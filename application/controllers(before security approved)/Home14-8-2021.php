@@ -1,0 +1,1597 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+//require 'PHPMailer/PHPMailer.php';
+
+class Home extends CI_Controller {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	 */
+	//public function index()
+//	{
+//		$this->load->database();
+//		$this->load->model('Home_Model');
+//		$data['title']='Time AND Action Plan';
+//		$this->load->view('head',$data);
+//		$this->load->view('toprightnav');
+//		$this->load->view('leftmenu');
+//		$data['all_order_count']=$this->Home_Model->all_order_count();
+//		$data['all_colour_count']=$this->Home_Model->all_colour_count();
+//		$data['all_pp_count']=$this->Home_Model->all_ppsample_count();
+//		$data['all_buyer']=$this->Home_Model->tna_status();
+//		$this->load->view('home',$data);
+//		//$this->load->view('footer');
+//	}
+	
+	//public function search()
+//	{
+//		$data['title']='User Login';
+//		$this->load->view('head',$data);
+//		$this->load->view('toprightnav');
+//		
+//		$this->load->view('home',$data);
+//	}
+//	public function creadits()
+//	{
+//		$data['title']='Creadits';
+//		$this->load->view('head',$data);
+//		$this->load->view('toprightnav');
+//		$this->load->view('leftmenu');
+//		$this->load->view('creadits',$data);
+//	}
+	
+	public function send(){
+		$this->load->database();
+		
+		$this->load->model('Admin');
+        // Load PHPMailer library
+        $this->load->library('phpmailer_lib');
+        
+        // PHPMailer object
+        $mail = $this->phpmailer_lib->load();
+        
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host     = 'shared70.accountservergroup.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'hris@babylonit.com';
+        $mail->Password = 'Hris@babylon';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port     = 465;
+        
+        $mail->setFrom('hris@babylonit.com', 'License Expire Notification');
+        //$mail->addReplyTo('info@example.com', 'Test');
+        
+        // Add a recipient
+        //$mail->addAddress('arifhrd@babylon-bd.com');
+		$mail->addAddress('mamunhrd@babylon-bd.com');
+		$mail->addAddress('ranahrd@babylon-bd.com');
+		$mail->addAddress('arifulhrd@babylon-bd.com');
+		$mail->addAddress('almamunhrd@babylon-bd.com');
+		$mail->addAddress('julfikar@babylon-bd.com');
+		$mail->addAddress('atlhrd@babylon-bd.com');
+		$mail->addAddress('sohelhrd@babylon-bd.com');
+		$mail->addAddress('arefeen@babylon-bd.com');
+		$mail->addAddress('bclcompliance@babylon-bd.com');
+		$mail->addAddress('tanvirhussain@babylon-bd.com');
+		$mail->addAddress('kazisumon@babylon-bd.com');
+		$mail->addAddress('tanikbtlhrd@babylon-bd.com');
+		$mail->addAddress('arifacc@babylon-bd.com');
+		$mail->addAddress('bplhrd@babylon-bd.com');
+		$mail->addAddress('jelhrd@babylon-bd.com');
+		$mail->addAddress('trendzhrd@babylon-bd.com');
+		$mail->addAddress('mostafiz@babylon-bd.com');
+		$mail->addAddress('atladmin@babylon-bd.com');
+		$mail->addAddress('masud@babylon-bd.com');
+		$mail->addAddress('simulnath@babylon-bd.com');
+		$mail->addAddress('azhar@babylon-bd.com');
+        
+        // Add cc or bcc 
+        $mail->addCC('akbar@babylon-bd.com');
+		$mail->addCC('apuhrd@babylon-bd.com');
+		$mail->addCC('mahmudhrd@babylon-bd.com');
+		$mail->addCC('arifhrd@babylon-bd.com');
+		$mail->addCC('parvezhrd@babylon-bd.com');
+		$mail->addCC('mshahedhrd@babylon-bd.com');
+		$mail->addCC('jahangir@babylon-bd.com');
+		$mail->addCC('arifkhan@babylon-bd.com');
+        $mail->addBCC('hris@babylon-bd.com');
+        
+        // Email subject
+        $mail->Subject = 'License Expire Notification';
+        
+        // Set email format to HTML
+        $mail->isHTML(true);
+        
+        
+		$sql1="SELECT DATEDIFF(renewaldate,CURDATE()) AS remaining,factory.factoryid,license_name,issuedate,renewaldate FROM license
+		
+		JOIN factory ON factory.factoryid=license.factoryid
+		JOIN division ON division.divisionid=license.divisionid 
+		JOIN department ON department.deptid=license.departmentid
+		LEFT JOIN licensetype ON licensetype.licensetypeid=license.licensetypeid
+		JOIN licensename ON license.licensename=licensename.lnid ";
+		$query1=$this->db->query($sql1);
+		$result=$query1->result_array();
+		$fac= array();
+		$lname = array();
+		$issu = array();
+		$rene = array();
+		$re = array();
+		foreach($result as $row)
+		{
+			if($row['remaining'] < 60)
+			{
+		$fac[] =$row['factoryid'];
+		$lname[] =$row['license_name'];
+		$issu[] =$row['issuedate'];
+		$rene[] =$row['renewaldate'];
+		$re[] =$row['remaining'];
+			}
+		}
+		
+		$fac=implode(' <br/>', $fac);
+		$lname=implode(' <br/>', $lname);
+		$issu=implode(' <br/>', $issu);
+		$rene=implode(' <br/>', $rene);
+		$re=implode('<br/> ', $re);
+		
+		
+		
+		
+		// Email body content
+        $mailContent = "<h3>License Tracker</h3>".
+		"<table id='tableData' class='table table-hover table-bordered'>
+		<tr style='border: 1px solid #000000'>
+		<th style='border: 1px solid #000000'>Factory</th>
+		<th style='border: 1px solid #000000'>Name</th>
+		<th style='border: 1px solid #000000'>Issue Date</th>
+		<th style='border: 1px solid #000000'>Renewal Date</th>
+		<th style='border: 1px solid #000000'>Remaining</th>
+		</tr>
+		<tr style='border: 1px solid #000000'>
+		<td style='border: 1px solid #000000'>".$fac."</td>
+		<td style='border: 1px solid #000000'>".$lname."</td>
+		<td style='border: 1px solid #000000'>".$issu."</td>
+		<td style='border: 1px solid #000000'>".$rene."</td>
+		<td style='border: 1px solid #000000'>".$re."</td>
+		</tr></table>".
+		"<br/>".
+		"<p>This is auto generated mail,no need to reply";
+		
+        $mail->Body = $mailContent;
+        
+        // Send email
+        if(!$mail->send()){
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+			
+        }else{
+            echo 'Message has been sent';
+        }
+			
+		
+    }
+	
+	/////////////////////////////////////////////////////////////CALENDAR///////////////////////////////////////////////////////////////
+	
+	/*Home page Calendar view  */
+	public function calendar()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title']='Challan Receive';
+		
+		$this->load->view('head',$data);
+		$this->load->view('toprightnav');
+		$this->load->view('leftmenu');
+		$this->load->view('calendar',$data);
+	}
+	
+	/*Get all Events */
+
+	public function getEvents()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$this->load->view('head',$data);
+		$result=$this->Admin->getEvents();
+		echo json_encode($result);
+
+	}
+	/*Add new event */
+	public function addEvent()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$result=$this->Admin->addEvent();
+		echo $result;
+	}
+	/*Update Event */
+	public function updateEvent()
+	{
+		$result=$this->Admin->updateEvent();
+		echo $result;
+	}
+	/*Delete Event*/
+	public function deleteEvent()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$result=$this->Admin->deleteEvent();
+		echo $result;
+	}
+	public function dragUpdateEvent()
+	{	
+		$this->load->database();
+		$this->load->model('Admin');
+		$result=$this->Admin->dragUpdateEvent();
+		echo $result;
+	}
+
+//////////////////////////////////////////////////////////////////MATERIAL MOVEMENT///////////////////////////////////////////////////////////
+
+		public function challan_mail_send(){
+		$this->load->database();
+		
+		$this->load->model('Admin');
+        // Load PHPMailer library
+        $this->load->library('phpmailer_lib');
+        
+        // PHPMailer object
+        $mail = $this->phpmailer_lib->load();
+        
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host     = 'mail.babylonit.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'hris@babylonit.com';
+        $mail->Password = 'Hris@babylon';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port     = 465;
+        
+        $mail->setFrom('hris@babylonit.com', 'Material Movement Gaps');
+        //$mail->addReplyTo('info@example.com', 'Test');
+        
+        // Add a recipient
+        $mail->addAddress('arifhrd@babylon-bd.com');
+		
+        
+        // Add cc or bcc 
+        $mail->addCC('akbar@babylon-bd.com');
+        $mail->addBCC('hris@babylon-bd.com');
+        
+        // Email subject
+        $mail->Subject = 'Material Movement Gaps';
+        
+        // Set email format to HTML
+        $mail->isHTML(true);
+        
+        
+		$sql1="SELECT * FROM challan_insert 
+		JOIN productunit ON challan_insert.unit=productunit.productunitid
+		WHERE rdate >= now() - INTERVAL 1 DAY AND status='0' AND sqty!=rqty ORDER BY ccid DESC";
+		$query1=$this->db->query($sql1);
+		$result=$query1->result_array();
+		$ccid= array();
+		$sent_factoryid = array();
+		$receive_factoryid = array();
+		$location = array();
+		$item = array();
+		$sqty = array();
+		$rqty = array();
+		$productunitname = array();
+		foreach($result as $row)
+		{
+//			if($row['remaining'] < 60)
+//			{
+		$ccid[] =$row['ccid'];
+		$sent_factoryid[] =$row['sent_factoryid'];
+		$receive_factoryid[] =$row['receive_factoryid'];
+		$location[] =$row['location'];
+		$item[] =$row['item'];
+		$sqty[] =$row['sqty'];
+		$rqty[]=$row['rqty'];
+		$productunitname[]=$row['productunitname'];
+			//}
+		}
+		
+		$ccid=implode(' <br/>', $ccid);
+		$sent_factoryid=implode(' <br/>', $sent_factoryid);
+		$receive_factoryid=implode(' <br/>', $receive_factoryid);
+		$location=implode(' <br/>', $location);
+		$item=implode(' <br/>', $item);
+		$sqty=implode('<br/> ', $sqty);
+		$rqty=implode('<br/> ', $rqty);
+		$productunitname=implode('<br/> ', $productunitname);
+		
+		
+		
+		
+		// Email body content
+        $mailContent = "<h3>Material Movement Gaps</h3>".
+		"<table id='tableData' class='table table-hover table-bordered'>
+		<tr style='border: 1px solid #000000'>
+		<th style='border: 1px solid #000000'>ID</th>
+		<th style='border: 1px solid #000000'>Sent Factory Name</th>
+		<th style='border: 1px solid #000000'>Destination Factory Name</th>
+		<th style='border: 1px solid #000000'>Location</th>
+		<th style='border: 1px solid #000000'>Item</th>
+		<th style='border: 1px solid #000000'>Sent Quantity</th>
+		<th style='border: 1px solid #000000'>Receive Quantity</th>
+		<th style='border: 1px solid #000000'>Unit</th>
+		</tr>
+		<tr style='border: 1px solid #000000'>
+		<td style='border: 1px solid #000000'>".$ccid."</td>
+		<td style='border: 1px solid #000000'>".$sent_factoryid."</td>
+		<td style='border: 1px solid #000000'>".$receive_factoryid."</td>
+		<td style='border: 1px solid #000000'>".$location."</td>
+		<td style='border: 1px solid #000000'>".$item."</td>
+		<td style='border: 1px solid #000000'>".$sqty."</td>
+		<td style='border: 1px solid #000000'>".$rqty."</td>
+		<td style='border: 1px solid #000000'>".$productunitname."</td>
+		</tr></table>".
+		"<br/>".
+		"<p>This is auto generated mail,no need to reply";
+		
+        $mail->Body = $mailContent;
+        
+        // Send email
+        if(!$mail->send()){
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+			
+        }else{
+            echo 'Message has been sent';
+        }
+			
+		
+    }
+	///////////////////////////////////////////////////OD//////////////////////////////////
+	public function od(){
+		ini_set('max_execution_time', '2000'); 
+		//ini_set('memory_limit','2048M');
+		//ini_set('MAX_EXECUTION_TIME', '2000');
+		
+		$this->load->database();
+		
+		$this->load->model('Admin');
+        // Load PHPMailer library
+        $this->load->library('phpmailer_lib');
+        
+        // PHPMailer object
+        $mail = $this->phpmailer_lib->load();
+        
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host     = 'mail.babylonit.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'hris@babylonit.com';
+        $mail->Password = 'Hris@babylon';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port     = 465;
+        
+        //$mail->setFrom('hris@babylonit.com', 'Minarul Akbar');
+		$mail->setFrom('hris@babylonit.com', 'Test mail');
+        //$mail->addReplyTo('info@example.com', 'Test');
+        
+        // Add a recipient
+        //$mail->addAddress('arifhrd@babylon-bd.com');
+		//$mail->addAddress('hoinfo@babylon-bd.com');
+//		$mail->addAddress('bgfacinfo@babylon-bd.com');
+//		$mail->addAddress('directorinfo@babylon-bd.com');
+
+		//$mail->addAddress('jahangir@babylon-bd.com');
+//		$mail->addAddress('cadashraf@babylon-bd.com');
+//		$mail->addAddress('cadsujon@babylon-bd.com');
+//		$mail->addAddress('aflcadpattern@babylon-bd.com');
+//		$mail->addAddress('sayem@babylon-bd.com');
+//		$mail->addAddress('aflcutting1@babylon-bd.com');
+//		$mail->addAddress('bzaman@babylon-bd.com');
+//		$mail->addAddress('aflcutting@babylon-bd.com');
+//		$mail->addAddress('bclpdn@babylon-bd.com');
+//		$mail->addAddress('kamal@babylon-bd.com');
+//		$mail->addAddress('aflpayroll@babylon-bd.com');
+//		$mail->addAddress('aflhrd@babylon-bd.com');
+//		$mail->addAddress('aflfiresafety@babylon-bd.com');
+//		$mail->addAddress('kazisumon@babylon-bd.com');
+//		$mail->addAddress('imranhrd@babylon-bd.com');
+//		$mail->addAddress('morshedhrd@babylon-bd.com');
+//		$mail->addAddress('arju@babylon-bd.com');
+//		$mail->addAddress('afltraining@babylon-bd.com');
+//		$mail->addAddress('shahidhrd@babylon-bd.com');
+//		$mail->addAddress('tanvirhussain@babylon-bd.com');
+//		$mail->addAddress('aflhrd2@babylon-bd.com');
+//		$mail->addAddress('ahsanit@babylon-bd.com');
+//		$mail->addAddress('sanaullah@babylon-bd.com');
+//		$mail->addAddress('badalplan@babylon-bd.com');
+//		$mail->addAddress('aflpdn@babylon-bd.com');
+//		$mail->addAddress('aflpdn2@babylon-bd.com');
+//		$mail->addAddress('tofazzal@babylon-bd.com');
+//		$mail->addAddress('aflqa@babylon-bd.com');
+//		$mail->addAddress('cip@babylon-bd.com');
+//		$mail->addAddress('aflstoreqc@babylon-bd.com');
+//		$mail->addAddress('abonigpq3@babylon-bd.com');
+
+
+
+		$mail->addAddress('jahangir@babylon-bd.com');
+		$mail->addAddress('cadashraf@babylon-bd.com');
+$mail->addAddress('cadsujon@babylon-bd.com');
+$mail->addAddress('aflcadpattern@babylon-bd.com');
+$mail->addAddress('sayem@babylon-bd.com');
+$mail->addAddress('aflcutting1@babylon-bd.com');
+$mail->addAddress('bzaman@babylon-bd.com');
+$mail->addAddress('aflcutting@babylon-bd.com');
+$mail->addAddress('bclpdn@babylon-bd.com');
+$mail->addAddress('kamal@babylon-bd.com');
+$mail->addAddress('aflpayroll@babylon-bd.com');
+$mail->addAddress('aflhrd@babylon-bd.com');
+$mail->addAddress('aflfiresafety@babylon-bd.com');
+$mail->addAddress('kazisumon@babylon-bd.com');
+$mail->addAddress('imranhrd@babylon-bd.com');
+$mail->addAddress('morshedhrd@babylon-bd.com');
+$mail->addAddress('arju@babylon-bd.com');
+$mail->addAddress('afltraining@babylon-bd.com');
+$mail->addAddress('shahidhrd@babylon-bd.com');
+$mail->addAddress('tanvirhussain@babylon-bd.com');
+$mail->addAddress('aflhrd2@babylon-bd.com');
+$mail->addAddress('ahsanit@babylon-bd.com');
+$mail->addAddress('sanaullah@babylon-bd.com');
+$mail->addAddress('badalplan@babylon-bd.com');
+$mail->addAddress('aflpdn@babylon-bd.com');
+$mail->addAddress('aflpdn2@babylon-bd.com');
+$mail->addAddress('tofazzal@babylon-bd.com');
+$mail->addAddress('aflqa@babylon-bd.com');
+$mail->addAddress('cip@babylon-bd.com');
+$mail->addAddress('aflstoreqc@babylon-bd.com');
+$mail->addAddress('abonigpq3@babylon-bd.com');
+$mail->addAddress('aboninqc@babylon-bd.com');
+$mail->addAddress('abonigpq1@babylon-bd.com');
+$mail->addAddress('aflfinishingqc@babylon-bd.com');
+$mail->addAddress('abonigpq2@babylon-bd.com');
+$mail->addAddress('aboniqms@babylon-bd.com');
+$mail->addAddress('aflqadata@babylon-bd.com');
+$mail->addAddress('abonigpq4@babylon-bd.com');
+$mail->addAddress('atiqueqa@babylon-bd.com');
+$mail->addAddress('qs@babylon-bd.com');
+$mail->addAddress('fayesrnd@babylon-bd.com');
+$mail->addAddress('aflrnd2@babylon-bd.com');
+$mail->addAddress('aflrnd@babylon-bd.com');
+$mail->addAddress('belalrnd@babylon-bd.com');
+$mail->addAddress('shakilrnd@babylon-bd.com');
+$mail->addAddress('ronyrnd@babylon-bd.com');
+$mail->addAddress('jahirul@babylon-bd.com');
+$mail->addAddress('samsu@babylon-bd.com');
+$mail->addAddress('babulafl@babylon-bd.com');
+$mail->addAddress('aflstore2@babylon-bd.com');
+$mail->addAddress('aflfabricstore@babylon-bd.com');
+$mail->addAddress('helalstore@babylon-bd.com');
+$mail->addAddress('aflstore@babylon-bd.com');
+$mail->addAddress('aflcartonstore@babylon-bd.com');
+$mail->addAddress('aflfabricstore2@babylon-bd.com');
+$mail->addAddress('jewelstore@babylon-bd.com');
+$mail->addAddress('aflstore3@babylon-bd.com');
+$mail->addAddress('bclstore3@babylon-bd.com');
+$mail->addAddress('bclstore@babylon-bd.com');
+$mail->addAddress('bclstore2@babylon-bd.com');
+$mail->addAddress('kzamanrnd@babylon-bd.com');
+$mail->addAddress('alaminrnd@babylon-bd.com');
+$mail->addAddress('zakirrnd@babylon-bd.com');
+$mail->addAddress('ibrahimrnd@babylon-bd.com');
+$mail->addAddress('lutforbcl@babylon-bd.com');
+$mail->addAddress('lifungbcl@babylon-bd.com');
+$mail->addAddress('bclinspection@babylon-bd.com');
+$mail->addAddress('bclfinishing@babylon-bd.com');
+$mail->addAddress('bclcutting@babylon-bd.com');
+$mail->addAddress('bclcutting2@babylon-bd.com');
+$mail->addAddress('bclquality@babylon-bd.com');
+$mail->addAddress('bclpdnt@babylon-bd.com');
+$mail->addAddress('firozhasan@babylon-bd.com');
+$mail->addAddress('bclhrd@babylon-bd.com');
+$mail->addAddress('fakrulhrd@babylon-bd.com');
+$mail->addAddress('bclcompliance@babylon-bd.com');
+$mail->addAddress('arefeen@babylon-bd.com');
+$mail->addAddress('bclwo@babylon-bd.com');
+$mail->addAddress('bclfiresafety@babylon-bd.com');
+$mail->addAddress('bclhracc@babylon-bd.com');
+$mail->addAddress('cadmonir@babylon-bd.com');
+$mail->addAddress('asmaragpq@babylon-bd.com');
+$mail->addAddress('gmsgpq@babylon-bd.com');
+$mail->addAddress('bclcad@babylon-bd.com');
+$mail->addAddress('asad@babylon-bd.com');
+$mail->addAddress('asad@babylon-bd.com');
+$mail->addAddress('raselqa@babylon-bd.com');
+$mail->addAddress('parvezppc@babylon-bd.com');
+$mail->addAddress('shahidit@babylon-bd.com');
+$mail->addAddress('riponit@babylon-bd.com');
+$mail->addAddress('prodip@babylon-bd.com');
+$mail->addAddress('sislam@babylon-bd.com');
+$mail->addAddress('btlalam@babylon-bd.com');
+$mail->addAddress('saifbtl@babylon-bd.com');
+$mail->addAddress('shahinur@babylon-bd.com');
+$mail->addAddress('piarulbtl@babylon-bd.com');
+$mail->addAddress('alibtl@babylon-bd.com');
+$mail->addAddress('saddambtl@babylon-bd.com');
+$mail->addAddress('amit@babylon-bd.com');
+$mail->addAddress('sardarbtl@babylon-bd.com');
+$mail->addAddress('gkshahabtl@babylon-bd.com'); 
+$mail->addAddress('arifacc@babylon-bd.com');
+$mail->addAddress('mazhar@babylon-bd.com');
+$mail->addAddress('sohelacbtl@babylon-bd.com');
+$mail->addAddress('omarbtl@babylon-bd.com');
+$mail->addAddress('mamunbtl@babylon-bd.com');
+$mail->addAddress('hannanbtl@babylon-bd.com');
+$mail->addAddress('ramact@babylon-bd.com');
+$mail->addAddress('molinaudit@babylon-bd.com');
+$mail->addAddress('arifrazzaque@babylon-bd.com');
+$mail->addAddress('susantabtl@babylon-bd.com');
+$mail->addAddress('tazrulbtl@babylon-bd.com');
+$mail->addAddress('litongomes@babylon-bd.com');
+$mail->addAddress('hossainbtl@babylon-bd.com');
+$mail->addAddress('rikonccsbtl@babylon-bd.com');
+$mail->addAddress('apubtl@babylon-bd.com');
+$mail->addAddress('linckonbtl@babylon-bd.com');
+$mail->addAddress('hafizbtl@babylon-bd.com');
+$mail->addAddress('imranccsbtl@babylon-bd.com');
+$mail->addAddress('jahangirbtl@babylon-bd.com');
+$mail->addAddress('sadekccsbtl@babylon-bd.com');
+$mail->addAddress('moshiurbtl@babylon-bd.com'); 
+$mail->addAddress('almamunbtl@babylon-bd.com');
+$mail->addAddress('kawsarbtl@babylon-bd.com');
+$mail->addAddress('sobuzbtl@babylon-bd.com');
+$mail->addAddress('qcbtl@babylon-bd.com');
+$mail->addAddress('productionbtl@babylon-bd.com');
+$mail->addAddress('polybtl@babylon-bd.com');
+$mail->addAddress('diecutbtl@babylon-bd.com');
+$mail->addAddress('productionbtl2@babylon-bd.com');
+$mail->addAddress('aslambtl@babylon-bd.com');
+$mail->addAddress('morshedbtl@babylon-bd.com');
+$mail->addAddress('kushibtl@babylon-bd.com');
+$mail->addAddress('raju@babylon-bd.com');
+$mail->addAddress('maintbtl@babylon-bd.com');
+$mail->addAddress('enayetbtl@babylon-bd.com');
+$mail->addAddress('toufiqbtl@babylon-bd.com');
+$mail->addAddress('shamimstorebtl@babylon-bd.com');
+$mail->addAddress('storebtl@babylon-bd.com');
+$mail->addAddress('sujonbtl@babylon-bd.com');
+$mail->addAddress('deliverybtl@babylon-bd.com');
+$mail->addAddress('sheikhriponbtl@babylon-bd.com');
+$mail->addAddress('zakirbtl@babylon-bd.com');
+$mail->addAddress('zakirbtl@babylon-bd.com');
+$mail->addAddress('manzurul@babylon-bd.com');
+$mail->addAddress('muradbtl@babylon-bd.com');
+$mail->addAddress('idrisscm@babylon-bd.com');
+$mail->addAddress('hasanbtl@babylon-bd.com');
+$mail->addAddress('offsetbtl@babylon-bd.com');
+$mail->addAddress('designbtl@babylon-bd.com');
+$mail->addAddress('tanikbtlhrd@babylon-bd.com');
+$mail->addAddress('firesafetybtl@babylon-bd.com');
+$mail->addAddress('humayonhrd@babylon-bd.com');
+$mail->addAddress('payrollbtl@babylon-bd.com');
+$mail->addAddress('shakilbtl@babylon-bd.com');
+$mail->addAddress('riponbtl@babylon-bd.com');
+$mail->addAddress('shiblubtl@babylon-bd.com');
+$mail->addAddress('sowponbtl@babylon-bd.com');
+$mail->addAddress('rezaulbtl@babylon-bd.com');
+$mail->addAddress('torikulbtl@babylon-bd.com');
+$mail->addAddress('masudbtl@babylon-bd.com');
+$mail->addAddress('nazmulbtl@babylon-bd.com');
+$mail->addAddress('shahadatbtl@babylon-bd.com');
+$mail->addAddress('ishrakhamid@babylon-bd.com'); 
+$mail->addAddress('munimbtl@babylon-bd.com');
+$mail->addAddress('rahmanbtl@babylon-bd.com');
+$mail->addAddress('mahasinbtl@babylon-bd.com');
+$mail->addAddress('rijonbtl@babylon-bd.com');
+$mail->addAddress('kabirbtl@babylon-bd.com');
+$mail->addAddress('delourbtl@babylon-bd.com');
+$mail->addAddress('pankajbtl@babylon-bd.com');
+$mail->addAddress('shawonbtl@babylon-bd.com');
+$mail->addAddress('rahimbtl@babylon-bd.com');
+$mail->addAddress('nurulbtl@babylon-bd.com');
+$mail->addAddress('rajib@babylon-bd.com');
+$mail->addAddress('tobaroakbtl@babylon-bd.com');
+$mail->addAddress('abirbtl@babylon-bd.com');
+$mail->addAddress('rakibbtl@babylon-bd.com');
+$mail->addAddress('imranbtl@babylon-bd.com');
+$mail->addAddress('touhidulbpl@babylon-bd.com');
+$mail->addAddress('bplproduction@babylon-bd.com');
+$mail->addAddress('bplsample@babylon-bd.com');
+$mail->addAddress('bplqc@babylon-bd.com');
+$mail->addAddress('bplhrd@babylon-bd.com');
+$mail->addAddress('bplwelfare@babylon-bd.com');
+$mail->addAddress('bpldesign1@babylon-bd.com');
+$mail->addAddress('bpl@babylon-bd.com');
+$mail->addAddress('bpldesign2@babylon-bd.com');
+$mail->addAddress('bplsample@babylon-bd.com');
+$mail->addAddress('bplstore@babylon-bd.com');
+$mail->addAddress('bplcolor@babylon-bd.com');
+$mail->addAddress('bpllab@babylon-bd.com');
+$mail->addAddress('bplmaintenance@babylon-bd.com');
+$mail->addAddress('gokul@babylon-bd.com');
+$mail->addAddress('uzzaljel@babylon-bd.com');
+$mail->addAddress('jeldesign@babylon-bd.com');
+$mail->addAddress('jelhrd@babylon-bd.com');
+$mail->addAddress('nahid@babylon-bd.com');
+$mail->addAddress('abubakar@babylon-bd.com');
+$mail->addAddress('gobinda@babylon-bd.com');
+$mail->addAddress('sadat@babylon-bd.com');
+$mail->addAddress('hmimran@babylon-bd.com');
+$mail->addAddress('mdashraf@babylon-bd.com');
+$mail->addAddress('majnu@babylon-bd.com');
+$mail->addAddress('mdtanvir@babylon-bd.com');
+$mail->addAddress('mohirobin@babylon-bd.com');
+$mail->addAddress('pir@babylon-bd.com');
+$mail->addAddress('rakibacc@babylon-bd.com');
+$mail->addAddress('sabbirahmed@babylon-bd.com');
+$mail->addAddress('sajibacc@babylon-bd.com');
+$mail->addAddress('main@babylon-bd.com');
+$mail->addAddress('simulnath@babylon-bd.com');
+$mail->addAddress('sonjoy@babylon-bd.com');
+$mail->addAddress('tanvir@babylon-bd.com');
+$mail->addAddress('acctscan@babylon-bd.com');
+$mail->addAddress('sohailtanvir@babylon-bd.com');
+$mail->addAddress('nooralam@babylon-bd.com');
+$mail->addAddress('frontdesk@babylon-bd.com');
+$mail->addAddress('shabuj@babylon-bd.com');
+$mail->addAddress('rahad@babylon-bd.com');
+$mail->addAddress('jahidaudit@babylon-bd.com');
+$mail->addAddress('asif@babylon-bd.com');
+$mail->addAddress('bipul@babylon-bd.com');
+$mail->addAddress('torikul@babylon-bd.com');
+$mail->addAddress('mostafizurrahman@babylon-bd.com');
+$mail->addAddress('sujon@babylon-bd.com');
+$mail->addAddress('yusuf@babylon-bd.com');
+$mail->addAddress('atikur@babylon-bd.com');
+$mail->addAddress('babylonlogistics@babylon-bd.com');
+$mail->addAddress('rokon@babylon-bd.com');
+$mail->addAddress('ziaur@babylon-bd.com');
+$mail->addAddress('sajib@babylon-bd.com');
+$mail->addAddress('shajankabir@babylon-bd.com');
+$mail->addAddress('asrafali@babylon-bd.com');
+$mail->addAddress('babyloncnfdhk@babylon-bd.com');
+$mail->addAddress('mabashar@babylon-bd.com');
+$mail->addAddress('mahbubalam@babylon-bd.com');
+$mail->addAddress('rashelcnf@babylon-bd.com');
+$mail->addAddress('ali@babylon-bd.com');
+$mail->addAddress('amin@babylon-bd.com');
+$mail->addAddress('arifcom@babylon-bd.com');
+$mail->addAddress('arifkhan@babylon-bd.com');
+$mail->addAddress('farhana@babylon-bd.com');
+$mail->addAddress('ferozalam@babylon-bd.com');
+$mail->addAddress('anasul@babylon-bd.com');
+$mail->addAddress('nazmulcom@babylon-bd.com');
+$mail->addAddress('maiqbal@babylon-bd.com');
+$mail->addAddress('mamunurrashid@babylon-bd.com');
+$mail->addAddress('maria@babylon-nd.com');
+$mail->addAddress('nahidcom@babylon-bd.com');
+$mail->addAddress('opel@babylon-bd.com');
+$mail->addAddress('rahim@babylon-bd.com');
+$mail->addAddress('rifat@babylon-bd.com');
+$mail->addAddress('sazedur@babylon-bd.com');
+$mail->addAddress('mostafiz@babylon-bd.com');
+$mail->addAddress('maruf@babylon-bd.com');
+$mail->addAddress('bristy@babylon-bd.com');
+$mail->addAddress('hafiza@babylon-bd.com');
+$mail->addAddress('salahuddin@babylon-bd.com');
+$mail->addAddress('shahana@babylon-bd.com');
+$mail->addAddress('mahiuddin@babylon-bd.com');
+$mail->addAddress('neesar@babylon-bd.com');
+$mail->addAddress('salam@babylon-bd.com');
+$mail->addAddress('arifhrd@babylon-bd.com');
+$mail->addAddress('jahidulhrd@babylon-bd.com');
+$mail->addAddress('rumana@babylon-bd.com');
+$mail->addAddress('mahmudhrd@babylon-bd.com');
+$mail->addAddress('mshahedhrd@babylon-bd.com');
+$mail->addAddress('akbar@babylon-bd.com');
+$mail->addAddress('prottayhrms@babylon-bd.com');
+$mail->addAddress('parvezhrd@babylon-bd.com');
+$mail->addAddress('rumana@babylon-bd.com');
+$mail->addAddress('zonehr@babylon-bd.com');
+$mail->addAddress('sobujhrd@babylon-bd.com');
+$mail->addAddress('ferdous@babylon-bd.com');
+$mail->addAddress('moidur@babyln-bd.com');
+$mail->addAddress('sadiazinat@babylon-bd.com');
+$mail->addAddress('habib@babylon-bd.com');
+$mail->addAddress('palash@babylon-bd.com');
+$mail->addAddress('sushanto@babylon-bd.com');
+$mail->addAddress('mokshed@babylon-bd.com');
+$mail->addAddress('aminakhter@babylon-bd.com');
+$mail->addAddress('chapalmkt@babylon-bd.com');
+$mail->addAddress('jahidulkhan@babylon-bd.com');
+$mail->addAddress('aktermkt@babylon-bd.com');
+$mail->addAddress('mahossain@babylon-bd.com');
+$mail->addAddress('mainuddin@babylon-bd.com');
+$mail->addAddress('mdfarhad@babylon-bd.com');
+$mail->addAddress('mehedimkt@babylon-bd.com');
+$mail->addAddress('mmahbub@babylon-bd.com');
+$mail->addAddress('mdmaruf@babylon-bd.com');
+$mail->addAddress('mosiurmkt@babylon-bd.com');
+$mail->addAddress('mostafashahriar@babylon-bd.com');
+$mail->addAddress('riadmkt@babylon-bd.com');
+$mail->addAddress('riyad@babylon-bd.com');
+$mail->addAddress('nazmulmkt@babylon-bd.com');
+$mail->addAddress('saniful@babylon-bd.com');
+$mail->addAddress('shawonmkt@babylon-bd.com');
+$mail->addAddress('shibly@babylon-bd.com');
+$mail->addAddress('sohely@babylon-bd.com');
+$mail->addAddress('tmahsan@babylon-bd.com');
+$mail->addAddress('tushermkt@babylon-bd.com');
+$mail->addAddress('zamanmkt@babylon-bd.com');
+$mail->addAddress('siddiqi@babylon-bd.com');
+$mail->addAddress('sadia@babylon-bd.com');
+$mail->addAddress('safikmkt@babylon-bd.com');
+$mail->addAddress('shanta@babylon-bd.com');
+$mail->addAddress('nayemkawsar@babylon-bd.com');
+$mail->addAddress('mhmithu@babylon-bd.com');
+$mail->addAddress('shazzad@babylon-bd.com');
+$mail->addAddress('radwan@babylon-bd.com');
+$mail->addAddress('anwar@babylon-bd.com');
+$mail->addAddress('mdpalash@babylon-bd.com');
+$mail->addAddress('akazad@babylon-bd.com');
+$mail->addAddress('mdsumon@babylon-bd.com');
+$mail->addAddress('rafiscm@babylon-bd.com');
+$mail->addAddress('iqbal@babylon-bd.com');
+$mail->addAddress('forazi@babylon-bd.com');
+$mail->addAddress('rajib@babylon-bd.com');
+$mail->addAddress('tanzima@babylon-bd.com');
+$mail->addAddress('mohshin@babylon-bd.com');
+$mail->addAddress('rakibul@babylon-bd.com');
+$mail->addAddress('awal@babylon-bd.com');
+$mail->addAddress('saiful@babylon-bd.com');
+$mail->addAddress('zahid@babylon-bd.com');
+$mail->addAddress('rahi@babylon-bd.com');
+$mail->addAddress('mdshohag@babylon-bd.com');
+$mail->addAddress('rabiul@babylon-bd.com');
+$mail->addAddress('wtcad3@babylon-bd.com');
+$mail->addAddress('wtcad0@babylon-bd.com');
+$mail->addAddress('alim@babylon-bd.com');
+$mail->addAddress('wtcat2@babylon-bd.com');
+$mail->addAddress('wtcad@babylon-bd.com');
+$mail->addAddress('bglcutting@babylon-bd.com');
+$mail->addAddress('bglcutting2@babylon-bd.com');
+$mail->addAddress('bgljahangir@babylon-bd.com');
+$mail->addAddress('bablu@babylon-bd.com');
+$mail->addAddress('mizanfnsh@babylon-bd.com');
+$mail->addAddress('bglfinishing@babylon-bd.com');
+$mail->addAddress('bglhrd1@babylon-bd.com');
+$mail->addAddress('jahangirhrd@babylon-bd.com');
+$mail->addAddress('bglhrd3@babylon-bd.com');
+$mail->addAddress('bglhrd2@babylon-bd.com');
+$mail->addAddress('bglfacacc@babylon-bd.com');
+$mail->addAddress('bglhrdwf@babylon-bd.com');
+$mail->addAddress('maksudahrd@babylon-bd.com');
+$mail->addAddress('mamunhrd@babylon-bd.com');
+$mail->addAddress('bglfiresafety@babylon-bd.com');
+$mail->addAddress('bglhrd4@babylon-bd.com');
+$mail->addAddress('ranahrd@babylon-bd.com');
+$mail->addAddress('ruhul@babylon-bd.com');
+$mail->addAddress('bglprd2@babylon-bd.com');
+$mail->addAddress('bglprd1@babylon-bd.com');
+$mail->addAddress('palashbgl@babylon-bd.com');
+$mail->addAddress('kadir@babylon-bd.com');
+$mail->addAddress('bdlprd@babylon-bd.com');
+$mail->addAddress('alaminbgl@babylon-bd.com');
+$mail->addAddress('khkabir@babylon-bd.com');
+$mail->addAddress('bglqccompliance@babylon-bd.com');
+$mail->addAddress('rafiq@babylon-bd.com');
+$mail->addAddress('jakia@babylon-bd.com');
+$mail->addAddress('mizanqa@babylon-bd.com');
+$mail->addAddress('dhgpq@babylon-bd.com');
+$mail->addAddress('bglgpq@babylon-bd.com');
+$mail->addAddress('nislam@babylon-bd.com');
+$mail->addAddress('soliverqa@babylon-bd.com');
+$mail->addAddress('walmartgpq@babylon-bd.com');
+$mail->addAddress('bglqc1@babylon-bd.com');
+$mail->addAddress('bglqc2@babylon-bd.com');
+$mail->addAddress('bglqc3@babylon-bd.com');
+$mail->addAddress('bglcuttingqc@babylon-bd.com');
+$mail->addAddress('sainsbury@babylon-bd.com');
+$mail->addAddress('mmamunqa@babylon-bd.com');
+$mail->addAddress('bdlrnd2@babylon-bd.com');
+$mail->addAddress('bdlrnd@babylon-bd.com');
+$mail->addAddress('bglrnd3@babylon-bd.com');
+$mail->addAddress('bgl2rnd@babylon-bd.com');
+$mail->addAddress('bglrnd@babylon-bd.com');
+$mail->addAddress('kabirrnd@babylon-bd.com');
+$mail->addAddress('rakibrnd@babylon-bd.com');
+$mail->addAddress('hridoyie@babylon-bd.com');
+$mail->addAddress('samad@babylon-bd.com');
+$mail->addAddress('cadsabuz@babylon-bd.com');
+$mail->addAddress('cadhaque@babylon-bd.com');
+$mail->addAddress('mnalam@babylon-bd.com');
+$mail->addAddress('tariq@babylon-bd.com');
+$mail->addAddress('rafiqul@babylon-bd.com');
+$mail->addAddress('cadraihan@babylon-bd.com');
+$mail->addAddress('cadmannan@babylon-bd.com');
+$mail->addAddress('smtanvir@babylon-bd.com');
+$mail->addAddress('mintu@babylon-bd.com');
+$mail->addAddress('arifsample@babylon-bd.com');
+$mail->addAddress('harun@babylon-bd.com');
+$mail->addAddress('obaydur@babylon-bd.com');
+$mail->addAddress('rabeya@babylon-bd.com');
+$mail->addAddress('dalia@babylon-bd.com');
+$mail->addAddress('cadsample1@babylon-bd.com');
+$mail->addAddress('nurulislam@babylon-bd.com');
+$mail->addAddress('solayman@babylon-bd.com');
+$mail->addAddress('dalia@babylon-bd.com');
+$mail->addAddress('cadtanvir@babylon-bd.com');
+$mail->addAddress('shahin@babylon-bd.com');
+$mail->addAddress('bglsecurity@babylon-bd.com');
+$mail->addAddress('bglgate@babylon-bd.com');
+$mail->addAddress('bglfabricstore@babylon-bd.com');
+$mail->addAddress('bglstore1@babylon-bd.com');
+$mail->addAddress('bglstore4@babylon-bd.com');
+$mail->addAddress('bglstore2@babylon-bd.com');
+$mail->addAddress('bglstoregl@babylon-bd.com');
+$mail->addAddress('bglstore@babylon-bd.com');
+$mail->addAddress('habibstore@babylon-bd.com');
+$mail->addAddress('shahabuddin@babylon-bd.com');
+$mail->addAddress('bglsroregl2@babylon-bd.com');
+$mail->addAddress('bglstore3@babylon-bd.com');
+$mail->addAddress('bglsubstore1@babylon-bd.com');
+$mail->addAddress('bglsubstore2@babylon-bd.com');
+$mail->addAddress('bglsubstore3@babylon-bd.com');
+$mail->addAddress('bglstore5@babylon-bd.com');
+$mail->addAddress('prashanta@babylon-bd.com');
+$mail->addAddress('alamgeer@babylon-bd.com ');
+$mail->addAddress('kanai@babylon-bd.com');
+$mail->addAddress('pijushtulanbs@babylon-bd.com');
+$mail->addAddress('hudabs@babylon-bd.com');
+$mail->addAddress('mehedibs@babylon-bd.com');
+$mail->addAddress('rakybulbasl@babylon-bd.com');
+$mail->addAddress('sagorbasl@babylon-bd.com');
+$mail->addAddress('barisaldepot@babylon-bd.com');
+$mail->addAddress('bogradepot@babylon-bd.com');
+$mail->addAddress('comilladepot@babylon-bd.com');
+$mail->addAddress('ctgdepot@babylon-bd.com');
+$mail->addAddress('dhakadepot@babylon-bd.com');
+$mail->addAddress('james@babylon-bd.com');
+$mail->addAddress('jessoredepot@babylon-bd.com');
+$mail->addAddress('jobairbs@babylon-bd.com');
+$mail->addAddress('paulbs@babylon-bd.com');
+$mail->addAddress('rangpurdepot@babylon-bd.com');
+$mail->addAddress('spcrangpur@babylon-bd.com');
+$mail->addAddress('ashrafulbasl@babylon-bd.com');
+$mail->addAddress('jamalpurdepot@babylon-bd.com');
+$mail->addAddress('jwelbasl@babylon-bd.com');
+$mail->addAddress('mhprince@babylon-bd.com');
+$mail->addAddress('zamanbs@babylon-bd.com');
+$mail->addAddress('plabonbs@babylon-bd.com');
+$mail->addAddress('mdrahatbasl@babylon-bd.com');
+$mail->addAddress('mozahadbasl@babylon-bd.com');
+$mail->addAddress('jamalbs@babylon-bd.com');
+$mail->addAddress('ahsanbadl@babylon-bd.com');
+$mail->addAddress('shadmanbadl@babylon-bd.com');
+$mail->addAddress('factorybasl@babylon-bd.com');
+$mail->addAddress('kamrulbasl@babylon-bd.com');
+$mail->addAddress('drtayeb@babylon-bd.com');
+$mail->addAddress('kabirbadl@babylon-bd.com');
+$mail->addAddress('shafiulbasl@babylon-bd.com');
+$mail->addAddress('arshadbs@babylon-bd.com');
+$mail->addAddress('hanifbadl@babylon-bd.com');
+$mail->addAddress('akibulbasl@babylon-bd.com');
+$mail->addAddress('borhanbasl@babylon-bd.com');
+$mail->addAddress('fazlulbasl@babylon-bd.com');
+$mail->addAddress('humaunbasl@babylon-bd.com');
+$mail->addAddress('mamunbasl@babylon-bd.com');
+$mail->addAddress('masudbasl@babylon-bd.com');
+$mail->addAddress('milonbasl@babylon-bd.com');
+$mail->addAddress('mintubasl@babylon-bd.com');
+$mail->addAddress('mrahmanbasl@babylon-bd.com');
+$mail->addAddress('naimbasl@babylon-bd.com');
+$mail->addAddress('nzamanbasl@babylon-bd.com');
+$mail->addAddress('rahatbasl@babylon-bd.com');
+$mail->addAddress('raihanbasl@babylon-bd.com');
+$mail->addAddress('shamimbasl@babylon-bd.com');
+$mail->addAddress('souravbasl@babylon-bd.com');
+$mail->addAddress('sujanbasl@babylon-bd.com');
+$mail->addAddress('zohurulbasl@babylob-bd.com');
+$mail->addAddress('belalbadl@babylon-bd.com');
+$mail->addAddress('rafiqbadl@babylon-bd.com');
+$mail->addAddress('mizanbadl@babylon-bd.com');
+$mail->addAddress('tonmoybadl@babylon-bd.com');
+$mail->addAddress('mdabdullahbasl@babylon-bd.com');
+$mail->addAddress('rubelbasl@babylon-bd.com');
+$mail->addAddress('atiulbasl@babylon-bd.com');
+$mail->addAddress('ntalha@babylon-bd.com');
+$mail->addAddress('azizbs@babylon-bd.com');
+$mail->addAddress('storebasl@babylon-bd.com');
+$mail->addAddress('farhankhan@babylon-bd.com');
+$mail->addAddress('tarun@babylon-bd.com');
+$mail->addAddress('abdulmottalab@babylon-bd.com');
+$mail->addAddress('jadidanower@babylon-bd.com');
+$mail->addAddress('sayedmasum@babylon-bd.com');
+$mail->addAddress('sonia@babylon-bd.com');
+$mail->addAddress('niloy@babylon-bd.com');
+$mail->addAddress('sajid@babylon-bd.com');
+$mail->addAddress('shadman@babylon-bd.com');
+$mail->addAddress('shohan@babylon-bd.com');
+$mail->addAddress('babyloncnfctg3@babylon-bd.com');
+$mail->addAddress('babyloncnfctg@babylon-bd.com');
+$mail->addAddress('babyloncnfctg2@babylon-bd.com'); 
+$mail->addAddress('babyloncnfctg4@babylon-bd.com');
+$mail->addAddress('btrctg@babylon-bd.com');
+$mail->addAddress('nurulbtl@babylon-bd.com');
+$mail->addAddress('faruqe@babylon-bd.com');
+$mail->addAddress('islam@babylon-bd.com');
+$mail->addAddress('shihabur@babylon-bd.com');
+$mail->addAddress('prosanto@babylon-bd.com');
+$mail->addAddress('alamgir@babylon-bd.com');
+$mail->addAddress('foyzul@babylon-bd.com');
+$mail->addAddress('shahjahanscm@babylon-bd.com');
+$mail->addAddress('foysalscm@babylon-bd.com');
+$mail->addAddress('salmanscm@babylon-bd.com');
+$mail->addAddress('iqbal@babylon-bd.com');
+$mail->addAddress('alaminscm@babylon-bd.com');
+$mail->addAddress('shukurit@babylon-bd.com');
+$mail->addAddress('aftab@babylon-bd.com');
+$mail->addAddress('syful@babylon-bd.com');
+$mail->addAddress('moudutta@babylon-bd.com');
+$mail->addAddress('mamundnd@babylon-bd.com');
+$mail->addAddress('mostafizcom@babylon-bd.com');
+$mail->addAddress('johurul@babylon-bd.com');
+$mail->addAddress('masud@babylon-bd.com');
+$mail->addAddress('compalash@babylon-bd.com');
+$mail->addAddress('ferozcom@babylon-bd.com');
+$mail->addAddress('zahid@babylon-bd.com');
+$mail->addAddress('farhad@babylon-bd.com');
+$mail->addAddress('comhaque@babylon-bd.com');
+$mail->addAddress('manik@babylon-bd.com');
+$mail->addAddress('zahidsdq@babylon-bd.com');
+$mail->addAddress('comtariq@babylon-bd.com');
+$mail->addAddress('showravcom@babylon-bd.com');
+$mail->addAddress('sujoncom@babylon-bd.com');
+$mail->addAddress('jahidul@babylon-bd.com');
+$mail->addAddress('mdmainul@babylon-bd.com');
+$mail->addAddress('jahir@babylon-bd.com');
+$mail->addAddress('noor@babylon-bd.com');
+$mail->addAddress('sajjadscm@babylon-bd.com');
+$mail->addAddress('cqa@babylon-bd.com');
+$mail->addAddress('sohelrana@babylon-bd.com');
+$mail->addAddress('zakir@babylon-bd.com');
+$mail->addAddress('apuhrd@babylon-bd.com');
+$mail->addAddress('jahidulhrd@babylon-bd.com');
+$mail->addAddress('solaiman@babylon-bd.com');
+$mail->addAddress('cfds@babylon-bd.com');
+$mail->addAddress('rezveekhalid@babylon-bd.com');
+$mail->addAddress('akhlakmkt@babylon-bd.com');
+$mail->addAddress('aklscanner@babylon-bd.com');
+$mail->addAddress('arafat@babylon-bd.com');
+$mail->addAddress('rashedul@babylon-bd.com');
+$mail->addAddress('asadmkt@babylon-bd.com');
+$mail->addAddress('bipulmkt@babylon-bd.com');
+$mail->addAddress('hasnatmkt@babylon-bd.com');
+$mail->addAddress('jijewel@babylon-bd.com');
+$mail->addAddress('kamrul@babylon-bd.com');
+$mail->addAddress('lenin@babylon-bd.com');
+$mail->addAddress('pronab@babylon-bd.com');
+$mail->addAddress('ismail@babylon-bd.com');
+$mail->addAddress('shahadat@babylon-bd.com');
+$mail->addAddress('sobrab@babylon-bd.com');
+$mail->addAddress('tipumkt@babylon-bd.com');
+$mail->addAddress('khalid@babylon-bd.com');
+$mail->addAddress('ikram@babylon-bd.com');
+$mail->addAddress('aminoor@babylon-bd.com');
+$mail->addAddress('rezwanul@babylon-bd.com');
+$mail->addAddress('sayedtanay@babylon-bd.com');
+$mail->addAddress('aklscanner@babylon-bd.com');
+$mail->addAddress('absiddiq@babylon-bd.com');
+$mail->addAddress('asraful@babylon-bd.com');
+$mail->addAddress('jamil@babylon-bd.com');
+$mail->addAddress('mahmudacc@babylon-bd.com');
+$mail->addAddress('rigan@babylon-bd.com');
+$mail->addAddress('azhar@babylon-bd.com');
+$mail->addAddress('mofazzal@babylon-bd.com');
+$mail->addAddress('jahid@babylon-bd.com');
+$mail->addAddress('nazmulhaque@babylon-bd.com');
+$mail->addAddress('basher@babylon-bd.com');
+$mail->addAddress('engrrazzak@babylon-bd.com');
+$mail->addAddress('faisalmkt@babylon-bd.com');
+$mail->addAddress('aziz@babylon-bd.com');
+$mail->addAddress('shohagmkt@babylon-bd.com');
+$mail->addAddress('aanmoon@babylon-bd.com');
+$mail->addAddress('abirmkt@babylon-bd.com');
+$mail->addAddress('badhan@babylon-bd.com');
+$mail->addAddress('naziurmkt@babylon-bd.com');
+$mail->addAddress('sabuzmkt@babylon-bd.com');
+$mail->addAddress('naim@babylon-bd.com');
+$mail->addAddress('tanvirmkt@babylon-bd.com');
+$mail->addAddress('sujoncom@babylon-bd.com');
+$mail->addAddress('aklcad@babylon-bd.com');
+$mail->addAddress('aklcad1@babylon-bd.com');
+$mail->addAddress('aklcad2@babylon-bd.com');
+$mail->addAddress('aklcutting2@babylon-bd.com');
+$mail->addAddress('aklcutting@babylon-bd.com');
+$mail->addAddress('rasel@babylon-bd.com');
+$mail->addAddress('aklcutting3@babylon-bd.com');
+$mail->addAddress('aklcutting4@babylon-bd.com');
+$mail->addAddress('aklcutting5@babylon-bd.com');
+$mail->addAddress('aklcutting6@babylon-bd.com');
+$mail->addAddress('aklcutting7@babylon-bd.com');
+$mail->addAddress('aklcutting8@babylon-bd.com');
+$mail->addAddress('aklcutting9@babylon-bd.com');
+$mail->addAddress('aklfinishing@babylon-bd.com');
+$mail->addAddress('aklfinishing3@babylon-bd.com');
+$mail->addAddress('mahabubfinishing@babylon-bd.com');
+$mail->addAddress('aklfinishing2@babylon-bd.com');
+$mail->addAddress('receptionakl@babylon-bd.com');
+$mail->addAddress('sagar@babylon-bd.com');
+$mail->addAddress('almamunhrd@babylon-bd.com');
+$mail->addAddress('rokhsanahrd@babylon-bd.com');
+$mail->addAddress('nahidhrd@babylon-bd.com');
+$mail->addAddress('firesafetyakl@babylon-bd.com');
+$mail->addAddress('wasimhrd@babylon-bd.com');
+$mail->addAddress('aklhrd4@babylon-bd.com');
+$mail->addAddress('arifulhrd@babylon-bd.com');
+$mail->addAddress('sagar@babylon-bd.com');
+$mail->addAddress('shikhahrd@babylon-bd.com');
+$mail->addAddress('aklmedical@babylon-bd.com');
+$mail->addAddress('aklhrd1@babylon-bd.com');
+$mail->addAddress('mahfuzur@babylon-bd.com');
+$mail->addAddress('ayubrnd@babylon-bd.com');
+$mail->addAddress('aklrnd2@babylon-bd.com');
+$mail->addAddress('aklrnd1@babylon-bd.com');
+$mail->addAddress('towhidrd@babylon-bd.com');
+$mail->addAddress('aklrnd6@babylon-bd.com');
+$mail->addAddress('rdfac@babylon-bd.com');
+$mail->addAddress('aklrnd3@babylon-bd.com');
+$mail->addAddress('aklmaint@babylon-bd.com');
+$mail->addAddress('aklprdmis@babylon-bd.com');
+$mail->addAddress('robiulppc@babylon-bd.com');
+$mail->addAddress('lifungqa@babylon-bd.com');
+$mail->addAddress('aklqc@babylon-bd.com');
+$mail->addAddress('aklqad@babylon-bd.com');
+$mail->addAddress('mdazizul@babylon-bd.com');
+$mail->addAddress('hridoyvapqa@babylon-bd.com');
+$mail->addAddress('khosrulalam@babylon-bd.com');
+$mail->addAddress('aklqccutting@babylon-bd.com');
+$mail->addAddress('lifunggpq@babylon-bd.com');
+$mail->addAddress('aklstoreqc@babylon-bd.com');
+$mail->addAddress('qsaboni@babylon-bd.com');
+$mail->addAddress('ratannqcaboni@babylon-bd.com');
+$mail->addAddress('dilipnqcaboni@babylon-bd.com');
+$mail->addAddress('tcqc@babylon-bd.com');
+$mail->addAddress('oryxgpq@babylon-bd.com');
+$mail->addAddress('mangogpq@babylon-bd.com');
+$mail->addAddress('aklfnshqc@babylon-bd.com');
+$mail->addAddress('aklsample4@babylon-bd.com');
+$mail->addAddress('aklsample1@babylon-bd.com');
+$mail->addAddress('aklpattern@babylon-bd.com');
+$mail->addAddress('aklsample2@babylon-bd.com');
+$mail->addAddress('aklsample3@babylon-bd.com');
+$mail->addAddress('siraj@babylon-bd.com');
+$mail->addAddress('tcgtakl@babylon-bd.com');
+$mail->addAddress('ntechakl@babylon-bd.com');
+$mail->addAddress('aklmarker@babylon-bd.com');
+$mail->addAddress('ntechakl@babylon-bd.com');
+$mail->addAddress('nazmulkabir@babylon-bd.com');
+$mail->addAddress('aklstore5@babylon-bd.com');
+$mail->addAddress('aklstore@babylon-bd.com');
+$mail->addAddress('aklaccstore1@babylon-bd.com');
+$mail->addAddress('aklfabstore@babylon-bd.com');
+$mail->addAddress('aklstore2@babylon-bd.com');
+$mail->addAddress('shaheen@babylon-bd.com');
+$mail->addAddress('aklstore6@babylon-bd.com');
+$mail->addAddress('aklaccstore@babylon-bd.com');
+$mail->addAddress('aklthreadstr@babylon-bd.com');
+$mail->addAddress('zabircivil@babylon-bd.com');
+$mail->addAddress('saifulislam@babylon-bd.com');
+$mail->addAddress('atikul@babylon-bd.com');
+$mail->addAddress('atldybatch@babylon-bd.com');
+$mail->addAddress('khoshruahmed@babylon-bd.com');
+$mail->addAddress('chandan@babylon-bd.com');
+$mail->addAddress('sumonkumar@babylon-bd.com');
+$mail->addAddress('anisatlrnd@babylon-bd.com');
+$mail->addAddress('manjurulems@babylon-bd.com');
+$mail->addAddress('ems@babylon-bd.com');
+$mail->addAddress('imranhossain@babylon-bd.com');
+$mail->addAddress('atlfinishing@babylon-bd.com');
+$mail->addAddress('atlhrd2@babylon-bd.com');
+$mail->addAddress('atlfs@babylon-bd.com');
+$mail->addAddress('atladmin@babylon-bd.com');
+$mail->addAddress('sohelhrd@babylon-bd.com');
+$mail->addAddress('atlhrd@babylon-bd.com');
+$mail->addAddress('forhad@babylon-bd.com');
+$mail->addAddress('atllab@babylon-bd.com');
+$mail->addAddress('atllabcolour@babylon-bd.com');
+$mail->addAddress('atllab3@babylon-bd.com');
+$mail->addAddress('atllab4@babylon-bd.com');
+$mail->addAddress('shohag@babylon-bd.com');
+$mail->addAddress('mahbubatl@babylon-bd.com');
+$mail->addAddress('atlmaintenance@babylon-bd.com');
+$mail->addAddress('rajibqad@babylon-bd.com');
+$mail->addAddress('shahanuralam@babylon-bd.com');
+$mail->addAddress('mdshiplu@babylon-bd.com');
+$mail->addAddress('mizanorstr@babylon-bd.com');
+$mail->addAddress('debabrata@babylon-bd.com');
+$mail->addAddress('sayeed@babylon-bd.com');
+$mail->addAddress('helaluddin@babylon-bd.com');
+$mail->addAddress('ronymiah@babylon-bd.com');
+$mail->addAddress('hoqueplan@babylon-bd.com');
+$mail->addAddress('atlqc3@babylon-bd.com');
+$mail->addAddress('gqpatl1@babylon-bd.com');
+$mail->addAddress('atlqc2@babylon-bd.com');
+$mail->addAddress('gpqatl2@babylon-bd.com');
+$mail->addAddress('atlchemical@babylon-bd.com');
+$mail->addAddress('atlfabstore2@babylon-bd.com');
+$mail->addAddress('atlfabstore2@babylon-bd.com');
+$mail->addAddress('atlfabstore1@babylon-bd.com');
+$mail->addAddress('shyamal@babylon-bd.com');
+$mail->addAddress('atlcntstroe@babylon-bd.com');
+$mail->addAddress('atlkntbatch2@babylon-bd.com');
+$mail->addAddress('atlkntbatch1@babylon-bd.com');
+$mail->addAddress('atlknittinghr@babylon-bd.com');
+$mail->addAddress('knittingmaintenance@babylon-bd.com');
+$mail->addAddress('fhrabby@babylon-bd.com');
+$mail->addAddress('knit@babylon-bd.com');
+$mail->addAddress('knitprd@babylon-bd.com');
+$mail->addAddress('shafiqul@babylon-bd.com');
+$mail->addAddress('atlqc1@babylon-bd.com');
+$mail->addAddress('atlyarnstr@babylon-bd.com');
+$mail->addAddress('atlyarnstr2@babylon-bd.com');
+$mail->addAddress('atldalimstr@babylon-bd.com');
+$mail->addAddress('atlgreigestr@babylon-bd.com');
+$mail->addAddress('atlyarnstr3@babylon-bd.com');
+$mail->addAddress('bwlmkt1@babylon-bd.com');
+$mail->addAddress('comhaque@babylon-bd.com');
+$mail->addAddress('comhaque@babylon-bd.com');
+$mail->addAddress('bwlhrd2@babylon-bd.com');
+$mail->addAddress('julfikar@babylon-bd.com');
+$mail->addAddress('samplebwl@babylon-bd.com');
+$mail->addAddress('nazrulrnd@babylon-bd.com');
+$mail->addAddress('bwlmaintenance@babylon-bd.com');
+$mail->addAddress('anam@babylon-bd.com');
+$mail->addAddress('mahmud@babylon-bd.com');
+$mail->addAddress('sajahangir@babylon-bd.com');
+$mail->addAddress('bwlplanning@babylon-bd.com');
+$mail->addAddress('jakirbwl@babylon-bd.com');
+$mail->addAddress('bwlprd@babylon-bd.com');
+$mail->addAddress('qualitybwl@babylon-bd.com');
+$mail->addAddress('kamrulbwl@babylon-bd.com');
+$mail->addAddress('bwlstore@babylon-bd.com');
+$mail->addAddress('bwlchemical@babylon-bd.com');
+$mail->addAddress('halim@babylon-bd.com');
+$mail->addAddress('bwlaccstore@babylon-bd.com');
+$mail->addAddress('malam@babylon-bd.com');
+$mail->addAddress('imrantrz@babylon-bd.com');
+$mail->addAddress('masumbillah@babylon-bd.com');
+$mail->addAddress('mahfuz@babylon-bd.com');
+$mail->addAddress('nurtrz@babylon-bd.com');
+$mail->addAddress('hris@babylon-bd.com');
+$mail->addAddress('khairul@babylon-bd.com');
+$mail->addAddress('ershad@babylon-bd.com');
+$mail->addAddress('trendz02shop@babylon-bd.com');
+$mail->addAddress('trendz01shop@gmail.com');
+$mail->addAddress('trendz05shop@babylon-bd.com');
+$mail->addAddress('trendz04shop@babylon-bd.com');
+$mail->addAddress('trendz03shop@babylon-bd.com');
+$mail->addAddress('trendz06shop@babylon-bd.com');
+$mail->addAddress('trendzhrd@babylon-bd.com');
+//$mail->addAddress('hris@babylon-bd.com');
+        
+        // Add cc or bcc 
+        //$mail->addCC('akbar@babylon-bd.com');
+
+        
+        // Email subject
+       // $mail->Subject = 'OD (Org.Development) Message';
+		$mail->Subject = 'Test mail';
+        
+        // Set email format to HTML
+        $mail->isHTML(true);
+        
+        
+		$sql1="SELECT * FROM od WHERE od_status='1' ORDER BY  STR_TO_DATE(senddate,'%Y-%m-%d') ASC LIMIT 1";
+		$query1=$this->db->query($sql1);
+		$result=$query1->result_array();
+		
+		foreach($result as $row)
+		{
+		$od=$row['image'];
+		$odid=$row['odid'];
+		}
+		
+		$sql2="UPDATE od SET od_status='0' WHERE odid='$odid'";
+		$query2=$this->db->query($sql2);
+		
+		
+		
+		
+		
+?>
+		
+        <?php
+		if($odid!='')
+		{
+        //$mail->Body ='mm';
+		$mail->AddEmbeddedImage('assets/uploads/od/'.$od, 'od');
+		//$mail->addEmbeddedImage('path/to/image_file.jpg', 'image_cid');
+
+		$mail->Body = '<p><img src="cid:od"></p>';
+                
+        // Send email
+        if(!$mail->send()){
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+			
+        }else{
+            echo 'Message has been sent';
+        }
+		}
+		
+    }
+	
+				///////////////////////////////////////////////////TASK TRACKER////////////////////////////////////////////////////////
+	
+	
+	public function tasktracker(){
+		$this->load->database();
+		
+		$this->load->model('Admin');
+        // Load PHPMailer library
+        //$this->load->library('phpmailer_lib');
+//        
+//        // PHPMailer object
+//        $mail = $this->phpmailer_lib->load();
+//        
+//        // SMTP configuration
+//        $mail->isSMTP();
+//        $mail->Host     = 'mail.babylonit.com';
+//        $mail->SMTPAuth = true;
+//        $mail->Username = 'hris@babylonit.com';
+//        $mail->Password = 'Hris@babylon';
+//        $mail->SMTPSecure = 'ssl';
+//        $mail->Port     = 465;
+//        
+//        $mail->setFrom('hris@babylonit.com', 'Task Tracker');
+        //$mail->addReplyTo('info@example.com', 'Test');
+        
+        // Add a recipient
+        //$mail->addAddress('arifhrd@babylon-bd.com');
+		//$mail->addAddress('hris@babylon-bd.com');
+		//$mail->addAddress('ranahrd@babylon-bd.com');
+//		$mail->addAddress('arifulhrd@babylon-bd.com');
+//		$mail->addAddress('almamunhrd@babylon-bd.com');
+//		$mail->addAddress('julfikar@babylon-bd.com');
+//		$mail->addAddress('atlhrd@babylon-bd.com');
+//		$mail->addAddress('sohelhrd@babylon-bd.com');
+//		$mail->addAddress('arefeen@babylon-bd.com');
+//		$mail->addAddress('bclcompliance@babylon-bd.com');
+//		$mail->addAddress('tanvirhussain@babylon-bd.com');
+//		$mail->addAddress('kazisumon@babylon-bd.com');
+//		$mail->addAddress('tanikbtlhrd@babylon-bd.com');
+//		$mail->addAddress('arifacc@babylon-bd.com');
+//		$mail->addAddress('bplhrd@babylon-bd.com');
+//		$mail->addAddress('jelhrd@babylon-bd.com');
+//		$mail->addAddress('trendzhrd@babylon-bd.com');
+//		$mail->addAddress('mostafiz@babylon-bd.com');
+//		$mail->addAddress('atladmin@babylon-bd.com');
+//		$mail->addAddress('masud@babylon-bd.com');
+//		$mail->addAddress('simulnath@babylon-bd.com');
+//		$mail->addAddress('azhar@babylon-bd.com');
+        
+        // Add cc or bcc 
+        //$mail->addCC('akbar@babylon-bd.com');
+//		$mail->addCC('apuhrd@babylon-bd.com');
+//		$mail->addCC('mahmudhrd@babylon-bd.com');
+//		$mail->addCC('arifhrd@babylon-bd.com');
+//		$mail->addCC('parvezhrd@babylon-bd.com');
+//		$mail->addCC('mshahedhrd@babylon-bd.com');
+//		$mail->addCC('jahangir@babylon-bd.com');
+//		$mail->addCC('arifkhan@babylon-bd.com');
+//        $mail->addBCC('hris@babylon-bd.com');
+        
+        // Email subject
+        //$mail->Subject = 'Task Tracker';
+        
+        // Set email format to HTML
+        //$mail->isHTML(true);
+        
+        
+		$sql1="SELECT userid,ename,oemail,SUM(ratings) as ratings,
+		SUM(CASE WHEN assigneestatus = 1 THEN 1 ELSE 0 END) as ongoing,
+		SUM(CASE WHEN assigneestatus = 1 AND DATEDIFF(deadline,CURDATE()) >7 THEN 1 ELSE 0 END) as gsongoing,
+		SUM(CASE WHEN assigneestatus = 1 AND DATEDIFF(deadline,CURDATE()) <7 THEN 1 ELSE 0 END) as lsongoing,
+		SUM(CASE WHEN assigneestatus = 1 AND DATEDIFF(deadline,CURDATE()) =1 THEN 1 ELSE 0 END) as tongoing,
+		SUM(CASE WHEN assigneestatus = 1 AND DATEDIFF(deadline,CURDATE()) =2 THEN 1 ELSE 0 END) as nongoing,
+		SUM(CASE WHEN assigneestatus = 2 AND assignee_submitted_date <= deadline THEN 1 ELSE 0 END) as wsubmitted,
+		SUM(CASE WHEN assigneestatus = 2 AND assignee_submitted_date >= deadline THEN 1 ELSE 0 END) as osubmitted,
+		SUM(CASE WHEN assigneestatus = 0 THEN 1 ELSE 0 END) as completed 
+		FROM assignee_task_list
+		JOIN user ON
+		user.userid=assignee_task_list.assigneeid
+		GROUP BY assigneeid";
+		$query1=$this->db->query($sql1);
+		$result=$query1->result_array();
+		
+		foreach($result as $row)
+		{
+			$this->load->library('phpmailer_lib');
+        	// PHPMailer object
+        	$mail = $this->phpmailer_lib->load();
+        	// SMTP configuration
+       	 	$mail->isSMTP();
+        	$mail->Host     = 'shared70.accountservergroup.com';
+        	$mail->SMTPAuth = true;
+        	$mail->Username = 'hris@babylonit.com';
+        	$mail->Password = 'Hris@babylon';
+        	$mail->SMTPSecure = 'ssl';
+        	$mail->Port     = 465;
+        
+        	$mail->setFrom('hris@babylonit.com', 'Task Tracker');
+			if($row['oemail']!='')
+			{
+			if($row['ongoing']!=0 || $row['wsubmitted']!=0 || $row['osubmitted']!=0)
+				{
+					
+					$oemail=$row['oemail'];
+					
+					$mail->Body = '<table>
+										<thead>
+											<th style="border: 1px solid #000000">ID</th>
+											<th style="border: 1px solid #000000">Name</th>
+											<th style="border: 1px solid #000000">Email</th>
+											<th style="border: 1px solid #000000">Ongoing</th>
+											<th style="border: 1px solid #000000">Today\'s Ongoing</th>
+											<th style="border: 1px solid #000000">Next Day Ongoing</th>
+											<th style="border: 1px solid #000000">Below 7 Days Ongoing</th>
+											<th style="border: 1px solid #000000">Above 7 Days Ongoing</th>
+											<th style="border: 1px solid #000000">Within Date Submitted</th>
+											<th style="border: 1px solid #000000">Out Of The Date Submitted</th>
+											<th style="border: 1px solid #000000">Completed</th>
+											<th style="border: 1px solid #000000">Ratings</th>
+										</thead>
+										<tbody>
+											<tr>
+												<td style="border: 1px solid #000000";text-align:center;>'.$row['userid'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['ename'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['oemail'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['ongoing'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['tongoing'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['nongoing'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['lsongoing'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['gsongoing'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['wsubmitted'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['osubmitted'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['completed'].'</td>
+												<td style="border: 1px solid #000000;text-align:center;">'.$row['ratings'].'</td>
+											</tr>
+										</tbody>
+								   </table>';
+                
+        						// Send email
+								//$mail->addAddress('hris@babylon-bd.com');
+								
+								$mail->addAddress($row['oemail']);
+								$mail->addBCC('hris@babylon-bd.com');
+								$mail->Subject = 'Task Tracker';
+								$mail->isHTML(true);
+        						if(!$mail->send())
+									{
+            							echo 'Message could not be sent.';
+            							echo 'Mailer Error: ' . $mail->ErrorInfo;
+			
+        							}
+								else
+									{
+            							echo 'Message has been sent';
+        							}
+						}
+				}
+		}
+		
+		
+		
+		
+		
+		
+		// Email body content
+        //$mailContent = "<h3>License Tracker</h3>".
+//		"<table id='tableData' class='table table-hover table-bordered'>
+//		<tr style='border: 1px solid #000000'>
+//		<th style='border: 1px solid #000000'>Factory</th>
+//		<th style='border: 1px solid #000000'>Name</th>
+//		<th style='border: 1px solid #000000'>Issue Date</th>
+//		<th style='border: 1px solid #000000'>Renewal Date</th>
+//		<th style='border: 1px solid #000000'>Remaining</th>
+//		</tr>
+//		<tr style='border: 1px solid #000000'>
+//		<td style='border: 1px solid #000000'>".$fac."</td>
+//		<td style='border: 1px solid #000000'>".$lname."</td>
+//		<td style='border: 1px solid #000000'>".$issu."</td>
+//		<td style='border: 1px solid #000000'>".$rene."</td>
+//		<td style='border: 1px solid #000000'>".$re."</td>
+//		</tr></table>".
+//		"<br/>".
+//		"<p>This is auto generated mail,no need to reply";
+?>
+		
+        <?php
+        //$mail->Body ='mm';
+		//$mail->AddEmbeddedImage('assets/uploads/od/'.$od, 'od');
+		//$mail->addEmbeddedImage('path/to/image_file.jpg', 'image_cid');
+		//$mail->Body = '<p><img src="cid:od"></p>';
+                
+        // Send email
+       // if(!$mail->send()){
+//            echo 'Message could not be sent.';
+//            echo 'Mailer Error: ' . $mail->ErrorInfo;
+//			
+//        }else{
+//            echo 'Message has been sent';
+//        }
+			
+		
+    }
+	
+	///////////////////////////////////////////////////BIRTHDAY MESSAGE//////////////////////////////////
+	
+	public function dob(){
+		$this->load->database();
+		
+		$this->load->model('Admin');
+        // Load PHPMailer library
+        $this->load->library('phpmailer_lib');
+        
+        // PHPMailer object
+        $mail = $this->phpmailer_lib->load();
+        
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host     = 'shared70.accountservergroup.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'hris@babylonit.com';
+        $mail->Password = 'Hris@babylon';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port     = 465;
+        
+        $mail->setFrom('hris@babylonit.com', 'Birth Day Message');
+        //$mail->addReplyTo('info@example.com', 'Test');
+        
+        // Add a recipient
+        //$mail->addAddress('arifhrd@babylon-bd.com');
+		//$mail->addAddress('hoinfo@babylon-bd.com');
+		//$mail->addAddress('bgfacinfo@babylon-bd.com');
+		$mail->addAddress('akbar@babylon-bd.com');
+		$mail->addAddress('hris@babylon-bd.com');
+		
+        
+        // Add cc or bcc 
+        //$mail->addCC('akbar@babylon-bd.com');
+
+        
+        // Email subject
+        $mail->Subject = 'Birth Day Message';
+        
+        // Set email format to HTML
+        $mail->isHTML(true);
+        
+        $cdate=date('Y-m-d');
+		$date = strtotime("+7 day");
+		$date=date('Y-m-d', $date);
+		$sql1="SELECT factoryid,userid,ename,dob FROM user WHERE dob BETWEEN '$cdate' AND '$date' AND ustatus='1'";
+		$query1=$this->db->query($sql1);
+		$result=$query1->result_array();
+		
+		$factoryid=array();
+		$userid=array();
+		$ename=array();
+		$dob=array();
+		foreach($result as $row)
+			{
+				$factoryid[]=$row['factoryid'];
+				$userid[]=$row['userid'];
+				$ename[]=$row['ename'];
+				$dob[]=$row['dob'];
+			}
+		$factoryid=implode(' <br/>', $factoryid);
+		$userid=implode(' <br/>', $userid);
+		$ename=implode(' <br/>', $ename);
+		$dob=implode(' <br/>', $dob);
+		$mail->AddEmbeddedImage('assets/uploads/dob/dob.jpg', 'dob1');
+		$card='<p><img style="width:100px;height:100px;" src="cid:dob1"></p>';
+		 $mailContent = "<h3>Birth Day Message</h3>".
+		"<table id='tableData' class='table table-hover table-bordered'>
+		<tr style='border: 1px solid #000000'>
+		<th style='border: 1px solid #000000'>Factory</th>
+		<th style='border: 1px solid #000000'>User ID</th>
+		<th style='border: 1px solid #000000'>Name</th>
+		<th style='border: 1px solid #000000'>Date OF Birth</th>
+		
+		
+		</tr>
+		<tr style='border: 1px solid #000000'>
+		<td style='border: 1px solid #000000'>".$factoryid."</td>
+		<td style='border: 1px solid #000000'>".$userid."</td>
+		<td style='border: 1px solid #000000'>".$ename."</td>
+		<td style='border: 1px solid #000000'>".$dob."</td>
+		
+		</tr></table>".
+		"<br/>".
+		"<p>This is auto generated mail,no need to reply";
+		
+        $mail->Body = $card."<br/>".$mailContent;
+		
+		
+		
+		
+		
+
+		
+        //$mail->Body ='mm';
+		
+		//$mail->addEmbeddedImage('path/to/image_file.jpg', 'image_cid');
+
+		//$mail->Body = '<p><img src="cid:od"></p>';
+                
+        // Send email
+        if(!$mail->send()){
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+			
+        }else{
+            echo 'Message has been sent';
+        }
+		
+		
+    }
+	
+	///////////////////////////////////////////////////SE//////////////////////////////////
+	
+	public function se(){
+		$this->load->database();
+		
+		$this->load->model('Admin');
+        // Load PHPMailer library
+        $this->load->library('phpmailer_lib');
+        
+        // PHPMailer object
+        $mail = $this->phpmailer_lib->load();
+        
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host     = 'shared70.accountservergroup.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'hris@babylonit.com';
+        $mail->Password = 'Hris@babylon';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port     = 465;
+        
+        $mail->setFrom('hris@babylonit.com', 'License');
+        
+		
+		$mail->addAddress('hris@babylon-bd.com');
+		// Email subject
+        $mail->Subject = 'License';
+        
+        // Set email format to HTML
+        $mail->isHTML(true);
+        $mail->Body ='license';
+                
+        // Send email
+        if(!$mail->send()){
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+			
+        }else{
+            echo 'Message has been sent';
+        }
+		
+		
+    }
+	
+}
