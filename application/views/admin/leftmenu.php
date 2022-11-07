@@ -26,8 +26,8 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-            			<li><a target="_blank" href="<?php echo base_url();?>Dashboard/factory_insert_form"><i class="fa fa-circle-o"></i> Add Factory Info</a></li>
-                		<li><a target="_blank" href="<?php echo base_url();?>Dashboard/factory_list"><i class="fa fa-circle-o"></i> Factory List</a></li>
+            			<li><a href="<?php echo base_url();?>Dashboard/factory_insert_form"><i class="fa fa-circle-o"></i> Add Factory Info</a></li>
+                		<li><a href="<?php echo base_url();?>Dashboard/factory_list"><i class="fa fa-circle-o"></i> Factory List</a></li>
             		</ul>
         		</li>
                 
@@ -39,8 +39,8 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-            			<li><a target="_blank" href="<?php echo base_url();?>Dashboard/department_insert_form"><i class="fa fa-circle-o"></i> Add Department Info</a></li>
-                		<li><a target="_blank" href="<?php echo base_url();?>Dashboard/department_list"><i class="fa fa-circle-o"></i> Department List</a></li>
+            			<li><a href="<?php echo base_url();?>Dashboard/department_insert_form"><i class="fa fa-circle-o"></i> Add Department Info</a></li>
+                		<li><a href="<?php echo base_url();?>Dashboard/department_list"><i class="fa fa-circle-o"></i> Department List</a></li>
             		</ul>
         		</li>
                 
@@ -54,8 +54,8 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-            			<li><a target="_blank" href="<?php echo base_url();?>Dashboard/designation_insert_form"><i class="fa fa-circle-o"></i> Add Designation</a></li>
-                		<li><a target="_blank" href="<?php echo base_url();?>Dashboard/designation_list"><i class="fa fa-circle-o"></i>Designation List</a></li>
+            			<li><a href="<?php echo base_url();?>Dashboard/designation_insert_form"><i class="fa fa-circle-o"></i> Add Designation</a></li>
+                		<li><a href="<?php echo base_url();?>Dashboard/designation_list"><i class="fa fa-circle-o"></i>Designation List</a></li>
             		</ul>
         		</li>
                 
@@ -67,8 +67,8 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-            			<li><a target="_blank" href="<?php echo base_url();?>Dashboard/usertype_insert_form"><i class="fa fa-circle-o"></i> Add User Type</a></li>
-                		<li><a target="_blank" href="<?php echo base_url();?>Dashboard/usertype_list"><i class="fa fa-circle-o"></i>User Type List</a></li>
+            			<li><a href="<?php echo base_url();?>Dashboard/usertype_insert_form"><i class="fa fa-circle-o"></i> Add User Type</a></li>
+                		<li><a href="<?php echo base_url();?>Dashboard/usertype_list"><i class="fa fa-circle-o"></i>User Type List</a></li>
             		</ul>
         		</li>
                 
@@ -80,8 +80,8 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-            			<li><a target="_blank" href="<?php echo base_url();?>Dashboard/userstatus_insert_form"><i class="fa fa-circle-o"></i> Add User Status</a></li>
-                		<li><a target="_blank" href="<?php echo base_url();?>Dashboard/userstatus_list"><i class="fa fa-circle-o"></i>User Status List</a></li>
+            			<li><a href="<?php echo base_url();?>Dashboard/userstatus_insert_form"><i class="fa fa-circle-o"></i> Add User Status</a></li>
+                		<li><a href="<?php echo base_url();?>Dashboard/userstatus_list"><i class="fa fa-circle-o"></i>User Status List</a></li>
             		</ul>
         		</li>
                 
@@ -93,9 +93,35 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-            			<li><a target="_blank" href="<?php echo base_url();?>Dashboard/user_insert_form"><i class="fa fa-circle-o"></i> Add User Info</a></li>
+            			<li><a href="<?php echo base_url();?>Dashboard/user_insert_form"><i class="fa fa-circle-o"></i> Add User Info</a></li>
                 		
-                		<li><a target="_blank" href="<?php echo base_url();?>Dashboard/user_list"><i class="fa fa-circle-o"></i> User List</a></li>
+                		<li><a href="<?php echo base_url();?>Dashboard/user_list"><i class="fa fa-circle-o"></i> User List</a></li>
+            		</ul>
+        		</li>
+                <li class="treeview">
+        			<a href="#">
+            			<i class="fa fa-id-card" aria-hidden="true"></i> <span>MPR Info</span>
+            				<span class="pull-right-container">
+              					<i class="fa fa-angle-left pull-right"></i>
+            				</span>
+          			</a>
+          			<ul class="treeview-menu">
+                    	<li><a href="<?php echo base_url();?>Dashboard/mpr_create_form"><i class="fa fa-circle-o"></i>Add MPR</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/date_wise_mpr_list_form"><i class="fa fa-circle-o"></i>Date Wise MPR List</a></li>
+                        
+            		</ul>
+        		</li>
+                <li class="treeview">
+        			<a href="#">
+            			<i class="fa fa-id-card" aria-hidden="true"></i> <span>PO Info</span>
+            				<span class="pull-right-container">
+              					<i class="fa fa-angle-left pull-right"></i>
+            				</span>
+          			</a>
+          			<ul class="treeview-menu">
+                    	<li><a href="<?php echo base_url();?>Dashboard/po_create_form"><i class="fa fa-circle-o"></i>PO Create</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/date_wise_po_list_form"><i class="fa fa-circle-o"></i>Date Wise PO List</a></li>
+                        
             		</ul>
         		</li>
                 <li class="treeview">
@@ -106,13 +132,13 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-                    	<li><a target="_blank" href="<?php echo base_url();?>Dashboard/product_uom_insert_form"><i class="fa fa-circle-o"></i>Add UOM</a></li>
-                        <li><a target="_blank" href="<?php echo base_url();?>Dashboard/product_uom_list"><i class="fa fa-circle-o"></i>Product UOM List</a></li>
-                        <li><a target="_blank" href="<?php echo base_url();?>Dashboard/product_capop_insert_form"><i class="fa fa-circle-o"></i>Add Capax/Opex</a></li>
-            			<li><a target="_blank" href="<?php echo base_url();?>Dashboard/product_category_insert_form"><i class="fa fa-circle-o"></i>Add Product Category</a></li>
+                    	<li><a href="<?php echo base_url();?>Dashboard/product_uom_insert_form"><i class="fa fa-circle-o"></i>Add UOM</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/product_uom_list"><i class="fa fa-circle-o"></i>Product UOM List</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/product_capop_insert_form"><i class="fa fa-circle-o"></i>Add Capax/Opex</a></li>
+            			<li><a href="<?php echo base_url();?>Dashboard/product_category_insert_form"><i class="fa fa-circle-o"></i>Add Product Category</a></li>
                         
-                		<li><a target="_blank" href="<?php echo base_url();?>Dashboard/product_category_list"><i class="fa fa-circle-o"></i>Product Category List</a></li>
-                        <li><a target="_blank" href="<?php echo base_url();?>Dashboard/product_details_list"><i class="fa fa-circle-o"></i>Product Details List</a></li>
+                		<li><a href="<?php echo base_url();?>Dashboard/product_category_list"><i class="fa fa-circle-o"></i>Product Category List</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/product_details_list"><i class="fa fa-circle-o"></i>Product Details List</a></li>
             		</ul>
         		</li>
             </ul>

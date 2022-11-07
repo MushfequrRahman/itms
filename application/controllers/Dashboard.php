@@ -1159,7 +1159,147 @@ class Dashboard extends CI_Controller {
 					redirect('Dashboard/product_details_list','refresh');
 				}
 		}
-	}  
+	}
+	public function mpr_create_form()
+	 {
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title']='MPR Create';
+		$this->load->view('admin/head',$data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$data['il']=$this->Admin->product_category_list();
+		$data['ul']=$this->Admin->product_uom_list();
+		$this->load->view('admin/mpr_create_form',$data);
+	 }
+	public function mpr_create()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		//if ($this->input->get('submit')) {
+			$userid = $this->input->get('userid');
+			$mprid = $this->input->get('mprid');
+			$cuserid = $this->input->get('cuserid');
+			$mprdate = $this->input->get('mprdate');
+			$item = $this->input->get('item');
+			$qty = $this->input->get('qty');
+			$uom = $this->input->get('uom');
+			$description = $this->input->get('description');
+			$price = $this->input->get('price');
+			for ($i = 0; $i < count($item); $i++) {
+				$data["i"] = $i;
+				$data["userid"] = $userid;
+				$data["mprid"] = $mprid;
+				$data["cuserid"] = $cuserid;
+				$data["mprdate"] = $mprdate;
+				$data["item"] = $item[$i];
+				$data["qty"] = $qty[$i];
+				$data["uom"] = $uom[$i];
+				$data["description"] = $description[$i];
+				$data["price"] = $price[$i];
+				$ins = $this->Admin->mpr_create($data);
+			}
+			if($ins)
+				{
+					echo  "ok";	
+				}
+			else
+				{
+					echo  "error";	
+				}
+	}
+	public function date_wise_mpr_list_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'MPR List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/date_wise_mpr_list_form', $data);
+	} 
+	public function date_wise_mpr_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		//$factoryid = $this->input->post('factoryid');
+		$pd = $this->input->post('pd');
+		$wd = $this->input->post('wd');
+		$data['ul'] = $this->Admin->date_wise_mpr_list($pd, $wd);
+		$this->load->view('admin/date_wise_mpr_list', $data);
+	}
+	public function po_create_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'PO Create';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$data['il']=$this->Admin->product_category_list();
+		$data['ul']=$this->Admin->product_uom_list();
+		$this->load->view('admin/po_create_form', $data);
+	}
+	public function po_create()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		//if ($this->input->get('submit')) {
+			$userid = $this->input->get('userid');
+			$mprid = $this->input->get('mprid');
+			$po = $this->input->get('po');
+			$supplier = $this->input->get('supplier');
+			$podate = $this->input->get('podate');
+			$item = $this->input->get('item');
+			$qty = $this->input->get('qty');
+			$uom = $this->input->get('uom');
+			$description = $this->input->get('description');
+			$price = $this->input->get('price');
+			for ($i = 0; $i < count($item); $i++) {
+				$data["i"] = $i;
+				$data["userid"] = $userid;
+				$data["mprid"] = $mprid;
+				$data["po"] = $po;
+				$data["supplier"] = $supplier;
+				$data["podate"] = $podate;
+				$data["item"] = $item[$i];
+				$data["qty"] = $qty[$i];
+				$data["uom"] = $uom[$i];
+				$data["description"] = $description[$i];
+				$data["price"] = $price[$i];
+				$ins = $this->Admin->po_create($data);
+			}
+			if($ins)
+				{
+					echo  "ok";	
+				}
+			else
+				{
+					echo  "error";	
+				}
+	}
+	public function date_wise_po_list_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'PO List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/date_wise_po_list_form', $data);
+	}
+	public function date_wise_po_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		//$factoryid = $this->input->post('factoryid');
+		$pd = $this->input->post('pd');
+		$wd = $this->input->post('wd');
+		$data['ul'] = $this->Admin->date_wise_po_list($pd, $wd);
+		$this->load->view('admin/date_wise_po_list', $data);
+	}   
 }
 
 

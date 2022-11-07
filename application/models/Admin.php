@@ -446,5 +446,82 @@ class Admin extends CI_Model {
 		$result=$this->db->query($query);
 		return $result->result_array();
 	}
+	public function mpr_create($data)
+	{
+		date_default_timezone_set('Asia/Dhaka');
+		$data['mprdate'] = date("Y-m-d", strtotime($data['mprdate']));
+		$d=date('Y-m-d');
+		$t= date("H:i:s");
+		$d1=str_replace("-","",$d);
+		$t1=str_replace(":","",$t);
+		$ccid=$d1.$t1;
+		
+		$d2=date('Y-m-d');
+		$t2= date("H:i:s");
+		$d21=str_replace("-","",$d2);
+		$t21=str_replace(":","",$t2);
+		$ccid1=$d21.$t21;
+		$ccid1=$ccid1.$data['i'];
+		
+		$sql1="INSERT INTO mpr_insert_id VALUES ('$ccid')";
+		$query1=$this->db->query($sql1);
+		
+		$sql="INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[cuserid]','$data[item]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[mprdate]')";
+		return $query=$this->db->query($sql);
+	}
+	public function date_wise_mpr_list($pd, $wd)
+	{
+		$pd= date("Y-m-d", strtotime($pd));
+		$wd= date("Y-m-d", strtotime($wd));
+		$query="SELECT * FROM mpr_insert 
+		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+		JOIN user ON user.userid=mpr_insert.cuserid
+		JOIN department ON department.deptid=user.departmentid
+		JOIN designation ON designation.desigid=user.designationid
+		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
+		$result=$this->db->query($query);
+		return $result->result_array();
+	}
+	public function po_create($data)
+	{
+		date_default_timezone_set('Asia/Dhaka');
+		$data['podate'] = date("Y-m-d", strtotime($data['podate']));
+		$d=date('Y-m-d');
+		$t= date("H:i:s");
+		$d1=str_replace("-","",$d);
+		$t1=str_replace(":","",$t);
+		$ccid=$d1.$t1;
+		
+		$d2=date('Y-m-d');
+		$t2= date("H:i:s");
+		$d21=str_replace("-","",$d2);
+		$t21=str_replace(":","",$t2);
+		$ccid1=$d21.$t21;
+		$ccid1=$ccid1.$data['i'];
+		
+		$sql1="INSERT INTO po_insert_id VALUES ('$ccid','$data[mprid]','$data[po]')";
+		$query1=$this->db->query($sql1);
+		
+		$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[supplier]','$data[podate]')";
+		return $query=$this->db->query($sql);
+	}
+	public function date_wise_po_list($pd, $wd)
+	{
+		$pd= date("Y-m-d", strtotime($pd));
+		$wd= date("Y-m-d", strtotime($wd));
+		$query="SELECT * FROM po_insert 
+		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+		JOIN product_uom_insert ON product_uom_insert.puomid=po_insert.uom
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+		JOIN user ON user.userid=mpr_insert.cuserid
+		JOIN department ON department.deptid=user.departmentid
+		JOIN designation ON designation.desigid=user.designationid
+		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
+		$result=$this->db->query($query);
+		return $result->result_array();
+	}
 	
 }
