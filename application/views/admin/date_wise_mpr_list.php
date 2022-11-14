@@ -27,6 +27,7 @@
   text-align:center;
 }
 th,td{font-size:12px;text-align:center;}
+td{font-weight: 600; font-variant:small-caps;}
 </style>
 
             
@@ -38,12 +39,15 @@ th,td{font-size:12px;text-align:center;}
                   <th>SL</th>
                   <th>MPR NO</th>
                   <th>Unit</th>
-                  <th>MPR Issued By</th>
+                  <th>MPR Prepared By</th>
                   <th>Item</th>
+                  <th>Type</th>
                   <th>Item Code</th>
                   <th>Qty</th>
                   <th>Description</th>
         		  <th>Price</th>
+                  <th>Remarks</th>
+                  <th>User</th>
                   <th>Date</th>
                 </tr>
                 </thead>
@@ -56,15 +60,16 @@ th,td{font-size:12px;text-align:center;}
                   
                   <td style="vertical-align:middle;"><?php echo $i++;?></td>
                   <td style="vertical-align:middle;"><?php echo $row['mprid'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['factoryid'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['userid'].'--'.$row['departmentname'].'--'.$row['designation'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['fid'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pcname'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['pcapop'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['simprid'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['qty']." ".$row['puom'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['description'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['price'];?></td>
-                  
-                 
+                  <td style="vertical-align:middle;"><?php echo $row['remarks'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['uname'];?></td>
                   <?php $mdate=date("d-m-Y", strtotime($row['mdate']));?>
                   <td style="vertical-align:middle;"><?php echo $mdate;?></td>
                   

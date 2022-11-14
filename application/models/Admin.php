@@ -466,9 +466,24 @@ class Admin extends CI_Model {
 		$sql1="INSERT INTO mpr_insert_id VALUES ('$ccid')";
 		$query1=$this->db->query($sql1);
 		
-		$sql="INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[cuserid]','$data[item]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[mprdate]')";
+		$sql="INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[item]','$data[type]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
 		return $query=$this->db->query($sql);
 	}
+	//public function date_wise_mpr_list($pd, $wd)
+//	{
+//		$pd= date("Y-m-d", strtotime($pd));
+//		$wd= date("Y-m-d", strtotime($wd));
+//		$query="SELECT * FROM mpr_insert 
+//		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
+//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+//		JOIN user ON user.userid=mpr_insert.cuserid
+//		JOIN department ON department.deptid=user.departmentid
+//		JOIN designation ON designation.desigid=user.designationid
+//		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
+//		$result=$this->db->query($query);
+//		return $result->result_array();
+//	}
 	public function date_wise_mpr_list($pd, $wd)
 	{
 		$pd= date("Y-m-d", strtotime($pd));
@@ -477,9 +492,9 @@ class Admin extends CI_Model {
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-		JOIN user ON user.userid=mpr_insert.cuserid
-		JOIN department ON department.deptid=user.departmentid
-		JOIN designation ON designation.desigid=user.designationid
+		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+		JOIN department ON department.deptid=mpr_insert.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert.mdesigid
 		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
 		$result=$this->db->query($query);
 		return $result->result_array();
@@ -503,25 +518,203 @@ class Admin extends CI_Model {
 		
 		$sql1="INSERT INTO po_insert_id VALUES ('$ccid','$data[mprid]','$data[po]')";
 		$query1=$this->db->query($sql1);
+		//if($data['pstatus']!=3)
+//		{
+		$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
+		//}
+//		else
+//		{
+//			$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','','$data[item]','$data[pqty]','$data[premarks]','','','','$data[pstatus]')";
+//		}
+//		
+//		$sql2="UPDATE mpr_insert SET mstatus='$data[pstatus]' WHERE simprid='$data[item]'";
+//		$query2=$this->db->query($sql2);
 		
-		$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[supplier]','$data[podate]')";
 		return $query=$this->db->query($sql);
 	}
+	
+	//public function date_wise_po_list($pd, $wd)
+//	{
+//		$pd= date("Y-m-d", strtotime($pd));
+//		$wd= date("Y-m-d", strtotime($wd));
+//		$query="SELECT * FROM po_insert 
+//		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+//		JOIN product_uom_insert ON product_uom_insert.puomid=po_insert.uom
+//		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+//		JOIN user ON user.userid=mpr_insert.cuserid
+//		JOIN department ON department.deptid=user.departmentid
+//		JOIN designation ON designation.desigid=user.designationid
+//		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
+//		$result=$this->db->query($query);
+//		return $result->result_array();
+//	}
+	//public function date_wise_po_list($pd, $wd)
+//	{
+//		$pd= date("Y-m-d", strtotime($pd));
+//		$wd= date("Y-m-d", strtotime($wd));
+//		$query="SELECT * FROM po_insert 
+//		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+//		
+//		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+//		JOIN department ON department.deptid=mpr_insert.mdeptid
+//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+//		WHERE mdate between '$pd' AND '$wd' AND pstatus='1' ORDER BY mpr_insert.mprid";
+//		$result=$this->db->query($query);
+//		return $result->result_array();
+//	}
 	public function date_wise_po_list($pd, $wd)
 	{
 		$pd= date("Y-m-d", strtotime($pd));
 		$wd= date("Y-m-d", strtotime($wd));
 		$query="SELECT * FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
-		JOIN product_uom_insert ON product_uom_insert.puomid=po_insert.uom
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-		JOIN user ON user.userid=mpr_insert.cuserid
-		JOIN department ON department.deptid=user.departmentid
-		JOIN designation ON designation.desigid=user.designationid
+		JOIN department ON department.deptid=mpr_insert.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert.mdesigid
 		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
 		$result=$this->db->query($query);
 		return $result->result_array();
 	}
+	//public function po_for_mpr_list($mprid)
+//	{
+//		
+//		$query="SELECT * FROM mpr_insert 
+//		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
+//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+//		JOIN department ON department.deptid=mpr_insert.mdeptid
+//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+//		WHERE mprid='$mprid' AND mstatus!='1'";
+//		$result=$this->db->query($query);
+//		return $result->result_array();
+//	}
+	//public function po_for_mpr_list($mprid)
+//		{
+//		
+//		$query="SELECT mpr_insert.mprid,fid,pcname,pcapop,po_insert.simprid,
+//		mpr_insert.qty,puom,description,price,remarks,uname,mdate,
+//		SUM(pqty) AS pqty,SUM(pprice) AS pprice
+// 		FROM po_insert 
+//		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+//		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+//		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+//		JOIN department ON department.deptid=mpr_insert.mdeptid
+//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+//		WHERE po_insert_id.mprid='$mprid'
+//		GROUP BY po_insert.simprid";
+//		$result=$this->db->query($query);
+//		return $result->result_array();
+//	    }
+		public function po_for_mpr_list($mprid)
+		{
+		
+		$query="SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,product_capop_insert.pcapop,po_insert.simprid,
+		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
+		prqty,tpprice
+ 		FROM po_insert 
+		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+		JOIN department ON department.deptid=mpr_insert.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+		WHERE po_insert_id.mprid='$mprid'
+		GROUP BY po_insert.simprid";
+		$result=$this->db->query($query);
+		return $result->result_array();
+	    }
+		public function receive_for_mpr_list($mprid)
+		{
+		
+		$query="SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,product_capop_insert.pcapop,
+		po_insert.simprid,po_insert.spoid,
+		po_insert.sipoid,
+		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
+		SUM(pqty) AS pqty,SUM(pprice) AS pprice
+ 		FROM po_insert 
+		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+		JOIN department ON department.deptid=mpr_insert.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+		WHERE po_insert_id.mprid='$mprid'
+		GROUP BY po_insert.simprid";
+		$result=$this->db->query($query);
+		return $result->result_array();
+	    }
+		public function receive_create($data)
+		{
+		date_default_timezone_set('Asia/Dhaka');
+		$data['rdate'] = date("Y-m-d", strtotime($data['rdate']));
+		$d=date('Y-m-d');
+		$t= date("H:i:s");
+		$d1=str_replace("-","",$d);
+		$t1=str_replace(":","",$t);
+		$ccid=$d1.$t1;
+		
+		$d2=date('Y-m-d');
+		$t2= date("H:i:s");
+		$d21=str_replace("-","",$d2);
+		$t21=str_replace(":","",$t2);
+		$ccid1=$d21.$t21;
+		$ccid1=$ccid1.$data['i'];
+		
+		$sql1="INSERT INTO receive_insert_id VALUES ('$ccid','$data[mprid]','$data[grn]')";
+		$query1=$this->db->query($sql1);
+		//if($data['pstatus']!=3)
+//		{
+		$sql="INSERT INTO receive_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[item]','$data[sipoid]','$data[po]','$data[grn]','$data[rqty]','$data[rremarks]','$data[rdate]')";
+		//}
+		//else
+//		{
+//			$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','','$data[item]','$data[pqty]','$data[premarks]','','','','$data[pstatus]')";
+//		}
+//		
+//		$sql2="UPDATE mpr_insert SET mstatus='$data[pstatus]' WHERE simprid='$data[item]'";
+		//$query2=$this->db->query($sql2);
+		
+		return $query=$this->db->query($sql);
+	}
+	public function mpr_wise_receive_list($mprid)
+		{
+		
+		$query="SELECT mpr_insert.mprid,fid,pcname,pcapop,po_insert.simprid,po_insert.spoid,po_insert.po,
+		mpr_insert.qty,puom,description,price,remarks,uname,mdate,
+		pqty, pprice,grn,rqty,mdate,pdate,rdate,description,remarks,premarks,uname
+ 		FROM mpr_insert 
+		JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+		WHERE receive_insert.mprid='$mprid' AND po_insert.po!='' AND grn!=''";
+		$result=$this->db->query($query);
+		return $result->result_array();
+	    }
+
+		public function mpr_wise_sreceive_list($mprid)
+		{
+			$query="SELECT * FROM po_qty_remaining 
+				JOIN receive_qty_remaining ON
+				po_qty_remaining.simprid=receive_qty_remaining.simprid
+				WHERE mprid='$mprid'";
+			$result=$this->db->query($query);
+			return $result->result_array();
+	    }
 	
 }

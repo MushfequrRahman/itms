@@ -809,6 +809,17 @@ class Dashboard extends CI_Controller {
 				}
 		}
 	}
+	public function product_capop_list()
+	 {
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title']='Cap/OP List';
+		$this->load->view('admin/head',$data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$data['ul']=$this->Admin->product_capop_list();
+		$this->load->view('admin/product_capop_list',$data);
+	}
 	public function product_category_insert_form()
 	 {
 		$this->load->database();
@@ -1170,6 +1181,10 @@ class Dashboard extends CI_Controller {
 		$this->load->view('admin/leftmenu');
 		$data['il']=$this->Admin->product_category_list();
 		$data['ul']=$this->Admin->product_uom_list();
+		$data['fl']=$this->Admin->factory_list();
+		$data['dep']=$this->Admin->department_list();
+		$data['des']=$this->Admin->designation_list();
+		$data['col']=$this->Admin->product_capop_list();
 		$this->load->view('admin/mpr_create_form',$data);
 	 }
 	public function mpr_create()
@@ -1180,24 +1195,36 @@ class Dashboard extends CI_Controller {
 		//if ($this->input->get('submit')) {
 			$userid = $this->input->get('userid');
 			$mprid = $this->input->get('mprid');
-			$cuserid = $this->input->get('cuserid');
+			$factoryid = $this->input->get('factoryid');
+			$departmentid = $this->input->get('departmentid');
+			$name = $this->input->get('name');
+			$designationid = $this->input->get('designationid');
 			$mprdate = $this->input->get('mprdate');
 			$item = $this->input->get('item');
+			$type = $this->input->get('type');
 			$qty = $this->input->get('qty');
 			$uom = $this->input->get('uom');
 			$description = $this->input->get('description');
 			$price = $this->input->get('price');
+			$remarks = $this->input->get('remarks');
+			$uname = $this->input->get('uname');
 			for ($i = 0; $i < count($item); $i++) {
 				$data["i"] = $i;
 				$data["userid"] = $userid;
 				$data["mprid"] = $mprid;
-				$data["cuserid"] = $cuserid;
+				$data["factoryid"] = $factoryid;
+				$data["departmentid"] = $departmentid;
+				$data["name"] = $name;
+				$data["designationid"] = $designationid;
 				$data["mprdate"] = $mprdate;
 				$data["item"] = $item[$i];
+				$data["type"] = $type[$i];
 				$data["qty"] = $qty[$i];
 				$data["uom"] = $uom[$i];
 				$data["description"] = $description[$i];
 				$data["price"] = $price[$i];
+				$data["remarks"] = $remarks[$i];
+				$data["uname"] = $uname[$i];
 				$ins = $this->Admin->mpr_create($data);
 			}
 			if($ins)
@@ -1241,44 +1268,87 @@ class Dashboard extends CI_Controller {
 		$data['ul']=$this->Admin->product_uom_list();
 		$this->load->view('admin/po_create_form', $data);
 	}
+	//public function po_create()
+//	{
+//		$this->load->database();
+//		$this->load->library('form_validation');
+//		$this->load->model('Admin');
+//		//if ($this->input->get('submit')) {
+//			$userid = $this->input->get('userid');
+//			$mprid = $this->input->get('mprid');
+//			$po = $this->input->get('po');
+//			$supplier = $this->input->get('supplier');
+//			$podate = $this->input->get('podate');
+//			$item = $this->input->get('item');
+//			$qty = $this->input->get('qty');
+//			$uom = $this->input->get('uom');
+//			$description = $this->input->get('description');
+//			$price = $this->input->get('price');
+//			for ($i = 0; $i < count($item); $i++) {
+//				$data["i"] = $i;
+//				$data["userid"] = $userid;
+//				$data["mprid"] = $mprid;
+//				$data["po"] = $po;
+//				$data["supplier"] = $supplier;
+//				$data["podate"] = $podate;
+//				$data["item"] = $item[$i];
+//				$data["qty"] = $qty[$i];
+//				$data["uom"] = $uom[$i];
+//				$data["description"] = $description[$i];
+//				$data["price"] = $price[$i];
+//				$ins = $this->Admin->po_create($data);
+//			}
+//			if($ins)
+//				{
+//					echo  "ok";	
+//				}
+//			else
+//				{
+//					echo  "error";	
+//				}
+//	}
 	public function po_create()
 	{
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
-		//if ($this->input->get('submit')) {
-			$userid = $this->input->get('userid');
-			$mprid = $this->input->get('mprid');
-			$po = $this->input->get('po');
-			$supplier = $this->input->get('supplier');
-			$podate = $this->input->get('podate');
-			$item = $this->input->get('item');
-			$qty = $this->input->get('qty');
-			$uom = $this->input->get('uom');
-			$description = $this->input->get('description');
-			$price = $this->input->get('price');
+		if ($this->input->post('submit')) {
+			$userid = $this->input->post('userid');
+			$mprid = $this->input->post('mprid');
+			$po = $this->input->post('po');
+			$supplier = $this->input->post('supplier');
+			$podate = $this->input->post('podate');
+			$item = $this->input->post('item');
+			$pqty = $this->input->post('pqty');
+			$premarks = $this->input->post('premarks');
+			$pprice = $this->input->post('pprice');
+			$pstatus = $this->input->post('pstatus');
 			for ($i = 0; $i < count($item); $i++) {
 				$data["i"] = $i;
 				$data["userid"] = $userid;
 				$data["mprid"] = $mprid;
-				$data["po"] = $po;
-				$data["supplier"] = $supplier;
-				$data["podate"] = $podate;
+				$data["po"] = $po[$i];
+				$data["supplier"] = $supplier[$i];
+				$data["podate"] = $podate[$i];
 				$data["item"] = $item[$i];
-				$data["qty"] = $qty[$i];
-				$data["uom"] = $uom[$i];
-				$data["description"] = $description[$i];
-				$data["price"] = $price[$i];
+				$data["pqty"] = $pqty[$i];
+				$data["premarks"] = $premarks[$i];
+				$data["pprice"] = $pprice[$i];
+				$data["pstatus"] = $pstatus[$i];
 				$ins = $this->Admin->po_create($data);
+				//var_dump($data);
 			}
-			if($ins)
-				{
-					echo  "ok";	
-				}
-			else
-				{
-					echo  "error";	
-				}
+		
+			if($ins==TRUE)
+						{
+							$this->session->set_flashdata('Successfully','Successfully Inserted');
+						}
+					else
+						{
+							$this->session->set_flashdata('Successfully','Failed To Inserted');
+						}
+					redirect('Dashboard/po_from_mpr_form','refresh');
+		}
 	}
 	public function date_wise_po_list_form()
 	{
@@ -1299,7 +1369,137 @@ class Dashboard extends CI_Controller {
 		$wd = $this->input->post('wd');
 		$data['ul'] = $this->Admin->date_wise_po_list($pd, $wd);
 		$this->load->view('admin/date_wise_po_list', $data);
-	}   
+	}
+	public function po_from_mpr_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'MPR List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/po_from_mpr_form', $data);
+	}
+	public function po_for_mpr_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$mprid = $this->input->post('mprid');
+		//$pd = $this->input->post('pd');
+//		$wd = $this->input->post('wd');
+		$data['ul'] = $this->Admin->po_for_mpr_list($mprid);
+		$this->load->view('admin/po_for_mpr_list', $data);
+	}
+	public function receive_from_mpr_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Receive List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/receive_from_mpr_form', $data);
+	}
+	public function receive_for_mpr_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$mprid = $this->input->post('mprid');
+		//$pd = $this->input->post('pd');
+//		$wd = $this->input->post('wd');
+		$data['ul'] = $this->Admin->receive_for_mpr_list($mprid);
+		$this->load->view('admin/receive_for_mpr_list', $data);
+	}
+	public function receive_create()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		if ($this->input->post('submit')) {
+			$userid = $this->input->post('userid');
+			$mprid = $this->input->post('mprid');
+			
+			//$supplier = $this->input->post('supplier');
+			//$podate = $this->input->post('podate');
+			$item = $this->input->post('item');
+			$sipoid = $this->input->post('sipoid');
+			$po = $this->input->post('po');
+			$grn = $this->input->post('grn');
+			
+			$rqty = $this->input->post('rqty');
+			$rdate = $this->input->post('rdate');
+			$rremarks = $this->input->post('rremarks');
+			//$rprice = $this->input->post('pprice');
+			//$pstatus = $this->input->post('pstatus');
+			for ($i = 0; $i < count($item); $i++) {
+				$data["i"] = $i;
+				$data["userid"] = $userid;
+				$data["mprid"] = $mprid;
+				$data["po"] = $po[$i];
+				$data["grn"] = $grn[$i];
+				//$data["supplier"] = $supplier[$i];
+				$data["rdate"] = $rdate[$i];
+				$data["item"] = $item[$i];
+				$data["sipoid"] = $sipoid[$i];
+				$data["rqty"] = $rqty[$i];
+				$data["rremarks"] = $rremarks[$i];
+				//$data["pprice"] = $pprice[$i];
+				//$data["pstatus"] = $pstatus[$i];
+				$ins = $this->Admin->receive_create($data);
+				//var_dump($data);
+			}
+		
+			if($ins==TRUE)
+						{
+							$this->session->set_flashdata('Successfully','Successfully Inserted');
+						}
+					else
+						{
+							$this->session->set_flashdata('Successfully','Failed To Inserted');
+						}
+					redirect('Dashboard/receive_from_mpr_form','refresh');
+		}
+	}
+	public function mpr_wise_receive_list_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Receive List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/mpr_wise_receive_list_form', $data);
+	}
+	public function mpr_wise_receive_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$mprid = $this->input->post('mprid');
+		//$pd = $this->input->post('pd');
+//		$wd = $this->input->post('wd');
+		$data['ul'] = $this->Admin->mpr_wise_receive_list($mprid);
+		$this->load->view('admin/mpr_wise_receive_list', $data);
+	}    
+	public function mpr_wise_sreceive_list_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Receive List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/mpr_wise_sreceive_list_form', $data);
+	}
+	public function mpr_wise_sreceive_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$mprid = $this->input->post('mprid');
+		//$pd = $this->input->post('pd');
+//		$wd = $this->input->post('wd');
+		$data['ul'] = $this->Admin->mpr_wise_sreceive_list($mprid);
+		$this->load->view('admin/mpr_wise_sreceive_list', $data);
+	}    
 }
 
 

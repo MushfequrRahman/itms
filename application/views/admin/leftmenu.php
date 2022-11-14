@@ -119,8 +119,24 @@
             				</span>
           			</a>
           			<ul class="treeview-menu">
-                    	<li><a href="<?php echo base_url();?>Dashboard/po_create_form"><i class="fa fa-circle-o"></i>PO Create</a></li>
+                    	<?php /*?><li><a href="<?php echo base_url();?>Dashboard/po_create_form"><i class="fa fa-circle-o"></i>Add PO</a></li><?php */?>
+                        <li><a href="<?php echo base_url();?>Dashboard/po_from_mpr_form"><i class="fa fa-circle-o"></i>Add PO</a></li>
                         <li><a href="<?php echo base_url();?>Dashboard/date_wise_po_list_form"><i class="fa fa-circle-o"></i>Date Wise PO List</a></li>
+                        
+            		</ul>
+        		</li>
+                <li class="treeview">
+        			<a href="#">
+            			<i class="fa fa-id-card" aria-hidden="true"></i> <span>Receive Info</span>
+            				<span class="pull-right-container">
+              					<i class="fa fa-angle-left pull-right"></i>
+            				</span>
+          			</a>
+          			<ul class="treeview-menu">
+                    	<?php /*?><li><a href="<?php echo base_url();?>Dashboard/po_create_form"><i class="fa fa-circle-o"></i>Add PO</a></li><?php */?>
+                        <li><a href="<?php echo base_url();?>Dashboard/receive_from_mpr_form"><i class="fa fa-circle-o"></i>Add Receive</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/mpr_wise_receive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Receive List</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/mpr_wise_sreceive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Summary List</a></li>
                         
             		</ul>
         		</li>
@@ -135,6 +151,7 @@
                     	<li><a href="<?php echo base_url();?>Dashboard/product_uom_insert_form"><i class="fa fa-circle-o"></i>Add UOM</a></li>
                         <li><a href="<?php echo base_url();?>Dashboard/product_uom_list"><i class="fa fa-circle-o"></i>Product UOM List</a></li>
                         <li><a href="<?php echo base_url();?>Dashboard/product_capop_insert_form"><i class="fa fa-circle-o"></i>Add Capax/Opex</a></li>
+                        <li><a href="<?php echo base_url();?>Dashboard/product_capop_list"><i class="fa fa-circle-o"></i>Product Capex/Opex List</a></li>
             			<li><a href="<?php echo base_url();?>Dashboard/product_category_insert_form"><i class="fa fa-circle-o"></i>Add Product Category</a></li>
                         
                 		<li><a href="<?php echo base_url();?>Dashboard/product_category_list"><i class="fa fa-circle-o"></i>Product Category List</a></li>

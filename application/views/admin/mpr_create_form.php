@@ -10,11 +10,15 @@
 <?php
 $item = '';
 $uom = '';
+$type = '';
 foreach ($il as $row) {
   $item .= '<option value="' . $row["pccode"] . '">' . $row["pcname"] . '</option>';
 }
 foreach ($ul as $row) {
   $uom .= '<option value="' . $row["puomid"] . '">' . $row["puom"] . '</option>';
+}
+foreach ($col as $row) {
+  $type .= '<option value="' . $row["pcoid"] . '">' . $row["pcapop"] . '</option>';
 }
 ?>
 
@@ -80,11 +84,62 @@ foreach ($ul as $row) {
                         <input type="text" class="form-control mprid" name="mprid" id="mprid" placeholder="Enter MPR Number">
                         <?php echo form_error('mpr', '<div class="error">', '</div>');  ?>
                       </div>
-                      <div class="form-group">
+                      <?php /*?><div class="form-group">
                         <label>User ID<em>*</em></label>
                         <input type="text" class="form-control" name="cuserid" id="cuserid" placeholder="Enter User ID">
                         <?php echo form_error('cuserid', '<div class="error">', '</div>');  ?>
-                      </div>
+                      </div><?php */?>
+                      <div class="form-group">
+												<label>Unit Name<em>*</em></label>
+												<select class="form-control" name="factoryid" id="factoryid">
+                    								<option value="">Select....</option>
+                        							<?php
+														foreach($fl as $row)
+															{
+													?>
+                    											<option value="<?php echo $row['factoryid'];?>"><?php echo $row['factoryname'];?></option>
+                    								<?php
+															}
+													?>
+                    							</select>
+                    								<?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
+											</div>
+                 							<div class="form-group">
+												<label>Department<em>*</em></label>
+												<select class="form-control" name="departmentid" id="departmentid">
+                    								<option value="">Select....</option>
+                                                    <?php
+														foreach($dep as $row)
+															{
+													?>
+                    											<option value="<?php echo $row['deptid'];?>"><?php echo $row['departmentname'];?></option>
+                    								<?php
+															}
+													?>
+                    							</select>
+                    								<?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
+                        						</select>
+											</div>
+                							<div class="form-group">
+												<label>Name<em>*</em></label>
+												<input type="text" class="form-control" name="name" placeholder="Enter Name">
+                    							<?php echo form_error('name', '<div class="error">', '</div>');  ?>
+											</div>
+                							<div class="form-group">
+												<label>Designation<em>*</em></label>
+												<select class="form-control" name="designationid" id="designationid">
+                    								<option value="">Select....</option>
+                        							<?php
+														foreach($des as $row)
+															{
+													?>
+                    											<option value="<?php echo $row['desigid'];?>"><?php echo $row['designation'];?></option>
+                    								<?php
+															}
+													?>
+                    							</select>
+                    							<?php echo form_error('designationid', '<div class="error">', '</div>');  ?>
+											</div>
                       <div class="form-group">
                         <label>MPR Create Date</label>
                         <input type="text" class="form-control pd" readonly name="mprdate" value="<?php echo date('d-m-Y'); ?>">
@@ -101,10 +156,13 @@ foreach ($ul as $row) {
                             <thead>
                               <tr>
                                 <th style="text-align:center;">Item</th>
+                                <th style="text-align:center;">Type</th>
                                 <th style="text-align:center;">Qty</th>
                                 <th style="text-align:center;">Unit</th>
                                 <th style="text-align:center;">Description</th>
                                 <th style="text-align:center;">Price</th>
+                                <th style="text-align:center;">Remarks</th>
+                                <th style="text-align:center;">User</th>
                                 <th style="vertical-align:middle; text-align:center;"><button type="button" name="add" class="btn btn-success btn-xs add"><span class="glyphicon glyphicon-plus"></span></button></th>
                               </tr>
                             </thead>
@@ -187,10 +245,13 @@ foreach ($ul as $row) {
         var html = '';
         html += '<tr>';
         html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option><?php echo $item; ?></select></td>';
+		html += '<td><select name="type[]" class="form-control type" id="type' + count + '"><option value="">Type</option><?php echo $type; ?></select></td>';
         html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
         html += '<td><select name="uom[]" class="form-control uom" id="uom' + count + '"><option value="">UOM</option><?php echo $uom; ?></select></td>';
         html += '<td><textarea class="form-control" rows="1" name="description[]" id="description"></textarea></td>';
         html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + '" /></td>';
+		html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
+		html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
         html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
         $('tbody').append(html);
       });
@@ -206,6 +267,15 @@ foreach ($ul as $row) {
           var count = 1;
           if ($(this).val() == '') {
             error += '<p>Enter Item at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+		
+		$('.type').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Type at ' + count + ' Row</p>';
             return false;
           }
           count = count + 1;
@@ -244,6 +314,18 @@ foreach ($ul as $row) {
 
           if ($(this).val() == '') {
             error += '<p>Select Price at ' + count + ' Row</p> ';
+            return false;
+          }
+
+          count = count + 1;
+
+        });
+		$('.uname').each(function() {
+
+          var count = 1;
+
+          if ($(this).val() == '') {
+            error += '<p>Select Uname at ' + count + ' Row</p> ';
             return false;
           }
 

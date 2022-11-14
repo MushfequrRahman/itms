@@ -47,7 +47,7 @@ th,td{font-size:12px;text-align:center;}
         		  <th>MPR Price</th>
                   <th>PO Qty</th>
                   <th>PO Price</th>
-                  <th>PO Description</th>
+                  <th>PO Remarks</th>
                   <th>Supplier</th>
                   <th>MPR Date</th>
                   <th>PO Date</th>
@@ -63,8 +63,9 @@ th,td{font-size:12px;text-align:center;}
                   <td style="vertical-align:middle;"><?php echo $i++;?></td>
                   <td style="vertical-align:middle;"><?php echo $row['mprid'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['po'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['factoryid'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['userid'].'--'.$row['departmentname'].'--'.$row['designation'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['fid'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td>
+                  <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'];?></td><?php */?>
                   <td style="vertical-align:middle;"><?php echo $row['pcname'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['simprid'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['qty']." ".$row['puom'];?></td>
@@ -72,7 +73,7 @@ th,td{font-size:12px;text-align:center;}
                   <td style="vertical-align:middle;"><?php echo $row['price'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pqty']." ".$row['puom'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pprice'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['pdescription'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['premarks'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['supplier'];?></td>
                   <?php $mdate=date("d-m-Y", strtotime($row['mdate']));?>
                   <td style="vertical-align:middle;"><?php echo $mdate;?></td>
