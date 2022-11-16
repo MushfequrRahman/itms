@@ -109,7 +109,7 @@ foreach ($ul as $row) {
                                 <th style="text-align:center;">PO Qty</th>
                                 <th style="text-align:center;">Unit</th>
                                 <th style="text-align:center;">Description</th>
-                                <th style="text-align:center;">Price</th>
+                                <th style="text-align:center;">Unit Price</th>
                                 <th style="vertical-align:middle; text-align:center;"><button type="button" name="add" class="btn btn-success btn-xs add"><span class="glyphicon glyphicon-plus"></span></button></th>
                               </tr>
                             </thead>

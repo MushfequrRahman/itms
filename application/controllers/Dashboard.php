@@ -1,5 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+// Spreadsheet
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class Dashboard extends CI_Controller {
 
@@ -1201,6 +1203,7 @@ class Dashboard extends CI_Controller {
 			$designationid = $this->input->get('designationid');
 			$mprdate = $this->input->get('mprdate');
 			$item = $this->input->get('item');
+			$model = $this->input->get('model');
 			$type = $this->input->get('type');
 			$qty = $this->input->get('qty');
 			$uom = $this->input->get('uom');
@@ -1218,6 +1221,7 @@ class Dashboard extends CI_Controller {
 				$data["designationid"] = $designationid;
 				$data["mprdate"] = $mprdate;
 				$data["item"] = $item[$i];
+				$data["model"] = $model[$i];
 				$data["type"] = $type[$i];
 				$data["qty"] = $qty[$i];
 				$data["uom"] = $uom[$i];
@@ -1253,8 +1257,86 @@ class Dashboard extends CI_Controller {
 		//$factoryid = $this->input->post('factoryid');
 		$pd = $this->input->post('pd');
 		$wd = $this->input->post('wd');
+		$data['pd'] = $pd;
+		$data['wd'] = $wd;
 		$data['ul'] = $this->Admin->date_wise_mpr_list($pd, $wd);
 		$this->load->view('admin/date_wise_mpr_list', $data);
+	}
+	public function date_wise_mpr_list_xls()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		//$factoryid = $this->input->post('factoryid');
+		$pd = $this->input->post('pd');
+		$wd = $this->input->post('wd');
+		$extension = $this->input->post('export_type');
+		if (!empty($extension)) {
+			$extension = $extension;
+		} else {
+			$extension = 'xlsx';
+		}
+		$this->load->helper('download');
+		$data = array();
+		$data['title'] = 'Export Excel Sheet';
+		// get employee list
+		$empInfo = $this->Admin->date_wise_mpr_list($pd, $wd);
+		$fileName = 'date_wise_mpr_list-' . time();
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+
+		$sheet->setCellValue('A1', 'MPR NO');
+		$sheet->setCellValue('B1', 'Unit');
+		$sheet->setCellValue('C1', 'MPR Prepared By');
+		$sheet->setCellValue('D1', 'Item');
+		$sheet->setCellValue('E1', 'Model');
+		$sheet->setCellValue('F1', 'Type');
+		$sheet->setCellValue('G1', 'Qty');
+		$sheet->setCellValue('H1', 'Description');
+		$sheet->setCellValue('I1', 'Unit Price');
+		$sheet->setCellValue('J1', 'Total Price');
+		$sheet->setCellValue('K1', 'Remarks');
+		$sheet->setCellValue('L1', 'User');
+		$sheet->setCellValue('M1', 'Date');
+
+		// 
+		$rowCount = 2;
+		foreach ($empInfo as $element) {
+			$sheet->setCellValue('A' . $rowCount, $element['mprid']);
+			$sheet->setCellValue('B' . $rowCount, $element['fid']);
+			$sheet->setCellValue('C' . $rowCount, $element['name'].'--'.$element['departmentname'].'--'.$element['designation']);
+			$sheet->setCellValue('D' . $rowCount, $element['pcname']);
+			$sheet->setCellValue('E' . $rowCount, $element['model']);
+			$sheet->setCellValue('F' . $rowCount, $element['pcapop']);
+			$sheet->setCellValue('G' . $rowCount, $element['qty']." ".$row['puom']);
+			$sheet->setCellValue('H' . $rowCount, $element['description']);
+			$sheet->setCellValue('I' . $rowCount, $element['price']);
+			$sheet->setCellValue('J' . $rowCount, $element['qty']*$element['price']);
+			$sheet->setCellValue('K' . $rowCount, $element['remarks']);
+			$sheet->setCellValue('L' . $rowCount, $element['uname']);
+			$sheet->setCellValue('M' . $rowCount, $element['mdate']);
+
+
+			$rowCount++;
+		}
+
+		if ($extension == 'csv') {
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
+			$fileName = $fileName . '.csv';
+		} elseif ($extension == 'xlsx') {
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+			$fileName = $fileName . '.xlsx';
+		} else {
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+			$fileName = $fileName . '.xls';
+		}
+
+		$this->output->set_header('Content-Type: application/vnd.ms-excel');
+		$this->output->set_header("Content-type: application/csv");
+		$this->output->set_header('Cache-Control: max-age=0');
+		$writer->save(ROOT_UPLOAD_PATH . $fileName);
+		//redirect(HTTP_UPLOAD_PATH.$fileName); 
+		$filepath = file_get_contents(ROOT_UPLOAD_PATH . $fileName);
+		force_download($fileName, $filepath);
 	}
 	public function po_create_form()
 	{
@@ -1367,9 +1449,87 @@ class Dashboard extends CI_Controller {
 		//$factoryid = $this->input->post('factoryid');
 		$pd = $this->input->post('pd');
 		$wd = $this->input->post('wd');
+		$data['pd'] = $pd;
+		$data['wd'] = $wd;
 		$data['ul'] = $this->Admin->date_wise_po_list($pd, $wd);
 		$this->load->view('admin/date_wise_po_list', $data);
 	}
+	//public function date_wise_po_list_xls()
+//	{
+//		$this->load->database();
+//		$this->load->model('Admin');
+//		//$factoryid = $this->input->post('factoryid');
+//		$pd = $this->input->post('pd');
+//		$wd = $this->input->post('wd');
+//		$extension = $this->input->post('export_type');
+//		if (!empty($extension)) {
+//			$extension = $extension;
+//		} else {
+//			$extension = 'xlsx';
+//		}
+//		$this->load->helper('download');
+//		$data = array();
+//		$data['title'] = 'Export Excel Sheet';
+//		// get employee list
+//		$empInfo = $this->Admin->date_wise_po_list($pd, $wd);
+//		$fileName = 'date_wise_po_list-' . time();
+//		$spreadsheet = new Spreadsheet();
+//		$sheet = $spreadsheet->getActiveSheet();
+//
+//		$sheet->setCellValue('A1', 'MPR NO');
+//		$sheet->setCellValue('B1', 'Unit');
+//		$sheet->setCellValue('C1', 'MPR Prepared By');
+//		$sheet->setCellValue('D1', 'Item');
+//		$sheet->setCellValue('E1', 'Model');
+//		$sheet->setCellValue('F1', 'Type');
+//		$sheet->setCellValue('G1', 'Qty');
+//		$sheet->setCellValue('H1', 'Description');
+//		$sheet->setCellValue('I1', 'Unit Price');
+//		$sheet->setCellValue('J1', 'Total Price');
+//		$sheet->setCellValue('K1', 'Remarks');
+//		$sheet->setCellValue('L1', 'User');
+//		$sheet->setCellValue('M1', 'Date');
+//
+//		// 
+//		$rowCount = 2;
+//		foreach ($empInfo as $element) {
+//			$sheet->setCellValue('A' . $rowCount, $element['mprid']);
+//			$sheet->setCellValue('B' . $rowCount, $element['fid']);
+//			$sheet->setCellValue('C' . $rowCount, $element['name'].'--'.$element['departmentname'].'--'.$element['designation']);
+//			$sheet->setCellValue('D' . $rowCount, $element['pcname']);
+//			$sheet->setCellValue('E' . $rowCount, $element['model']);
+//			$sheet->setCellValue('F' . $rowCount, $element['pcapop']);
+//			$sheet->setCellValue('G' . $rowCount, $element['qty']." ".$row['puom']);
+//			$sheet->setCellValue('H' . $rowCount, $element['description']);
+//			$sheet->setCellValue('I' . $rowCount, $element['price']);
+//			$sheet->setCellValue('J' . $rowCount, $element['qty']*$element['price']);
+//			$sheet->setCellValue('K' . $rowCount, $element['remarks']);
+//			$sheet->setCellValue('L' . $rowCount, $element['uname']);
+//			$sheet->setCellValue('M' . $rowCount, $element['mdate']);
+//
+//
+//			$rowCount++;
+//		}
+//
+//		if ($extension == 'csv') {
+//			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
+//			$fileName = $fileName . '.csv';
+//		} elseif ($extension == 'xlsx') {
+//			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+//			$fileName = $fileName . '.xlsx';
+//		} else {
+//			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+//			$fileName = $fileName . '.xls';
+//		}
+//
+//		$this->output->set_header('Content-Type: application/vnd.ms-excel');
+//		$this->output->set_header("Content-type: application/csv");
+//		$this->output->set_header('Cache-Control: max-age=0');
+//		$writer->save(ROOT_UPLOAD_PATH . $fileName);
+//		//redirect(HTTP_UPLOAD_PATH.$fileName); 
+//		$filepath = file_get_contents(ROOT_UPLOAD_PATH . $fileName);
+//		force_download($fileName, $filepath);
+//	}
 	public function po_from_mpr_form()
 	{
 		$this->load->database();

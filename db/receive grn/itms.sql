@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2022 at 04:18 AM
+-- Generation Time: Nov 16, 2022 at 10:06 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -134,6 +134,167 @@ CREATE TABLE `internet` (
 INSERT INTO `internet` (`iid`, `status`) VALUES
 (1, 'Yes'),
 (2, 'No');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mpr_insert`
+--
+
+CREATE TABLE `mpr_insert` (
+  `smprid` varchar(50) NOT NULL,
+  `simprid` varchar(50) NOT NULL,
+  `suserid` varchar(50) NOT NULL,
+  `mprid` varchar(50) NOT NULL,
+  `fid` varchar(50) NOT NULL,
+  `mdeptid` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `mdesigid` int(11) NOT NULL,
+  `item` varchar(50) NOT NULL,
+  `model` varchar(50) NOT NULL,
+  `type` int(11) NOT NULL,
+  `qty` float NOT NULL,
+  `uom` int(11) NOT NULL,
+  `description` varchar(500) NOT NULL,
+  `price` float NOT NULL,
+  `remarks` varchar(500) NOT NULL,
+  `uname` varchar(50) NOT NULL,
+  `mdate` date NOT NULL,
+  `mstatus` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `mpr_insert`
+--
+
+INSERT INTO `mpr_insert` (`smprid`, `simprid`, `suserid`, `mprid`, `fid`, `mdeptid`, `name`, `mdesigid`, `item`, `model`, `type`, `qty`, `uom`, `description`, `price`, `remarks`, `uname`, `mdate`, `mstatus`) VALUES
+('20221110155424', '202211101554240', 'HO926', '1', 'HO', 1, 'ABC', 2, 'LPT', '', 1, 5, 1, '4 GB RAM', 200000, '', 'A', '2022-11-10', 0),
+('20221110155424', '202211101554241', 'HO926', '1', 'HO', 1, 'ABC', 2, 'Mouse', '', 1, 10, 1, 'Wireless', 2000, 'A4 Tech', 'B', '2022-11-10', 0),
+('20221115113724', '202211151137240', 'HO926', '2', 'HO', 1, 'Helal', 2, 'LPT', 'Lenevo', 1, 5, 1, 'Core i5', 55000, '4 GB Ram', 'Helal', '2022-11-15', 0),
+('20221115113724', '202211151137241', 'HO926', '2', 'HO', 1, 'Helal', 2, 'Mouse', 'A4 Tech', 1, 10, 1, 'Wireless', 750, 'Bluetooth', 'AB', '2022-11-15', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mpr_insert_id`
+--
+
+CREATE TABLE `mpr_insert_id` (
+  `smprid` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `mpr_insert_id`
+--
+
+INSERT INTO `mpr_insert_id` (`smprid`) VALUES
+('20221110155424'),
+('20221115113724');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `po_insert`
+--
+
+CREATE TABLE `po_insert` (
+  `spoid` varchar(50) NOT NULL,
+  `sipoid` varchar(50) NOT NULL,
+  `suserid` varchar(50) NOT NULL,
+  `mprid` varchar(50) NOT NULL,
+  `po` varchar(50) NOT NULL,
+  `simprid` varchar(50) NOT NULL,
+  `pqty` float NOT NULL,
+  `premarks` varchar(500) NOT NULL,
+  `pprice` float NOT NULL,
+  `supplier` varchar(200) NOT NULL,
+  `pdate` date NOT NULL,
+  `pstatus` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `po_insert`
+--
+
+INSERT INTO `po_insert` (`spoid`, `sipoid`, `suserid`, `mprid`, `po`, `simprid`, `pqty`, `premarks`, `pprice`, `supplier`, `pdate`, `pstatus`) VALUES
+('20221113104848', '202211131048480', 'HO926', '1', '1', '202211101554240', 2, '', 7000, 'Global', '2022-11-10', 0),
+('20221113104848', '202211131048481', 'HO926', '1', '', '202211101554241', 0, '', 0, '', '2022-11-13', 0),
+('20221113105317', '202211131053170', 'HO926', '1', '2', '202211101554240', 1, '', 3000, 'Ryans', '2022-11-12', 0),
+('20221113105317', '202211131053171', 'HO926', '1', '', '202211101554241', 0, '', 0, '', '2022-11-13', 0),
+('20221113125857', '202211131258570', 'HO926', '1', '3', '202211101554240', 2, 'Complete', 10000, 'Global', '2022-11-13', 0),
+('20221113125857', '202211131258571', 'HO926', '1', '', '202211101554241', 0, '', 0, '', '2022-11-13', 0),
+('20221113130509', '202211131305090', 'HO926', '1', '', '202211101554240', 0, '', 0, '', '2022-11-13', 0),
+('20221113130509', '202211131305091', 'HO926', '1', '4', '202211101554241', 1, 'Remaining 9 Pcs', 200, 'Smartech', '2022-11-13', 0),
+('20221115123801', '202211151238010', 'HO926', '1', '', '202211101554240', 0, '', 0, '', '2022-11-15', 0),
+('20221115123801', '202211151238011', 'HO926', '1', '5', '202211101554241', 3, 'Remaining', 2400, 'Global', '2022-11-15', 0),
+('20221115135146', '202211151351460', 'HO926', '2', '6', '202211151137240', 4, '1st', 50000, 'Global', '2022-11-15', 0),
+('20221115135146', '202211151351461', 'HO926', '2', '6', '202211151137241', 5, '2nd', 700, 'Global', '2022-11-15', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `po_insert_id`
+--
+
+CREATE TABLE `po_insert_id` (
+  `spoid` varchar(50) NOT NULL,
+  `mprid` varchar(50) NOT NULL,
+  `po` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `po_insert_id`
+--
+
+INSERT INTO `po_insert_id` (`spoid`, `mprid`, `po`) VALUES
+('20221113104848', '1', '1'),
+('20221113105317', '1', '2'),
+('20221113125857', '1', '3'),
+('20221113130509', '1', ''),
+('20221115123801', '1', ''),
+('20221115134249', '2', '6'),
+('20221115135146', '2', '6');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `po_insert_view`
+-- (See below for the actual view)
+--
+CREATE TABLE `po_insert_view` (
+`spoid` varchar(50)
+,`sipoid` varchar(50)
+,`suserid` varchar(50)
+,`mprid` varchar(50)
+,`po` varchar(50)
+,`simprid` varchar(50)
+,`pqty` float
+,`premarks` varchar(500)
+,`pprice` float
+,`mpprice` double
+,`supplier` varchar(200)
+,`pdate` date
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `po_qty_remaining`
+-- (See below for the actual view)
+--
+CREATE TABLE `po_qty_remaining` (
+`mprid` varchar(50)
+,`fid` varchar(50)
+,`pcname` varchar(50)
+,`model` varchar(50)
+,`simprid` varchar(50)
+,`pcapop` varchar(50)
+,`item` varchar(50)
+,`qty` float
+,`puom` varchar(10)
+,`prqty` double
+,`tpprice` double
+);
 
 -- --------------------------------------------------------
 
@@ -275,6 +436,70 @@ INSERT INTO `product_uom_insert` (`puomid`, `puom`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `receive_insert`
+--
+
+CREATE TABLE `receive_insert` (
+  `grnid` varchar(50) NOT NULL,
+  `grnrid` varchar(50) NOT NULL,
+  `suserid` varchar(50) NOT NULL,
+  `mprid` varchar(50) NOT NULL,
+  `simprid` varchar(50) NOT NULL,
+  `sipoid` varchar(50) NOT NULL,
+  `po` varchar(50) NOT NULL,
+  `grn` varchar(50) NOT NULL,
+  `rqty` float NOT NULL,
+  `rremarks` varchar(500) NOT NULL,
+  `rdate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `receive_insert`
+--
+
+INSERT INTO `receive_insert` (`grnid`, `grnrid`, `suserid`, `mprid`, `simprid`, `sipoid`, `po`, `grn`, `rqty`, `rremarks`, `rdate`) VALUES
+('20221114094820', '202211140948200', 'HO926', '1', '202211101554240', '202211131048480', '1', '1', 5, 'All', '2022-11-14'),
+('20221114094820', '202211140948201', 'HO926', '1', '202211101554241', '202211131048481', '', '', 0, '', '2022-11-14'),
+('20221116143821', '202211161438210', 'HO926', '2', '202211151137240', '202211151351460', '10', '10', 1, '', '2022-11-16'),
+('20221116143821', '202211161438211', 'HO926', '2', '202211151137241', '202211151351461', '', '', 0, '', '2022-11-16'),
+('20221116143856', '202211161438560', 'HO926', '2', '202211151137240', '202211151351460', '11', '11', 2, '', '2022-11-16'),
+('20221116143856', '202211161438561', 'HO926', '2', '202211151137241', '202211151351461', '', '', 0, '', '2022-11-16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `receive_insert_id`
+--
+
+CREATE TABLE `receive_insert_id` (
+  `grnid` varchar(50) NOT NULL,
+  `mprid` varchar(50) NOT NULL,
+  `po` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `receive_insert_id`
+--
+
+INSERT INTO `receive_insert_id` (`grnid`, `mprid`, `po`) VALUES
+('20221114094820', '1', '1'),
+('20221116143821', '2', '10'),
+('20221116143856', '2', '11');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `receive_qty_remaining`
+-- (See below for the actual view)
+--
+CREATE TABLE `receive_qty_remaining` (
+`simprid` varchar(50)
+,`rqty` double
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ruser`
 --
 
@@ -287,6 +512,7 @@ CREATE TABLE `ruser` (
 --
 
 INSERT INTO `ruser` (`ruserid`) VALUES
+('HO690'),
 ('HO926');
 
 -- --------------------------------------------------------
@@ -316,6 +542,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`factoryid`, `departmentid`, `designationid`, `name`, `email`, `mobile`, `user_type`, `userid`, `ruserid`, `password`, `image`, `ustatus`, `indate`) VALUES
+('HO', 1, 2, 'Shahajalal Palash', '', '', '1', 'HO690', 'HO690', '123456', '', '1', '0000-00-00'),
 ('HO', 1, 2, 'MD Mushfequr Rahman', '1@email.com', '000000', '1', 'HO926', 'HO926', '123456', 'babylon7.jpg', '1', '0000-00-00');
 
 -- --------------------------------------------------------
@@ -355,6 +582,33 @@ INSERT INTO `usertype` (`usertypeid`, `usertype`) VALUES
 (1, 'Admin'),
 (2, 'User');
 
+-- --------------------------------------------------------
+
+--
+-- Structure for view `po_insert_view`
+--
+DROP TABLE IF EXISTS `po_insert_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `po_insert_view`  AS  select `po_insert`.`spoid` AS `spoid`,`po_insert`.`sipoid` AS `sipoid`,`po_insert`.`suserid` AS `suserid`,`po_insert`.`mprid` AS `mprid`,`po_insert`.`po` AS `po`,`po_insert`.`simprid` AS `simprid`,`po_insert`.`pqty` AS `pqty`,`po_insert`.`premarks` AS `premarks`,`po_insert`.`pprice` AS `pprice`,`po_insert`.`pqty` * `po_insert`.`pprice` AS `mpprice`,`po_insert`.`supplier` AS `supplier`,`po_insert`.`pdate` AS `pdate` from `po_insert` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `po_qty_remaining`
+--
+DROP TABLE IF EXISTS `po_qty_remaining`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `po_qty_remaining`  AS  select `mpr_insert`.`mprid` AS `mprid`,`mpr_insert`.`fid` AS `fid`,`product_category_insert`.`pcname` AS `pcname`,`mpr_insert`.`model` AS `model`,`po_insert_view`.`simprid` AS `simprid`,`product_capop_insert`.`pcapop` AS `pcapop`,`mpr_insert`.`item` AS `item`,`mpr_insert`.`qty` AS `qty`,`product_uom_insert`.`puom` AS `puom`,sum(`po_insert_view`.`pqty`) AS `prqty`,sum(`po_insert_view`.`mpprice`) AS `tpprice` from ((((((`po_insert_view` join `mpr_insert` on(`mpr_insert`.`simprid` = `po_insert_view`.`simprid`)) join `product_uom_insert` on(`product_uom_insert`.`puomid` = `mpr_insert`.`uom`)) join `product_category_insert` on(`product_category_insert`.`pccode` = `mpr_insert`.`item`)) join `product_capop_insert` on(`product_capop_insert`.`pcoid` = `mpr_insert`.`type`)) join `department` on(`department`.`deptid` = `mpr_insert`.`mdeptid`)) join `designation` on(`designation`.`desigid` = `mpr_insert`.`mdesigid`)) group by `po_insert_view`.`simprid` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `receive_qty_remaining`
+--
+DROP TABLE IF EXISTS `receive_qty_remaining`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `receive_qty_remaining`  AS  select `receive_insert`.`simprid` AS `simprid`,sum(`receive_insert`.`rqty`) AS `rqty` from `receive_insert` group by `receive_insert`.`simprid` ;
+
 --
 -- Indexes for dumped tables
 --
@@ -388,6 +642,30 @@ ALTER TABLE `factory`
 --
 ALTER TABLE `internet`
   ADD PRIMARY KEY (`iid`);
+
+--
+-- Indexes for table `mpr_insert`
+--
+ALTER TABLE `mpr_insert`
+  ADD PRIMARY KEY (`simprid`);
+
+--
+-- Indexes for table `mpr_insert_id`
+--
+ALTER TABLE `mpr_insert_id`
+  ADD PRIMARY KEY (`smprid`);
+
+--
+-- Indexes for table `po_insert`
+--
+ALTER TABLE `po_insert`
+  ADD PRIMARY KEY (`sipoid`) USING BTREE;
+
+--
+-- Indexes for table `po_insert_id`
+--
+ALTER TABLE `po_insert_id`
+  ADD PRIMARY KEY (`spoid`) USING BTREE;
 
 --
 -- Indexes for table `product_assign_insert`
@@ -424,6 +702,18 @@ ALTER TABLE `product_history_insert`
 --
 ALTER TABLE `product_uom_insert`
   ADD PRIMARY KEY (`puomid`);
+
+--
+-- Indexes for table `receive_insert`
+--
+ALTER TABLE `receive_insert`
+  ADD PRIMARY KEY (`grnrid`);
+
+--
+-- Indexes for table `receive_insert_id`
+--
+ALTER TABLE `receive_insert_id`
+  ADD PRIMARY KEY (`grnid`);
 
 --
 -- Indexes for table `ruser`

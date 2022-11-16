@@ -466,7 +466,7 @@ class Admin extends CI_Model {
 		$sql1="INSERT INTO mpr_insert_id VALUES ('$ccid')";
 		$query1=$this->db->query($sql1);
 		
-		$sql="INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[item]','$data[type]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
+		$sql="INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[item]','$data[model]','$data[type]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
 		return $query=$this->db->query($sql);
 	}
 	//public function date_wise_mpr_list($pd, $wd)
@@ -615,30 +615,50 @@ class Admin extends CI_Model {
 //		$result=$this->db->query($query);
 //		return $result->result_array();
 //	    }
+		//public function po_for_mpr_list($mprid)
+//		{
+//		
+//		$query="SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,model,product_capop_insert.pcapop,po_insert.simprid,
+//		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
+//		prqty,tpprice
+// 		FROM po_insert 
+//		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+//		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+//		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+//		JOIN department ON department.deptid=mpr_insert.mdeptid
+//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+//		WHERE po_insert_id.mprid='$mprid'
+//		GROUP BY po_insert.simprid";
+//		$result=$this->db->query($query);
+//		return $result->result_array();
+//	    }
+
 		public function po_for_mpr_list($mprid)
 		{
 		
-		$query="SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,product_capop_insert.pcapop,po_insert.simprid,
+		$query="SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,model,product_capop_insert.pcapop,mpr_insert.simprid,
 		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
 		prqty,tpprice
- 		FROM po_insert 
-		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
-		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
-		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+ 		FROM mpr_insert 
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
 		JOIN department ON department.deptid=mpr_insert.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert.mdesigid
 		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-		WHERE po_insert_id.mprid='$mprid'
-		GROUP BY po_insert.simprid";
+		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		LEFT JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+		WHERE mpr_insert.mprid='$mprid'
+		GROUP BY mpr_insert.simprid";
 		$result=$this->db->query($query);
 		return $result->result_array();
 	    }
 		public function receive_for_mpr_list($mprid)
 		{
 		
-		$query="SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,product_capop_insert.pcapop,
+		$query="SELECT mpr_insert.mprid,mpr_insert.fid,mpr_insert.model,product_category_insert.pcname,product_capop_insert.pcapop,
 		po_insert.simprid,po_insert.spoid,
 		po_insert.sipoid,
 		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
@@ -693,7 +713,7 @@ class Admin extends CI_Model {
 	public function mpr_wise_receive_list($mprid)
 		{
 		
-		$query="SELECT mpr_insert.mprid,fid,pcname,pcapop,po_insert.simprid,po_insert.spoid,po_insert.po,
+		$query="SELECT mpr_insert.mprid,fid,pcname,model,pcapop,po_insert.simprid,po_insert.spoid,po_insert.po,
 		mpr_insert.qty,puom,description,price,remarks,uname,mdate,
 		pqty, pprice,grn,rqty,mdate,pdate,rdate,description,remarks,premarks,uname
  		FROM mpr_insert 

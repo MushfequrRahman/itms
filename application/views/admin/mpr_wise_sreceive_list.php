@@ -56,6 +56,7 @@ td{font-weight: 600; font-variant:small-caps;}
                   <th>Unit</th>
                   <!--<th>MPR Prepared By</th>-->
                   <th>Item</th>
+                  <th>Model</th>
                   <th>Type</th>
                   <!--<th>Item Code</th>-->
                   <th>Qty</th>
@@ -93,6 +94,7 @@ td{font-weight: 600; font-variant:small-caps;}
                   <td style="vertical-align:middle;"><?php echo $row['fid'];?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */?>
                   <td style="vertical-align:middle;"><?php echo $row['pcname'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['model'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pcapop'];?></td>
                   
                   <td style="vertical-align:middle;"><?php echo $row['qty']." ".$row['puom'];?></td>

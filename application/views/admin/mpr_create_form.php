@@ -156,11 +156,12 @@ foreach ($col as $row) {
                             <thead>
                               <tr>
                                 <th style="text-align:center;">Item</th>
+                                <th style="text-align:center;">Model</th>
                                 <th style="text-align:center;">Type</th>
                                 <th style="text-align:center;">Qty</th>
                                 <th style="text-align:center;">Unit</th>
                                 <th style="text-align:center;">Description</th>
-                                <th style="text-align:center;">Price</th>
+                                <th style="text-align:center;">Unit Price</th>
                                 <th style="text-align:center;">Remarks</th>
                                 <th style="text-align:center;">User</th>
                                 <th style="vertical-align:middle; text-align:center;"><button type="button" name="add" class="btn btn-success btn-xs add"><span class="glyphicon glyphicon-plus"></span></button></th>
@@ -245,6 +246,7 @@ foreach ($col as $row) {
         var html = '';
         html += '<tr>';
         html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option><?php echo $item; ?></select></td>';
+		html += '<td><input type="text" name="model[]" class="form-control model" id="model' + count + '" /></td>';
 		html += '<td><select name="type[]" class="form-control type" id="type' + count + '"><option value="">Type</option><?php echo $type; ?></select></td>';
         html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
         html += '<td><select name="uom[]" class="form-control uom" id="uom' + count + '"><option value="">UOM</option><?php echo $uom; ?></select></td>';

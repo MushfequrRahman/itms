@@ -56,19 +56,20 @@ td{font-weight: 600; font-variant:small-caps;}
                   <th>Unit</th>
                   <!--<th>MPR Prepared By</th>-->
                   <th>Item</th>
+                  <th>Model</th>
                   <th>Type</th>
-                  <th>Item Code</th>
+                  <th style="display:none;">Item Code</th>
                   <th>Qty</th>
                   <th>Description</th>
-        		  <th>MPR Price</th>
+        		  <th>MPR Unit Price</th>
                   <th>Remarks</th>
                   <th>User</th>
                   <th>Date</th>
                   <th>PO Qty</th>
-                  <th>Price</th>
+                  <th>PO Price</th>
                   <th>PO NO</th>
                   <th>Qty</th>
-                  <th>PO Qty Price</th>
+                  <th>PO Unit Price</th>
                   
                   <th>Supplier</th>
                   <th>Date</th>
@@ -90,8 +91,9 @@ td{font-weight: 600; font-variant:small-caps;}
                   <td style="vertical-align:middle;"><?php echo $row['fid'];?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */?>
                   <td style="vertical-align:middle;"><?php echo $row['pcname'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['model'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pcapop'];?></td>
-                  <td style="vertical-align:middle;"><input type="text" readonly="readonly" class="form-control" name="item[]" value="<?php echo $row['simprid'];?>" /></td>
+                  <td style="vertical-align:middle; display:none;"><input type="text" readonly="readonly" class="form-control" name="item[]" value="<?php echo $row['simprid'];?>" /></td>
                   <td style="vertical-align:middle;"><?php echo $row['qty']." ".$row['puom'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['description'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['price'];?></td>
