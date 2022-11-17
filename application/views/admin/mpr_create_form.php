@@ -7,6 +7,13 @@
     color: red;
   }
 </style>
+<script>
+  $(function() {
+    jQuery(".pd").datepicker({
+      dateFormat: 'dd-mm-yy'
+    });
+  })
+</script>
 <?php
 $item = '';
 $uom = '';
@@ -23,13 +30,7 @@ foreach ($col as $row) {
 ?>
 
 
-<script type="text/javascript">
-  $(function() {
-    jQuery(".pd").datepicker({
-      dateFormat: 'dd-mm-yy'
-    });
-  })
-</script>
+
 
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
@@ -117,7 +118,7 @@ foreach ($col as $row) {
 															}
 													?>
                     							</select>
-                    								<?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
+                    								<?php echo form_error('departmentid', '<div class="error">', '</div>');  ?>
                         						</select>
 											</div>
                 							<div class="form-group">
@@ -141,8 +142,8 @@ foreach ($col as $row) {
                     							<?php echo form_error('designationid', '<div class="error">', '</div>');  ?>
 											</div>
                       <div class="form-group">
-                        <label>MPR Create Date</label>
-                        <input type="text" class="form-control pd" readonly name="mprdate" value="<?php echo date('d-m-Y'); ?>">
+                        <label>MPR Create Date<em>*</em></label>
+                        <input type="text" class="form-control" name="mprdate" id="mprdate" value="<?php echo date('d-m-Y'); ?>">
                         <?php /*?><?php echo form_error('dobdate', '<div class="error">', '</div>');  ?><?php */ ?>
                       </div>
 
@@ -194,18 +195,18 @@ foreach ($col as $row) {
 
 
 
+</div>
 
 
 
-
-
-
-                      <!-- /.users-list -->
-                  </div>
-                  <!-- /.box-body -->
-                  <div class="box-footer text-center">
+ <div class="box-footer text-center">
                     <input type="submit" class="btn btn-primary" name="submit" value="CREATE" />
                   </div>
+
+                      <!-- /.users-list -->
+                  
+                  <!-- /.box-body -->
+                 
                   </form>
                   <!-- /.box-footer -->
                 </div>
@@ -274,6 +275,15 @@ foreach ($col as $row) {
           count = count + 1;
         });
 		
+		$('.model').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Model at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+		
 		$('.type').each(function() {
           var count = 1;
           if ($(this).val() == '') {
@@ -287,7 +297,7 @@ foreach ($col as $row) {
           var count = 1;
 
           if ($(this).val() == '') {
-            error += '<p>Select Qty at ' + count + ' row</p>';
+            error += '<p>Enter Qty at ' + count + ' row</p>';
             return false;
           }
 
@@ -300,7 +310,7 @@ foreach ($col as $row) {
           var count = 1;
 
           if ($(this).val() == '') {
-            error += '<p>Select Uom at ' + count + ' Row</p> ';
+            error += '<p>Enter Uom at ' + count + ' Row</p> ';
             return false;
           }
 
@@ -315,7 +325,7 @@ foreach ($col as $row) {
           var count = 1;
 
           if ($(this).val() == '') {
-            error += '<p>Select Price at ' + count + ' Row</p> ';
+            error += '<p>Enter Price at ' + count + ' Row</p> ';
             return false;
           }
 
@@ -327,7 +337,7 @@ foreach ($col as $row) {
           var count = 1;
 
           if ($(this).val() == '') {
-            error += '<p>Select Uname at ' + count + ' Row</p> ';
+            error += '<p>Enter Uname at ' + count + ' Row</p> ';
             return false;
           }
 
@@ -361,6 +371,7 @@ foreach ($col as $row) {
 
     });
   </script>
+  
 </body>
 
 </html>

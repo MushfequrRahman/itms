@@ -66,7 +66,7 @@ td{font-weight: 600; font-variant:small-caps;}
                   <th>Remarks</th>
                   <th>User</th>
                   <th>Date</th>
-                  <th>PO Remaining</th>
+                  <th>PO Qty</th>
                   <!--<th>PO Unit Price</th>-->
                   <th>PO NO</th>
                   <th>GRN NO</th>
@@ -105,13 +105,14 @@ td{font-weight: 600; font-variant:small-caps;}
                   
                   <?php $mdate=date("d-m-Y", strtotime($row['mdate']));?>
                   <td style="vertical-align:middle;"><?php echo $mdate;?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['qty']-$row['pqty']." ".$row['puom'];?></td>
+                  <?php /*?><td style="vertical-align:middle;"><?php echo $row['qty']-$row['pqty']." ".$row['puom'];?></td><?php */?>
+                  <td style="vertical-align:middle;"><?php echo $row['pqty']." ".$row['puom'];?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['pprice'];?></td><?php */?>
-                  <?php
-				  if($row['pqty'] != $row['qty'])
+                  <?php /*?><?php
+				  if(($row['rqty'] < $row['pqty']) )
 				  {
-					  ?>
-                  <td style="vertical-align:middle;"><input type="text" class="form-control" name="po[]" placeholder="PO NO"></td>
+					  ?><?php */?>
+                  <td style="vertical-align:middle;"><input type="text" readonly="readonly" class="form-control" name="po[]" value="<?php echo $row['po'];?>"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" name="grn[]" placeholder="GRN PO"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" name="rqty[]" placeholder="Qty"></td>
                   <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="pprice[]" placeholder="Price"></td>-->
@@ -125,28 +126,28 @@ td{font-weight: 600; font-variant:small-caps;}
                         <option value="3">Pending</option>
                     </select>
                     </td><?php */?>
-                    <?php
+                    <?php /*?><?php
 				  }
 				  else
 				  {
-				  ?>
-                  <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="po[]" placeholder="PO NO"></td>
+				  ?><?php */?>
+                  <?php /*?><td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="po[]" value="<?php echo $row['po'];?>"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="grn[]" placeholder="GRN PO"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="rqty[]" placeholder="Qty"></td>
                   <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="pprice[]" placeholder="Price"></td>-->
                   
                   <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="supplier[]" placeholder=" supplier"></td>-->
                   <td style="vertical-align:middle;"><input type="text" class="form-control pd" readonly name="rdate[]" value="<?php echo date('d-m-Y'); ?>"></td>
-                  <td><textarea class="form-control" readonly rows="1" name="rremarks[]" id="rremarks"></textarea></td>
+                  <td><textarea class="form-control" readonly rows="1" name="rremarks[]" id="rremarks"></textarea></td><?php */?>
                   <?php /*?><td><select class="form-control" name="pstatus[]" id="pstatus">
                         <option value="1">Done</option>
                         <option value="2">Remaining</option>
                         <option value="3">Pending</option>
                     </select>
                     </td><?php */?>
-                    <?php
+                    <?php /*?><?php
 				  }
-				  ?>
+				  ?><?php */?>
                     
                 </tr>
                 </tbody>

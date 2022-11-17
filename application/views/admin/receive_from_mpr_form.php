@@ -32,7 +32,7 @@ em{color:red;}
               <!-- USERS LIST -->
               <div class="box box-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">MPR List For Receive</h3>
+                  <h3 class="box-title">PO List For Receive</h3>
 					<div class="row">
 						<div class="col-sm-12 col-md-12 col-lg-12">
 							<?php if($responce = $this->session->flashdata('Successfully')): ?>
@@ -63,7 +63,7 @@ em{color:red;}
                     <?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
 				</div>		<?php */?>
                 	<div class="form-group">
-					<label>MPR No<em>*</em></label>
+					<label>PO No<em>*</em></label>
 					<input type="text" class="form-control" id="mprid" placeholder="Enter MPR No">
                     <div class="box-footer text-center">
                   <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
