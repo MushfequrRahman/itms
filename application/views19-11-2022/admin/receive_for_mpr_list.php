@@ -67,12 +67,10 @@ td{font-weight: 600; font-variant:small-caps;}
                   <th>User</th>
                   <th>Date</th>
                   <th>PO Qty</th>
-                  <th>Remaining Qty</th>
                   <!--<th>PO Unit Price</th>-->
                   <th>PO NO</th>
                   <th>GRN NO</th>
                   <th>Receive Qty</th>
-                  
                   <!--<th>PO Qty Price</th>-->
                   
                   <!--<th>Supplier</th>-->
@@ -109,12 +107,11 @@ td{font-weight: 600; font-variant:small-caps;}
                   <td style="vertical-align:middle;"><?php echo $mdate;?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['qty']-$row['pqty']." ".$row['puom'];?></td><?php */?>
                   <td style="vertical-align:middle;"><?php echo $row['pqty']." ".$row['puom'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['pqty']-$row['rqty']." ".$row['puom'];?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['pprice'];?></td><?php */?>
-                  <?php
+                  <?php /*?><?php
 				  if(($row['rqty'] < $row['pqty']) )
 				  {
-					  ?>
+					  ?><?php */?>
                   <td style="vertical-align:middle;"><input type="text" readonly="readonly" class="form-control" name="po[]" value="<?php echo $row['po'];?>"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" name="grn[]" placeholder="GRN PO"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" name="rqty[]" placeholder="Qty"></td>
@@ -129,28 +126,28 @@ td{font-weight: 600; font-variant:small-caps;}
                         <option value="3">Pending</option>
                     </select>
                     </td><?php */?>
-                    <?php
+                    <?php /*?><?php
 				  }
 				  else
 				  {
-				  ?>
-                  <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="po[]" value="<?php echo $row['po'];?>"></td>
+				  ?><?php */?>
+                  <?php /*?><td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="po[]" value="<?php echo $row['po'];?>"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="grn[]" placeholder="GRN PO"></td>
                   <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="rqty[]" placeholder="Qty"></td>
                   <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="pprice[]" placeholder="Price"></td>-->
                   
                   <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="supplier[]" placeholder=" supplier"></td>-->
                   <td style="vertical-align:middle;"><input type="text" class="form-control pd" readonly name="rdate[]" value="<?php echo date('d-m-Y'); ?>"></td>
-                  <td><textarea class="form-control" readonly rows="1" name="rremarks[]" id="rremarks"></textarea></td>
+                  <td><textarea class="form-control" readonly rows="1" name="rremarks[]" id="rremarks"></textarea></td><?php */?>
                   <?php /*?><td><select class="form-control" name="pstatus[]" id="pstatus">
                         <option value="1">Done</option>
                         <option value="2">Remaining</option>
                         <option value="3">Pending</option>
                     </select>
                     </td><?php */?>
-                    <?php
+                    <?php /*?><?php
 				  }
-				  ?>
+				  ?><?php */?>
                     
                 </tr>
                 </tbody>

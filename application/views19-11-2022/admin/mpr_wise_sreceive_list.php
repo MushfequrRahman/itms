@@ -59,7 +59,7 @@ td{font-weight: 600; font-variant:small-caps;}
                   <th>Model</th>
                   <th>Type</th>
                   <!--<th>Item Code</th>-->
-                  <th>MPR Qty</th>
+                  <th>Qty</th>
                   <!--<th>Description</th>-->
         		  <!--<th>MPR Price</th>-->
                   <!--<th>Remarks</th>-->

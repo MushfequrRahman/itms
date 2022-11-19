@@ -679,19 +679,18 @@ class Admin extends CI_Model {
 		po_insert.simprid,po_insert.spoid,
 		po_insert.sipoid,
 		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
-		pqty,pprice,SUM(rqty) AS rqty
+		pqty,pprice
  		FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
-		LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
+		
 		
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
 		JOIN department ON department.deptid=mpr_insert.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert.mdesigid
 		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-		WHERE po_insert.po='$mprid'
-		GROUP BY po_insert.sipoid";
+		WHERE po_insert.po='$mprid'";
 		$result=$this->db->query($query);
 		return $result->result_array();
 	    }
@@ -748,7 +747,7 @@ class Admin extends CI_Model {
 		public function mpr_wise_sreceive_list($mprid)
 		{
 			$query="SELECT * FROM po_qty_remaining 
-				LEFT JOIN receive_qty_remaining ON
+				JOIN receive_qty_remaining ON
 				po_qty_remaining.simprid=receive_qty_remaining.simprid
 				WHERE mprid='$mprid'";
 			$result=$this->db->query($query);

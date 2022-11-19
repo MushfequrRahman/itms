@@ -54,23 +54,30 @@ td{font-weight: 600; font-variant:small-caps;}
                   <!--<th>Select</th>-->
                   <th>MPR NO</th>
                   <th>Unit</th>
+                  <th>Name</th>
                   <!--<th>MPR Prepared By</th>-->
                   <th>Item</th>
                   <th>Model</th>
                   <th>Type</th>
                   <!--<th>Item Code</th>-->
                   <th>MPR Qty</th>
+                  <th>Description</th>
+                  <th>Remarks</th>
+                  <th>Date</th>
                   <!--<th>Description</th>-->
         		  <!--<th>MPR Price</th>-->
                   <!--<th>Remarks</th>-->
                   <!--<th>User</th>
                   <th>Date</th>-->
+                  <th>PO</th>
                   <th>PO Qty</th>
                   <th>Price</th>
+                  <th>Remarks</th>
+                  <th>Date</th>
                   <!--<th>PO NO</th>-->
-                  
+                  <th>GRN</th>
                   <th>Receive Qty</th>
-                  
+                  <th>Date</th>
                   <!--<th>PO Qty</th>
                   <th>PO Qty Price</th>
                   
@@ -92,24 +99,32 @@ td{font-weight: 600; font-variant:small-caps;}
                   <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */?>
                   <td style="vertical-align:middle;"><?php echo $row['mprid'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['fid'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['uname'];?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */?>
                   <td style="vertical-align:middle;"><?php echo $row['pcname'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['model'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pcapop'];?></td>
                   
                   <td style="vertical-align:middle;"><?php echo $row['qty']." ".$row['puom'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['description'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['remarks'];?></td>
+                  <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['mdate']));?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['description'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['price'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['remarks'];?></td><?php */?>
-                  <td style="vertical-align:middle;"><?php echo $row['prqty']." ".$row['puom'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['tpprice'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['po'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['pqty']." ".$row['puom'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['pprice'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['premarks'];?></td>
+                  <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['pdate']));?></td>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['po'];?></td><?php */?>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['uname'];?></td><?php */?>
                   
                   <?php /*?><?php $mdate=date("d-m-Y", strtotime($row['mdate']));?>
                   <td style="vertical-align:middle;"><?php echo $mdate;?></td><?php */?>
-                  
+                  <td style="vertical-align:middle;"><?php echo $row['grn'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['rqty']." ".$row['puom'];?></td>
+                  <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['rdate']));?></td>
                   
                 </tr>
                 </tbody>
