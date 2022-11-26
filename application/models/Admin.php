@@ -798,17 +798,27 @@ class Admin extends CI_Model
 	public function mpr_wise_receive_list($mprid)
 	{
 
-		$query = "SELECT mpr_insert.mprid,fid,pcname,model,pcapop,po_insert.simprid,po_insert.spoid,receive_insert.po,
+		//$query = "SELECT mpr_insert.mprid,fid,pcname,model,pcapop,po_insert.simprid,po_insert.spoid,receive_insert.po,
+//		mpr_insert.qty,puom,description,price,remarks,uname,mdate,
+//		pqty, pprice,grn,rqty,mdate,pdate,rdate,description,remarks,premarks,uname
+// 		FROM mpr_insert 
+//		JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+//		JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
+//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
+//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
+//		WHERE receive_insert.mprid='$mprid' AND po_insert.po!='' AND grn!=''";
+
+		$query = "SELECT mpr_insert.mprid,fid,pcname,model,pcapop,receive_insert.po,
 		mpr_insert.qty,puom,description,price,remarks,uname,mdate,
-		pqty, pprice,grn,rqty,mdate,pdate,rdate,description,remarks,premarks,uname
+		 grn,rqty,mdate,rdate,description,remarks,uname
  		FROM mpr_insert 
-		JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		
 		JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
 		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-		WHERE receive_insert.mprid='$mprid' AND po_insert.po!='' AND grn!=''
-		GROUP BY grn";
+		WHERE receive_insert.mprid='1' AND grn!=''";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}

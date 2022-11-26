@@ -69,11 +69,11 @@ td{font-weight: 600; font-variant:small-caps;}
                   <!--<th>Remarks</th>-->
                   <!--<th>User</th>
                   <th>Date</th>-->
-                  <th>PO</th>
+                  <!--<th>PO</th>
                   <th>PO Qty</th>
                   <th>Price</th>
                   <th>Remarks</th>
-                  <th>Date</th>
+                  <th>Date</th>-->
                   <!--<th>PO NO</th>-->
                   <th>GRN</th>
                   <th>Receive Qty</th>
@@ -112,11 +112,11 @@ td{font-weight: 600; font-variant:small-caps;}
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['description'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['price'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['remarks'];?></td><?php */?>
-                  <td style="vertical-align:middle;"><?php echo $row['po'];?></td>
+                  <?php /*?><td style="vertical-align:middle;"><?php echo $row['po'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pqty']." ".$row['puom'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pprice'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['premarks'];?></td>
-                  <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['pdate']));?></td>
+                  <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['pdate']));?></td><?php */?>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['po'];?></td><?php */?>
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['uname'];?></td><?php */?>
                   
