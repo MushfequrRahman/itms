@@ -798,7 +798,7 @@ class Admin extends CI_Model
 	public function mpr_wise_receive_list($mprid)
 	{
 
-		$query = "SELECT mpr_insert.mprid,fid,pcname,model,pcapop,po_insert.simprid,po_insert.spoid,po_insert.po,
+		$query = "SELECT mpr_insert.mprid,fid,pcname,model,pcapop,po_insert.simprid,po_insert.spoid,receive_insert.po,
 		mpr_insert.qty,puom,description,price,remarks,uname,mdate,
 		pqty, pprice,grn,rqty,mdate,pdate,rdate,description,remarks,premarks,uname
  		FROM mpr_insert 
