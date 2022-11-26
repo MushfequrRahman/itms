@@ -2,7 +2,13 @@
 .error{color:red;}
 em{color:red;}
 </style>
-
+<!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+<script type="text/javascript">
+$(function () {
+    jQuery(".pd").datepicker({dateFormat: 'yy-mm-dd'});
+	jQuery(".wd").datepicker({dateFormat: 'dd-mm-yy'});
+	})
+</script> 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -32,7 +38,7 @@ em{color:red;}
               <!-- USERS LIST -->
               <div class="box box-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">PO List For Receive</h3>
+                  <h3 class="box-title">User List</h3>
 					<div class="row">
 						<div class="col-sm-12 col-md-12 col-lg-12">
 							<?php if($responce = $this->session->flashdata('Successfully')): ?>
@@ -46,13 +52,14 @@ em{color:red;}
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body ">
-				 
-                    <?php /*?><div class="form-group">
-					<label>Factory Name<em>*</em></label>
+				 <?php /*?><form role="form" autocomplete="off" action="<?php echo base_url();?>Dashboard/user_task_complete_list" method="post" enctype="multipart/form-data"><?php */?>
+                 
+                	<div class="form-group">
+					<label>Unit Name<em>*</em></label>
 					<select class="form-control" name="factoryid" id="factoryid">
                     	<option value="">Select....</option>
                         <?php
-						foreach($allf as $row)
+						foreach($fl as $row)
 						{
 					?>
                     		<option value="<?php echo $row['factoryid'];?>"><?php echo $row['factoryname'];?></option>
@@ -61,21 +68,13 @@ em{color:red;}
 					?>
                     </select>
                     <?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
-				</div>		<?php */?>
-        <form role="form" id="insert_form" autocomplete="off" method="post" action="<?php echo base_url(); ?>Dashboard/receive_for_mpr_list" enctype="multipart/form-data">
-                	<div class="form-group">
-					<label>PO No<em>*</em></label>
-					<input type="text" class="form-control" name="mprid" id="mprid" placeholder="Enter MPR No">
-                    <div class="box-footer text-center">
-                  <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
-                </div>
-                    
 				</div>
-                
                </div>
                 <!-- /.box-body -->
-                
-				 </form>
+                <div class="box-footer text-center">
+                  <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
+                </div>
+				 <!--</form>-->
                 <!-- /.box-footer -->
               </div>
               <!--/.box -->
@@ -102,20 +101,19 @@ em{color:red;}
   
 </div>
 <!-- ./wrapper -->
-<!-- <script>
+<script>
     $(document).ready(function(){
         $( "#btn" ).click(function(event)
         {
             event.preventDefault();
-            //var pd= $("#pd").val();
-//			var wd= $("#wd").val();
-			var mprid= $("#mprid").val();
+            var factoryid= $("#factoryid").val();
+
             $.ajax(
                 {
                     type:'post',
-                    url: '<?php echo base_url(); ?>Dashboard/receive_for_mpr_list',
+                    url: '<?php echo base_url(); ?>Dashboard/factorywise_user_list',
 					dataType:"text",
-                    data:{ mprid:mprid},
+                    data:{ factoryid:factoryid},
 					      success: function(data) 
 						  	{
        					  		$('#ajax-content-container').html(data);
@@ -128,7 +126,7 @@ em{color:red;}
                 });
         });
     });
-</script> -->
+</script>
 
 
 </body>

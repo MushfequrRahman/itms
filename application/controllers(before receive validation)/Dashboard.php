@@ -1564,89 +1564,61 @@ class Dashboard extends CI_Controller {
 	{
 		$this->load->database();
 		$this->load->model('Admin');
-		$data['title'] = 'Receive List';
-		$this->load->view('admin/head', $data);
 		$mprid = $this->input->post('mprid');
 		//$pd = $this->input->post('pd');
 //		$wd = $this->input->post('wd');
 		$data['ul'] = $this->Admin->receive_for_mpr_list($mprid);
 		$this->load->view('admin/receive_for_mpr_list', $data);
 	}
-	// public function receive_create()
-	// {
-	// 	$this->load->database();
-	// 	$this->load->library('form_validation');
-	// 	$this->load->model('Admin');
-	// 	if ($this->input->post('submit')) {
-	// 		$userid = $this->input->post('userid');
-	// 		$mprid = $this->input->post('mprid');
-			
-	// 		//$supplier = $this->input->post('supplier');
-	// 		//$podate = $this->input->post('podate');
-	// 		$item = $this->input->post('item');
-	// 		$sipoid = $this->input->post('sipoid');
-	// 		$po = $this->input->post('po');
-	// 		$grn = $this->input->post('grn');
-			
-	// 		$rqty = $this->input->post('rqty');
-	// 		$rdate = $this->input->post('rdate');
-	// 		$rremarks = $this->input->post('rremarks');
-	// 		//$rprice = $this->input->post('pprice');
-	// 		//$pstatus = $this->input->post('pstatus');
-	// 		for ($i = 0; $i < count($item); $i++) {
-	// 			$data["i"] = $i;
-	// 			$data["userid"] = $userid;
-	// 			$data["mprid"] = $mprid;
-	// 			$data["po"] = $po[$i];
-	// 			$data["grn"] = $grn[$i];
-	// 			//$data["supplier"] = $supplier[$i];
-	// 			$data["rdate"] = $rdate[$i];
-	// 			$data["item"] = $item[$i];
-	// 			$data["sipoid"] = $sipoid[$i];
-	// 			$data["rqty"] = $rqty[$i];
-	// 			$data["rremarks"] = $rremarks[$i];
-	// 			//$data["pprice"] = $pprice[$i];
-	// 			//$data["pstatus"] = $pstatus[$i];
-	// 			$ins = $this->Admin->receive_create($data);
-	// 			//var_dump($data);
-	// 		}
-		
-	// 		if($ins==TRUE)
-	// 					{
-	// 						$this->session->set_flashdata('Successfully','Successfully Inserted');
-	// 					}
-	// 				else
-	// 					{
-	// 						$this->session->set_flashdata('Successfully','Failed To Inserted');
-	// 					}
-	// 				redirect('Dashboard/receive_from_mpr_form','refresh');
-	// 	}
-	// }
 	public function receive_create()
 	{
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
-		//if ($this->input->post('submit')) {
+		if ($this->input->post('submit')) {
 			$userid = $this->input->post('userid');
 			$mprid = $this->input->post('mprid');
+			
+			//$supplier = $this->input->post('supplier');
+			//$podate = $this->input->post('podate');
 			$item = $this->input->post('item');
 			$sipoid = $this->input->post('sipoid');
 			$po = $this->input->post('po');
 			$grn = $this->input->post('grn');
+			
 			$rqty = $this->input->post('rqty');
 			$rdate = $this->input->post('rdate');
 			$rremarks = $this->input->post('rremarks');
-			$ins = $this->Admin->receive_create($userid,$mprid,$item,$sipoid,$po,$grn,$rqty,$rdate,$rremarks);
-			if($ins)
-				{
-					echo  "ok";	
-				}
-			else
-				{
-					echo  "error";	
-				}
-		//}
+			//$rprice = $this->input->post('pprice');
+			//$pstatus = $this->input->post('pstatus');
+			for ($i = 0; $i < count($item); $i++) {
+				$data["i"] = $i;
+				$data["userid"] = $userid;
+				$data["mprid"] = $mprid;
+				$data["po"] = $po[$i];
+				$data["grn"] = $grn[$i];
+				//$data["supplier"] = $supplier[$i];
+				$data["rdate"] = $rdate[$i];
+				$data["item"] = $item[$i];
+				$data["sipoid"] = $sipoid[$i];
+				$data["rqty"] = $rqty[$i];
+				$data["rremarks"] = $rremarks[$i];
+				//$data["pprice"] = $pprice[$i];
+				//$data["pstatus"] = $pstatus[$i];
+				$ins = $this->Admin->receive_create($data);
+				//var_dump($data);
+			}
+		
+			if($ins==TRUE)
+						{
+							$this->session->set_flashdata('Successfully','Successfully Inserted');
+						}
+					else
+						{
+							$this->session->set_flashdata('Successfully','Failed To Inserted');
+						}
+					redirect('Dashboard/receive_from_mpr_form','refresh');
+		}
 	}
 	public function mpr_wise_receive_list_form()
 	{

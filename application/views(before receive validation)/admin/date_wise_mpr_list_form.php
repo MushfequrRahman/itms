@@ -2,7 +2,12 @@
 .error{color:red;}
 em{color:red;}
 </style>
-
+<script type="text/javascript">
+$(function () {
+    jQuery(".pd").datepicker({dateFormat: 'dd-mm-yy'});
+	jQuery(".wd").datepicker({dateFormat: 'dd-mm-yy'});
+	})
+</script> 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -32,7 +37,7 @@ em{color:red;}
               <!-- USERS LIST -->
               <div class="box box-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">PO List For Receive</h3>
+                  <h3 class="box-title">Date Wise MPR List</h3>
 					<div class="row">
 						<div class="col-sm-12 col-md-12 col-lg-12">
 							<?php if($responce = $this->session->flashdata('Successfully')): ?>
@@ -62,20 +67,22 @@ em{color:red;}
                     </select>
                     <?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
 				</div>		<?php */?>
-        <form role="form" id="insert_form" autocomplete="off" method="post" action="<?php echo base_url(); ?>Dashboard/receive_for_mpr_list" enctype="multipart/form-data">
                 	<div class="form-group">
-					<label>PO No<em>*</em></label>
-					<input type="text" class="form-control" name="mprid" id="mprid" placeholder="Enter MPR No">
-                    <div class="box-footer text-center">
-                  <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
-                </div>
+					<label>Start Date<em>*</em></label>
+					<input type="text" class="form-control pd" readonly  id="pd" value="<?php echo date('d-m-Y');?>">
                     
 				</div>
-                
+                <div class="form-group">
+					<label>End Date<em>*</em></label>
+					
+                    <input type="text" class="form-control wd" readonly  id="wd" value="<?php echo date('d-m-Y');?>">
+				</div>
                </div>
                 <!-- /.box-body -->
-                
-				 </form>
+                <div class="box-footer text-center">
+                  <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
+                </div>
+				 <!--</form>-->
                 <!-- /.box-footer -->
               </div>
               <!--/.box -->
@@ -102,20 +109,20 @@ em{color:red;}
   
 </div>
 <!-- ./wrapper -->
-<!-- <script>
+<script>
     $(document).ready(function(){
         $( "#btn" ).click(function(event)
         {
             event.preventDefault();
-            //var pd= $("#pd").val();
-//			var wd= $("#wd").val();
-			var mprid= $("#mprid").val();
+            var pd= $("#pd").val();
+			var wd= $("#wd").val();
+			//var factoryid= $("#factoryid").val();
             $.ajax(
                 {
                     type:'post',
-                    url: '<?php echo base_url(); ?>Dashboard/receive_for_mpr_list',
+                    url: '<?php echo base_url(); ?>Dashboard/date_wise_mpr_list',
 					dataType:"text",
-                    data:{ mprid:mprid},
+                    data:{ pd:pd,wd:wd},
 					      success: function(data) 
 						  	{
        					  		$('#ajax-content-container').html(data);
@@ -128,7 +135,7 @@ em{color:red;}
                 });
         });
     });
-</script> -->
+</script>
 
 
 </body>

@@ -62,10 +62,9 @@ em{color:red;}
                     </select>
                     <?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
 				</div>		<?php */?>
-        <form role="form" id="insert_form" autocomplete="off" method="post" action="<?php echo base_url(); ?>Dashboard/receive_for_mpr_list" enctype="multipart/form-data">
                 	<div class="form-group">
 					<label>PO No<em>*</em></label>
-					<input type="text" class="form-control" name="mprid" id="mprid" placeholder="Enter MPR No">
+					<input type="text" class="form-control" id="mprid" placeholder="Enter MPR No">
                     <div class="box-footer text-center">
                   <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
                 </div>
@@ -75,7 +74,7 @@ em{color:red;}
                </div>
                 <!-- /.box-body -->
                 
-				 </form>
+				 <!--</form>-->
                 <!-- /.box-footer -->
               </div>
               <!--/.box -->
@@ -102,7 +101,7 @@ em{color:red;}
   
 </div>
 <!-- ./wrapper -->
-<!-- <script>
+<script>
     $(document).ready(function(){
         $( "#btn" ).click(function(event)
         {
@@ -128,7 +127,7 @@ em{color:red;}
                 });
         });
     });
-</script> -->
+</script>
 
 
 </body>
