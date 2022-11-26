@@ -807,7 +807,8 @@ class Admin extends CI_Model
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
 		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-		WHERE receive_insert.mprid='$mprid' AND po_insert.po!='' AND grn!=''";
+		WHERE receive_insert.mprid='$mprid' AND po_insert.po!='' AND grn!=''
+		GROUP BY grn";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
