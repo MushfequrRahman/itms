@@ -265,68 +265,6 @@
 
 <script>
   $(document).ready(function() {
-	  for(let i = 0; i < 50; i++) {
-		   //var test = $("input[id='id_" + i + "']").val();
-    $("#btn" + i + "").click(function(event) {
-        event.preventDefault();
-        //var pd= $("#pd").val();
-        //			var wd= $("#wd").val();
-        var userid = $("#userid").val();
-        var mprid = $("#mprid").val();
-        var item = $("#item" + i + "").val();
-		
-        var sipoid = $("#sipoid" + i + "").val();
-        var po = $("#po" + i + "").val();
-        var grn = $("#grn" + i + "").val();
-		//alert(grn);
-        var rqty = parseFloat($("#rqty" + i + "").val());
-        var reqty = parseFloat($("#reqty" + i + "").val());
-        var rremarks= $("#rremarks" + i + "").val();
-        var rdate= $("#rdate" + i + "").val();
-        var error = "";
-        if (rqty > reqty) {
-          error += "Receive Qty Must be Less Then Remaining Qty<br/>";
-        }
-        if (grn=='') {
-          error += "Enter GRN<br/>";
-        }
-        //alert(reqty);
-
-
-        if (error == '') 
-        {
-            $.ajax({
-                type: 'post',
-                url: '<?php echo base_url(); ?>Dashboard/receive_create',
-                dataType: "text",
-                data: 
-                  {
-                    userid:userid,mprid:mprid,item:item,sipoid:sipoid,po:po,grn: grn,rqty:rqty,rremarks:rremarks,rdate:rdate
-                  },
-                success: function(data) 
-                  {
-                    //$('#ajax-content-container').html(data);
-					var ii=i-1;
-                    $("#trid" + ii + "").delay(1000).hide("slow");
-                    $("#error").delay(1000).hide("slow");
-                  },
-            //}
-
-            // error: function(){
-            // alert('error!');
-          //}
-            });
-        }
-        else {
-          $('#error').html('<div class="alert alert-danger">' + error + '</div>');
-        }
-    });
-  }
-  });
-</script>
-
-<?php /*?><script>
-  $(document).ready(function() {
     $("#btn2").click(function(event) {
         event.preventDefault();
         //var pd= $("#pd").val();
@@ -940,4 +878,3 @@
     });
   });
 </script>
-<?php */?>
