@@ -181,7 +181,7 @@
 
 															<td style="vertical-align:middle;"><?php echo $row['sn']; ?></td>
 
-															<td style="vertical-align:middle;"><?php echo $row['model']; ?></td>
+															<td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
 															<td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
 															<td style="vertical-align:middle;"><?php echo $row['pprice']; ?></td>
 															<td style="vertical-align:middle;"><?php echo $row['iqty'] . " " . $row['puom']; ?></td>

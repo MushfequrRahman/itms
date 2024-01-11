@@ -98,7 +98,7 @@
 
           <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'];?></td><?php */ ?>
           <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['model']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
 
           <?php /*?><td style="vertical-align:middle;"><?php echo $row['simprid'];?></td><?php */ ?>
           <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>

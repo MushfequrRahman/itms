@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 10, 2024 at 11:20 AM
+-- Generation Time: Jan 11, 2024 at 10:52 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -63,8 +63,7 @@ INSERT INTO `department` (`deptid`, `departmentname`) VALUES
 (4, 'RND'),
 (5, 'HRD'),
 (6, 'QAD'),
-(7, 'PLANNING'),
-(8, 'STORE');
+(7, 'PLANNING');
 
 -- --------------------------------------------------------
 
@@ -88,8 +87,7 @@ INSERT INTO `designation` (`desigid`, `designation`) VALUES
 (5, 'DEPUTY MANAGER'),
 (6, 'EXECUTIVE'),
 (7, 'SENIOR MANAGER'),
-(8, 'SENIOR SUPERVISOR'),
-(9, 'Assistant Manager');
+(8, 'SENIOR SUPERVISOR');
 
 -- --------------------------------------------------------
 
@@ -156,6 +154,7 @@ INSERT INTO `internet` (`iid`, `status`) VALUES
 --
 
 CREATE TABLE `item_insert` (
+  `itemcode` varchar(50) NOT NULL,
   `item` varchar(100) NOT NULL,
   `pcode` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -164,27 +163,27 @@ CREATE TABLE `item_insert` (
 -- Dumping data for table `item_insert`
 --
 
-INSERT INTO `item_insert` (`item`, `pcode`) VALUES
-('Acer 1080', 'LPT'),
-('Acer Travel mate P214', 'LPT'),
-('Acer Travel matep2', 'LPT'),
-('Asus ExpertBook B1400G', 'LPT'),
-('ASUS EXPERTBOOK B1500C', 'LPT'),
-('Asus ExpertBook P2451F', 'LPT'),
-('ASUS Zenbook 1000', 'LPT'),
-('Asus ZenBook 14 UX425JA', 'LPT'),
-('Asus ZenBook UX425JA-1035G1', 'LPT'),
-('Clone PC', 'DKTP'),
-('Fortinet FG100EF', 'FW'),
-('HP EliteBook ', 'LPT'),
-('HP Probook 440', 'LPT'),
-('HP ProBook 440 G3', 'LPT'),
-('HP ProBook 440 G4', 'LPT'),
-('HP ProBook 450 G4', 'LPT'),
-('HP ProBook 450 G5 ', 'LPT'),
-('HP Probook 450 G5 7th Gen', 'LPT'),
-('Hp probook 450G4', 'LPT'),
-('Lenovo Ideapad 330', 'LPT');
+INSERT INTO `item_insert` (`itemcode`, `item`, `pcode`) VALUES
+('20240111124928', 'Acer 1080', 'LPT'),
+('20240111124947', 'Acer Travel mate P214', 'LPT'),
+('20240111124959', 'Acer Travel matep2', 'LPT'),
+('20240111125009', 'Asus ExpertBook B1400G', 'LPT'),
+('20240111125019', 'ASUS EXPERTBOOK B1500C', 'LPT'),
+('20240111125029', 'Asus ExpertBook P2451F', 'LPT'),
+('20240111125049', 'ASUS Zenbook 1000', 'LPT'),
+('20240111125059', 'Asus ZenBook 14 UX425JA', 'LPT'),
+('20240111125108', 'Asus ZenBook UX425JA-1035G1', 'LPT'),
+('20240111125117', 'Clone PC', 'DKTP'),
+('20240111125127', 'Fortinet FG100EF', 'FW'),
+('20240111125135', 'HP EliteBook ', 'LPT'),
+('20240111125146', 'HP Probook 440', 'LPT'),
+('20240111125155', 'HP ProBook 440 G3', 'LPT'),
+('20240111125206', 'HP ProBook 440 G4', 'LPT'),
+('20240111125215', 'HP ProBook 450 G4', 'LPT'),
+('20240111125223', 'HP ProBook 450 G5 ', 'LPT'),
+('20240111125231', 'HP Probook 450 G5 7th Gen', 'LPT'),
+('20240111125241', 'Hp probook 450G4', 'LPT'),
+('20240111125250', 'Lenovo Ideapad 330', 'LPT');
 
 -- --------------------------------------------------------
 
@@ -242,7 +241,7 @@ CREATE TABLE `mpr_insert` (
   `mdeptid` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `mdesigid` int(11) NOT NULL,
-  `item` varchar(50) NOT NULL,
+  `mpcode` varchar(50) NOT NULL,
   `model` varchar(300) NOT NULL,
   `qty` float NOT NULL,
   `uom` int(11) NOT NULL,
@@ -254,6 +253,15 @@ CREATE TABLE `mpr_insert` (
   `mstatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `mpr_insert`
+--
+
+INSERT INTO `mpr_insert` (`smprid`, `simprid`, `suserid`, `mprid`, `fid`, `mdeptid`, `name`, `mdesigid`, `mpcode`, `model`, `qty`, `uom`, `description`, `price`, `remarks`, `uname`, `mdate`, `mstatus`) VALUES
+('20240111154038', '202401111540380', 'HO926', 'BGL1', 'BGL', 1, 'AAA', 2, 'LPT', '20240111124928', 1, 1, '', 55000, '', '', '2024-01-11', 0),
+('20240111154038', '202401111540381', 'HO926', 'BGL1', 'BGL', 1, 'AAA', 2, 'LPT', '20240111125135', 1, 1, '', 52000, '', '', '2024-01-11', 0),
+('20240111154038', '202401111540382', 'HO926', 'BGL1', 'BGL', 1, 'AAA', 2, 'DKTP', '20240111125117', 1, 1, '', 50000, '', '', '2024-01-11', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -263,6 +271,13 @@ CREATE TABLE `mpr_insert` (
 CREATE TABLE `mpr_insert_id` (
   `smprid` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `mpr_insert_id`
+--
+
+INSERT INTO `mpr_insert_id` (`smprid`) VALUES
+('20240111154038');
 
 -- --------------------------------------------------------
 
@@ -274,6 +289,7 @@ CREATE TABLE `mpr_wise_receive_list_view` (
 `mprid` varchar(50)
 ,`fid` varchar(50)
 ,`pccode` varchar(50)
+,`item` varchar(100)
 ,`pcname` varchar(50)
 ,`model` varchar(300)
 ,`po` varchar(50)
@@ -314,6 +330,15 @@ CREATE TABLE `po_insert` (
   `pstatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `po_insert`
+--
+
+INSERT INTO `po_insert` (`spoid`, `sipoid`, `suserid`, `mprid`, `po`, `simprid`, `pqty`, `premarks`, `pprice`, `supplier`, `pdate`, `pstatus`) VALUES
+('20240111154129', '202401111541290', 'HO926', 'BGL1', '1', '202401111540380', 1, '', 55000, '1', '2024-01-11', 0),
+('20240111154129', '202401111541291', 'HO926', 'BGL1', '', '202401111540381', 0, '', 0, '', '2024-01-11', 0),
+('20240111154129', '202401111541292', 'HO926', 'BGL1', '', '202401111540382', 0, '', 0, '', '2024-01-11', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -324,6 +349,13 @@ CREATE TABLE `po_insert_id` (
   `spoid` varchar(50) NOT NULL,
   `mprid` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `po_insert_id`
+--
+
+INSERT INTO `po_insert_id` (`spoid`, `mprid`) VALUES
+('20240111154129', 'BGL1');
 
 -- --------------------------------------------------------
 
@@ -359,7 +391,7 @@ CREATE TABLE `po_qty_remaining` (
 ,`pname` varchar(100)
 ,`model` varchar(300)
 ,`simprid` varchar(50)
-,`item` varchar(50)
+,`pcode` varchar(50)
 ,`qty` float
 ,`puom` varchar(10)
 ,`prqty` double
@@ -379,6 +411,14 @@ CREATE TABLE `product_asset_code` (
   `pcidnum` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `product_asset_code`
+--
+
+INSERT INTO `product_asset_code` (`pacode`, `pafid`, `pcode`, `pcidnum`) VALUES
+('BGL-DKTP-1', 'BGL', 'DKTP', 1),
+('BGL-LPT-1', 'BGL', 'LPT', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -394,6 +434,13 @@ CREATE TABLE `product_assign_insert` (
   `rremarks` varchar(100) NOT NULL,
   `astatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `product_assign_insert`
+--
+
+INSERT INTO `product_assign_insert` (`paiid`, `pacode`, `userid`, `adate`, `rdate`, `rremarks`, `astatus`) VALUES
+('20240111155032', 'BGL-LPT-1', 'HO926', '2024-01-11', '2024-01-11', '', 0);
 
 -- --------------------------------------------------------
 
@@ -501,6 +548,13 @@ CREATE TABLE `product_ihistory_insert` (
   `phstatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `product_ihistory_insert`
+--
+
+INSERT INTO `product_ihistory_insert` (`phiid`, `pacode`, `factoryid`, `phstatus`) VALUES
+('20240111154845', 'BGL-LPT-1', 'BGL', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -520,63 +574,19 @@ CREATE TABLE `product_insert` (
 --
 
 INSERT INTO `product_insert` (`pcode`, `pccode`, `pgid`, `psgid`, `pname`) VALUES
-('05A', '20230820083757', '20230822072551', '20240108105102', 'Toner 05A'),
-('107A', '20230820083757', '20230822072551', '20240108105102', 'Toner 107A'),
-('26A', '20230820083757', '20230822072551', '20240108105102', 'Toner 26A'),
-('45A', '20230820083757', '20230822072551', '20240108105112', 'HP 45A'),
-('76A', '20230820083757', '20230822072551', '20240108105102', 'Toner 76A'),
-('78A', '20230820083757', '20230822072551', '20240108105102', 'Toner 78A'),
-('79A', '20230820083757', '20230822072551', '20240108105102', 'Toner 79A'),
-('80A', '20230820083757', '20230822072551', '20240108105102', 'Toner 80A'),
-('810', '20230820083757', '20230822072551', '20240108105112', 'Canon 810'),
-('811', '20230820083757', '20230822072551', '20240108105112', 'Canon 811'),
-('85A', '20230820083757', '20230822072551', '20240108105102', 'Toner 85A'),
 ('AP', '20230820083743', '20230822072652', '20230822083026', 'Access Point'),
 ('AR', '20230820083743', '20230822072652', '20230822083344', 'Attendance Reader'),
-('CBL', '20230820083757', '20230822072519', '20240108102520', 'UTP Cable (Cat6)'),
-('CBTR', '20230820083757', '20230822072519', '20240108102520', 'CMOS Battery'),
-('CF', '20230820083757', '20230822072519', '20240108102520', 'Cooling Fan (CPU)'),
 ('CPR', '20230820083743', '20230822072652', '20230822082854', 'Copier'),
-('CPRDM', '20230820083757', '20230822072537', '20240108102127', 'Copier Drum'),
-('CPRDR', '20230820083757', '20230822072537', '20240108102127', 'Copier Developer'),
-('CPRGR', '20230820083757', '20230822072537', '20240108102127', 'Copier Gear'),
-('CSG', '20230820083757', '20230822072519', '20240108102520', 'Casing (CPU)'),
 ('DKTP', '20230820083743', '20230822072652', '20230822082725', 'Desktop'),
-('FCBL', '20230820083757', '20230822072519', '20240108102520', 'Fiber Cable'),
 ('FW', '20230820083743', '20230822072652', '20230822082942', 'Firewall'),
-('HP', '20230820083757', '20230822072519', '20240108102520', 'Headphone'),
-('LBTR', '20230820083757', '20230822072519', '20240108102520', 'Laptop Battery'),
-('LC', '20230820083757', '20230822072519', '20240108102520', 'Lan Card'),
-('LCRG', '20230820083757', '20230822072519', '20240108102520', 'Laptop Charger'),
-('LDSP', '20230820083757', '20230822072519', '20240108102520', 'Laptop Display'),
-('LKB', '20230820083757', '20230822072519', '20240108102520', 'Laptop Keyboard'),
 ('LPT', '20230820083743', '20230822072652', '20230822082725', 'Laptop'),
-('LSTD', '20230820083757', '20230822072519', '20240108102520', 'Laptop Stand'),
-('MCVTR', '20230820083757', '20230822072519', '20240108102520', 'Converter (Multiport)'),
 ('MNT', '20230820083743', '20230822072652', '20230822083124', 'Monitor'),
-('NFP', '20230820083757', '20230822072519', '20240108102520', 'Faceplate'),
-('NMDL', '20230820083757', '20230822072519', '20240108102520', 'Modular'),
-('NPP', '20230820083757', '20230822072519', '20240108102520', 'Patch Panel'),
 ('NTRK', '20230820083743', '20230822072652', '20230822083502', 'Network Rack'),
 ('NTSW', '20230820083743', '20230822072652', '20230822083005', 'Network Switch'),
 ('NVR', '20230820083743', '20230822072652', '20230822083355', 'NVR'),
 ('OUPS', '20230820083743', '20230822072652', '20230822083051', 'Online UPS'),
-('PD', '20230820083757', '20230822072519', '20240108102520', 'Pendrive'),
 ('PJTR', '20230820083743', '20230822072652', '20230822082919', 'Projector'),
-('PP', '20230820083757', '20230822072519', '20240108102520', 'Patch Panel'),
-('PSU', '20230820083757', '20230822072519', '20240108102520', 'Power Supply'),
-('PTR', '20230820083743', '20230822072652', '20230822082821', 'Printer'),
-('PTRFF', '20230820083757', '20230822072537', '20240108102127', 'Fuser Film'),
-('PTRGR', '20230820083757', '20230822072537', '20240108102127', 'Printer Gear'),
-('PTRPCR', '20230820083757', '20230822072537', '20240108102127', 'Pickup Roller'),
-('PTRPR', '20230820083757', '20230822072537', '20240108102127', 'Pressure Roller'),
-('RJC', '20230820083757', '20230822072519', '20240108102520', 'RJ45 Connector'),
-('SCN', '20230820083743', '20230822072652', '20230822082828', 'Scanner'),
-('UKB', '20230820083757', '20230822072519', '20240108102520', 'USB Keyboard'),
-('ULC', '20230820083757', '20230822072519', '20240108102520', 'USB Lan Card'),
-('UMS', '20230820083757', '20230822072519', '20240108102520', 'USB Mouse'),
-('WM', '20230820083757', '20230822072519', '20240108102520', 'Wire Manager'),
-('WMS', '20230820083757', '20230822072519', '20240108102520', 'Wireless Mouse');
+('PTR', '20230820083743', '20230822072652', '20230822082821', 'Printer');
 
 -- --------------------------------------------------------
 
@@ -599,6 +609,13 @@ CREATE TABLE `product_inventory` (
   `userid` varchar(50) NOT NULL,
   `pastatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `product_inventory`
+--
+
+INSERT INTO `product_inventory` (`piv`, `sipoid`, `ifid`, `pacode`, `sn`, `idescription`, `iqty`, `warranty`, `pdate`, `adate`, `rdate`, `userid`, `pastatus`) VALUES
+('20240111154845', '202401111541290', 'BGL', 'BGL-LPT-1', '1', '', 1, 365, '2024-01-11', '2024-01-11', '2024-01-11', '', 0);
 
 -- --------------------------------------------------------
 
@@ -643,20 +660,7 @@ INSERT INTO `product_subgroup_insert` (`psgid`, `pccode`, `pgid`, `psgname`) VAL
 ('20230822083124', '20230820083743', '20230822072652', 'Monitor'),
 ('20230822083344', '20230820083743', '20230822072652', 'Attendance Reader'),
 ('20230822083355', '20230820083743', '20230822072652', 'NVR'),
-('20230822083502', '20230820083743', '20230822072652', 'Network Rack'),
-('20240108095837', '20230820083757', '20230822072637', 'Internet Bill'),
-('20240108101032', '20230820083757', '20230822072637', 'Data Bill'),
-('20240108101047', '20230820083757', '20230822072637', 'IP Phone Bill'),
-('20240108101258', '20230820083757', '20230822072637', 'Internet Maintenance '),
-('20240108102127', '20230820083757', '20230822072537', 'Spare Parts'),
-('20240108102156', '20230820083757', '20230822072537', 'Repair Charge'),
-('20240108102520', '20230820083757', '20230822072519', 'Accessories'),
-('20240108105102', '20230820083757', '20230822072551', 'Toner'),
-('20240108105112', '20230820083757', '20230822072551', 'Cartridge'),
-('20240108105220', '20230820083757', '20230822072551', 'Ink'),
-('20240108105232', '20230820083757', '20230822072551', 'Ribbon'),
-('20240108105311', '20230820083757', '20230822072618', 'AMC/MMC'),
-('20240108105540', '20230820083757', '20230822072618', 'OTC/Service Charge');
+('20230822083502', '20230820083743', '20230822072652', 'Network Rack');
 
 -- --------------------------------------------------------
 
@@ -698,6 +702,13 @@ CREATE TABLE `receive_insert` (
   `cdate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `receive_insert`
+--
+
+INSERT INTO `receive_insert` (`grnid`, `grnrid`, `suserid`, `mprid`, `simprid`, `sipoid`, `po`, `grn`, `rqty`, `rremarks`, `rdate`, `invoice`, `cdate`) VALUES
+('20240111154327', '20240111154327', 'HO926', 'BGL1', '202401111540380', '202401111541290', '1', '1', 1, '', '2024-01-11', '1', '2024-01-11');
+
 -- --------------------------------------------------------
 
 --
@@ -709,6 +720,13 @@ CREATE TABLE `receive_insert_id` (
   `mprid` varchar(50) NOT NULL,
   `grn` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `receive_insert_id`
+--
+
+INSERT INTO `receive_insert_id` (`grnid`, `mprid`, `grn`) VALUES
+('20240111154327', 'BGL1', '1');
 
 -- --------------------------------------------------------
 
@@ -870,7 +888,7 @@ INSERT INTO `usertype` (`usertypeid`, `usertype`) VALUES
 --
 DROP TABLE IF EXISTS `mpr_wise_receive_list_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `mpr_wise_receive_list_view`  AS  select `mpr_insert`.`mprid` AS `mprid`,`mpr_insert`.`fid` AS `fid`,`product_category_insert`.`pccode` AS `pccode`,`product_category_insert`.`pcname` AS `pcname`,`mpr_insert`.`model` AS `model`,`receive_insert`.`po` AS `po`,`mpr_insert`.`qty` AS `qty`,`product_uom_insert`.`puom` AS `puom`,`mpr_insert`.`price` AS `price`,`mpr_insert`.`remarks` AS `remarks`,`mpr_insert`.`uname` AS `uname`,`mpr_insert`.`mdate` AS `mdate`,`receive_insert`.`grn` AS `grn`,`receive_insert`.`rqty` AS `rqty`,`receive_insert`.`rdate` AS `rdate`,`mpr_insert`.`description` AS `description`,`receive_insert`.`simprid` AS `simprid`,`receive_insert`.`sipoid` AS `sipoid`,`product_insert`.`pcode` AS `pcode`,`product_insert`.`pname` AS `pname` from ((((`mpr_insert` join `receive_insert` on(`receive_insert`.`simprid` = `mpr_insert`.`simprid`)) join `product_uom_insert` on(`product_uom_insert`.`puomid` = `mpr_insert`.`uom`)) join `product_insert` on(`product_insert`.`pcode` = `mpr_insert`.`item`)) join `product_category_insert` on(`product_category_insert`.`pccode` = `product_insert`.`pccode`)) where `receive_insert`.`grn` <> '' ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `mpr_wise_receive_list_view`  AS  select `mpr_insert`.`mprid` AS `mprid`,`mpr_insert`.`fid` AS `fid`,`product_category_insert`.`pccode` AS `pccode`,`item_insert`.`item` AS `item`,`product_category_insert`.`pcname` AS `pcname`,`mpr_insert`.`model` AS `model`,`receive_insert`.`po` AS `po`,`mpr_insert`.`qty` AS `qty`,`product_uom_insert`.`puom` AS `puom`,`mpr_insert`.`price` AS `price`,`mpr_insert`.`remarks` AS `remarks`,`mpr_insert`.`uname` AS `uname`,`mpr_insert`.`mdate` AS `mdate`,`receive_insert`.`grn` AS `grn`,`receive_insert`.`rqty` AS `rqty`,`receive_insert`.`rdate` AS `rdate`,`mpr_insert`.`description` AS `description`,`receive_insert`.`simprid` AS `simprid`,`receive_insert`.`sipoid` AS `sipoid`,`product_insert`.`pcode` AS `pcode`,`product_insert`.`pname` AS `pname` from (((((`mpr_insert` join `receive_insert` on(`receive_insert`.`simprid` = `mpr_insert`.`simprid`)) join `product_uom_insert` on(`product_uom_insert`.`puomid` = `mpr_insert`.`uom`)) join `product_insert` on(`product_insert`.`pcode` = `mpr_insert`.`mpcode`)) join `item_insert` on(`item_insert`.`itemcode` = `mpr_insert`.`model`)) join `product_category_insert` on(`product_category_insert`.`pccode` = `product_insert`.`pccode`)) where `receive_insert`.`grn` <> '' ;
 
 -- --------------------------------------------------------
 
@@ -888,7 +906,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `po_qty_remaining`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `po_qty_remaining`  AS  select `mpr_insert`.`mprid` AS `mprid`,`mpr_insert`.`fid` AS `fid`,`product_category_insert`.`pcname` AS `pcname`,`product_insert`.`pname` AS `pname`,`mpr_insert`.`model` AS `model`,`po_insert_view`.`simprid` AS `simprid`,`mpr_insert`.`item` AS `item`,`mpr_insert`.`qty` AS `qty`,`product_uom_insert`.`puom` AS `puom`,sum(`po_insert_view`.`pqty`) AS `prqty`,sum(`po_insert_view`.`mpprice`) AS `tpprice` from ((((((`po_insert_view` join `mpr_insert` on(`mpr_insert`.`simprid` = `po_insert_view`.`simprid`)) join `product_uom_insert` on(`product_uom_insert`.`puomid` = `mpr_insert`.`uom`)) join `product_insert` on(`product_insert`.`pcode` = `mpr_insert`.`item`)) join `product_category_insert` on(`product_category_insert`.`pccode` = `product_insert`.`pccode`)) join `department` on(`department`.`deptid` = `mpr_insert`.`mdeptid`)) join `designation` on(`designation`.`desigid` = `mpr_insert`.`mdesigid`)) group by `po_insert_view`.`simprid` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `po_qty_remaining`  AS  select `mpr_insert`.`mprid` AS `mprid`,`mpr_insert`.`fid` AS `fid`,`product_category_insert`.`pcname` AS `pcname`,`product_insert`.`pname` AS `pname`,`mpr_insert`.`model` AS `model`,`po_insert_view`.`simprid` AS `simprid`,`mpr_insert`.`mpcode` AS `pcode`,`mpr_insert`.`qty` AS `qty`,`product_uom_insert`.`puom` AS `puom`,sum(`po_insert_view`.`pqty`) AS `prqty`,sum(`po_insert_view`.`mpprice`) AS `tpprice` from ((((((`po_insert_view` join `mpr_insert` on(`mpr_insert`.`simprid` = `po_insert_view`.`simprid`)) join `product_uom_insert` on(`product_uom_insert`.`puomid` = `mpr_insert`.`uom`)) join `product_insert` on(`product_insert`.`pcode` = `mpr_insert`.`mpcode`)) join `product_category_insert` on(`product_category_insert`.`pccode` = `product_insert`.`pccode`)) join `department` on(`department`.`deptid` = `mpr_insert`.`mdeptid`)) join `designation` on(`designation`.`desigid` = `mpr_insert`.`mdesigid`)) group by `po_insert_view`.`simprid` ;
 
 -- --------------------------------------------------------
 
@@ -946,7 +964,7 @@ ALTER TABLE `internet`
 -- Indexes for table `item_insert`
 --
 ALTER TABLE `item_insert`
-  ADD PRIMARY KEY (`item`) USING BTREE;
+  ADD PRIMARY KEY (`itemcode`);
 
 --
 -- Indexes for table `item_release_insert`
@@ -1112,13 +1130,13 @@ ALTER TABLE `antivirus`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `deptid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `deptid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `designation`
 --
 ALTER TABLE `designation`
-  MODIFY `desigid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `desigid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `internet`

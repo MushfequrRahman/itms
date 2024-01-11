@@ -104,7 +104,7 @@ td{font-weight: 600; font-variant:small-caps;}
                   <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */?>
                   <td style="vertical-align:middle;"><?php echo $row['pcname'];?></td>
                   <td style="vertical-align:middle;"><?php echo $row['pname'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['model'];?></td>
+                  <td style="vertical-align:middle;"><?php echo $row['item'];?></td>
                   
                   
                   <td style="vertical-align:middle;"><?php echo $row['qty']." ".$row['puom'];?></td>

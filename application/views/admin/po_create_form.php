@@ -29,31 +29,12 @@ foreach ($ul as $row) {
 
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
-
-
-
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-
-      <!-- Main content -->
       <section class="content">
-        <!-- Info boxes -->
-
-
-
-
-        <!-- Main row -->
         <div class="row">
-          <!-- Left col -->
           <div class="col-md-12">
-
             <div class="row">
-
-              <!-- /.col -->
-
               <div class="col-md-12">
-                <!-- USERS LIST -->
                 <div class="box box-danger">
                   <div class="box-header with-border">
                     <h3 class="box-title">PO Create</h3>
@@ -66,9 +47,7 @@ foreach ($ul as $row) {
 							<?php endif;?>
 						</div>
 					</div><?php */ ?>
-
-                  </div>
-                  <!-- /.box-header -->
+</div>
                   <div class="box-body">
                     <span style="text-align:center" id="error"></span>
                     <div style="text-align:center" id="item_table"></div>
@@ -95,14 +74,9 @@ foreach ($ul as $row) {
                         <input type="text" class="form-control pd" readonly name="podate" value="<?php echo date('d-m-Y'); ?>">
                         <?php /*?><?php echo form_error('dobdate', '<div class="error">', '</div>');  ?><?php */ ?>
                       </div>
-
-
-
-
-                      <div id="AuGroup">
+<div id="AuGroup">
                         <div class="row">
-
-                          <table class="table table-bordered" id="item_table1">
+<table class="table table-bordered" id="item_table1">
                             <thead>
                               <tr>
                                 <th style="text-align:center;">Item Code</th>
@@ -115,71 +89,21 @@ foreach ($ul as $row) {
                             </thead>
                             <tbody></tbody>
                           </table>
-
-                        </div>
-
-                      </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                      <!-- /.users-list -->
+</div>
+</div>
                   </div>
-                  <!-- /.box-body -->
                   <div class="box-footer text-center">
                     <input type="submit" class="btn btn-primary" name="submit" value="CREATE" />
                   </div>
                   </form>
-                  <!-- /.box-footer -->
                 </div>
-                <!--/.box -->
               </div>
-              <!-- /.col -->
             </div>
-            <!-- /.row -->
-
-
-            <!-- /.box -->
           </div>
-          <!-- /.col -->
-
-          <!-- /.col -->
         </div>
-
-
-        <!-- /.row -->
       </section>
-      <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
-
-
   </div>
-  <!-- ./wrapper -->
-
 
 
   <script>
@@ -257,7 +181,7 @@ foreach ($ul as $row) {
         });
 
         var form_data = $(this).serialize();
-		//alert(form_data);
+        //alert(form_data);
 
         if (error == '') {
           $.ajax({
@@ -270,7 +194,9 @@ foreach ($ul as $row) {
                 document.forms['insert_form'].reset();
                 $('#item_table1').find('tr:gt(0)').remove();
                 $('#error').html('<div class="alert alert-success">PO Details Saved</div>');
-				window.setTimeout(function(){location.reload()},3000)
+                window.setTimeout(function() {
+                  location.reload()
+                }, 3000)
               }
             }
           });

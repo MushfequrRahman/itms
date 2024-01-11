@@ -417,18 +417,19 @@ class Admin extends CI_Model
 	}
 	public function item_insert($item, $pcode)
 	{
-		// $d = date('Y-m-d');
-		// $t = date("H:i:s");
-		// $d1 = str_replace("-", "", $d);
-		// $t1 = str_replace(":", "", $t);
-		// $ccid = $d1 . $t1;
+		date_default_timezone_set('Asia/Dhaka');
+		$d = date('Y-m-d');
+		$t = date("H:i:s");
+		$d1 = str_replace("-", "", $d);
+		$t1 = str_replace(":", "", $t);
+		$ccid = $d1 . $t1;
 
 		$sql = "SELECT * FROM item_insert WHERE item='$item'";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() == 1) {
 			return false;
 		} else {
-			$sql = "INSERT INTO item_insert VALUES ('$item','$pcode')";
+			$sql = "INSERT INTO item_insert VALUES ('$ccid','$item','$pcode')";
 			$query = $this->db->query($sql);
 			return $query;
 		}
@@ -589,15 +590,15 @@ class Admin extends CI_Model
 
 		$sql0 = "UPDATE product_inventory SET ifid='$factoryid'
 				WHERE pacode='$pacode'";
-				$this->db->query($sql0);
+		$this->db->query($sql0);
 
 		$sql = "UPDATE product_ihistory_insert SET phstatus='0'
 				WHERE pacode='$pacode' AND phstatus='1'";
-				$this->db->query($sql);
+		$this->db->query($sql);
 
 		$sql1 = "INSERT INTO product_ihistory_insert VALUES ('$ccid','$pacode','$factoryid','1')";
-				$query1 = $this->db->query($sql1);
-				return $query1;
+		$query1 = $this->db->query($sql1);
+		return $query1;
 	}
 	public function product_inventory_list_up($pdiid)
 	{
@@ -645,7 +646,7 @@ class Admin extends CI_Model
 
 		$sql1 = "UPDATE product_inventory SET userid='',rdate='$rdate',pastatus='0' 
 				WHERE pacode='$pacode'";
-				$this->db->query($sql1);
+		$this->db->query($sql1);
 		return $query = $this->db->query($sql);
 	}
 	public function item_release_insert($pacode, $irid, $remarks, $ddate)
@@ -668,7 +669,7 @@ class Admin extends CI_Model
 
 		$sql2 = "UPDATE product_inventory SET userid='',rdate='$ddate',pastatus='0' 
 				WHERE pacode='$pacode'";
-				$this->db->query($sql1);
+		$this->db->query($sql1);
 		return $query = $this->db->query($sql2);
 	}
 	public function antivirus()
@@ -680,6 +681,12 @@ class Admin extends CI_Model
 	public function internet()
 	{
 		$query = "SELECT * FROM internet";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function show_item($pcode)
+	{
+		$query = "SELECT itemcode,item FROM item_insert WHERE pcode='$pcode'";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
@@ -703,7 +710,7 @@ class Admin extends CI_Model
 		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid')";
 		$query1 = $this->db->query($sql1);
 
-		$sql = "INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[item]','$data[model]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
+		$sql = "INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[product]','$data[item]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
 		return $query = $this->db->query($sql);
 	}
 	//public function date_wise_mpr_list($pd, $wd)
@@ -728,7 +735,8 @@ class Admin extends CI_Model
 		$query = "SELECT * FROM mpr_insert 
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-		JOIN product_insert ON product_insert.pcode=mpr_insert.item
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 		JOIN department ON department.deptid=mpr_insert.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert.mdesigid
@@ -809,6 +817,7 @@ class Admin extends CI_Model
 		$query = "SELECT * FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		
@@ -896,14 +905,15 @@ class Admin extends CI_Model
 
 	public function po_for_mpr_list($mprid)
 	{
-		$query = "SELECT mpr_insert.mprid,mpr_insert.fid,product_insert.pname,mpr_insert.model,
+		$query = "SELECT mpr_insert.mprid,mpr_insert.fid,product_insert.pname,item,
 		mpr_insert.simprid,product_category_insert.pcname,
 		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
 		prqty,tpprice,pprice 
 		FROM mpr_insert 
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-		JOIN product_insert ON product_insert.pcode=mpr_insert.item
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 		JOIN department ON department.deptid=mpr_insert.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert.mdesigid
@@ -967,7 +977,7 @@ class Admin extends CI_Model
 				LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
 				
 				JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-				JOIN product_insert ON product_insert.pcode=mpr_insert.item
+				JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 				JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 				JOIN department ON department.deptid=mpr_insert.mdeptid
 				JOIN designation ON designation.desigid=mpr_insert.mdesigid
@@ -1230,7 +1240,7 @@ class Admin extends CI_Model
 	{
 		$query = "SELECT  product_inventory.pacode,product_ihistory_insert.factoryid,
 		supplier_insert.supplier,
-		mpr_insert.mprid,sn,item,description,model,
+		mpr_insert.mprid,sn,description,item,
 		iqty,puom,warranty,price,pprice,
 		po_insert.pdate,adate,rdate,
 		ddate,dremarks,item_release_type_insert.irid,releasetype,
@@ -1239,9 +1249,10 @@ class Admin extends CI_Model
 		FROM product_inventory 
 		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-		JOIN product_insert ON product_insert.pcode=mpr_insert.item
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
 		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid

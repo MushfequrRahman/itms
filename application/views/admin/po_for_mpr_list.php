@@ -96,7 +96,7 @@
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
             <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['model']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
             <td style="vertical-align:middle; display:none;"><input type="text" readonly="readonly" class="form-control" name="item[]" value="<?php echo $row['simprid']; ?>" /></td>
             <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>

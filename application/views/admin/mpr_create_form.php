@@ -27,7 +27,7 @@ foreach ($ul as $row) {
   $uom .= '<option value="' . $row["puomid"] . '">' . $row["puom"] . '</option>';
 }
 foreach ($col as $row) {
-  $item .= '<option value="' . $row["pcode"] . '">' . $row["pname"] . '</option>';
+  $product .= '<option value="' . $row["pcode"] . '">' . $row["pname"] . '</option>';
 }
 ?>
 
@@ -133,11 +133,11 @@ foreach ($col as $row) {
                           <table class="table table-bordered" id="item_table1">
                             <thead>
                               <tr>
-                                <th style="text-align:center;">Item</th>
-                                <th style="text-align:center;">Model</th>
+                                <th style="text-align:center;">Product<em>*</em></th>
+                                <th style="text-align:center;">Item/Model<em>*</em></th>
                                 <!-- <th style="text-align:center;">Type</th> -->
-                                <th style="text-align:center;">Qty</th>
-                                <th style="text-align:center;">Unit</th>
+                                <th style="text-align:center;">Qty<em>*</em></th>
+                                <th style="text-align:center;">Unit<em>*</em></th>
                                 <th style="text-align:center;">Description</th>
                                 <th style="text-align:center;">Unit Price</th>
                                 <th style="text-align:center;">Remarks</th>
@@ -175,13 +175,14 @@ foreach ($col as $row) {
         count++;
         var html = '';
         html += '<tr>';
-        html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option><?php echo $item; ?></select></td>';
-        html += '<td><input type="text" name="model[]" class="form-control model" id="model' + count + '" /></td>';
+        html += '<td><select name="product[]" class="form-control product" data-item="' + count + '"><option value="">Product</option><?php echo $product; ?></select></td>';
+        //html += '<td><input type="text" name="model[]" class="form-control model" id="model' + count + '" /></td>';
+        html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option></select></td>';
         // html += '<td><select name="type[]" class="form-control type" id="type' + count + '"><option value="">Type</option><?php echo $type; ?></select></td>';
         html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
         html += '<td><select name="uom[]" class="form-control uom" id="uom' + count + '"><option value="">UOM</option><?php echo $uom; ?></select></td>';
         html += '<td><textarea class="form-control" rows="1" name="description[]" id="description"></textarea></td>';
-        html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + '" /></td>';
+        html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + '" value="0.00" /></td>';
         html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
         html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
         html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
@@ -192,9 +193,39 @@ foreach ($col as $row) {
         $(this).closest('tr').remove();
       });
 
+      $(document).on('change', '.product', function() {
+        var pcode = $(this).val();
+        var item = $(this).data('item');
+        $.ajax({
+          url: "<?php echo base_url(); ?>Dashboard/show_item",
+          dataType: "json",
+          method: "get",
+          data: {
+            pcode: pcode
+          },
+          success: function(data) {
+            var html = '<option value="">Item</option>';
+
+
+            html += data;
+
+            $('#item' + item).html(html);
+          }
+        })
+      });
+
       $('#insert_form').on('submit', function(event) {
         event.preventDefault();
         var error = '';
+        $('.product').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Product at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
         $('.item').each(function() {
           var count = 1;
           if ($(this).val() == '') {
@@ -204,23 +235,14 @@ foreach ($col as $row) {
           count = count + 1;
         });
 
-        $('.model').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Model at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.type').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Type at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
+        // $('.type').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Type at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
 
         $('.qty').each(function() {
           var count = 1;
@@ -261,18 +283,18 @@ foreach ($col as $row) {
           count = count + 1;
 
         });
-        $('.uname').each(function() {
+        // $('.uname').each(function() {
 
-          var count = 1;
+        //   var count = 1;
 
-          if ($(this).val() == '') {
-            error += '<p>Enter Uname at ' + count + ' Row</p> ';
-            return false;
-          }
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Uname at ' + count + ' Row</p> ';
+        //     return false;
+        //   }
 
-          count = count + 1;
+        //   count = count + 1;
 
-        });
+        // });
 
         var form_data = $(this).serialize();
         //alert(form_data);
