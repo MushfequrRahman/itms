@@ -61,12 +61,12 @@
 												<?php echo form_error('psgid', '<div class="error">', '</div>');  ?>
 											</div>
 											<div class="form-group">
-												<label>Product Code</label>
+												<label>Product Code<em>*</em></label>
 												<input type="text" class="form-control" name="pcode" placeholder="Enter Product Code">
 												<?php echo form_error('pcode', '<div class="error">', '</div>');  ?>
 											</div>
 											<div class="form-group">
-												<label>Product</label>
+												<label>Product<em>*</em></label>
 												<input type="text" class="form-control" name="pname" placeholder="Enter Product Name">
 												<?php echo form_error('pname', '<div class="error">', '</div>');  ?>
 											</div>

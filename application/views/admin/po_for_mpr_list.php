@@ -93,7 +93,7 @@
             <td style="vertical-align:middle;"><?php echo $i++; ?></td>
             <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
             <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="mprid" value="<?php echo $row['mprid']; ?>"></td>
-            <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
+            <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="fid" value="<?php echo $row['fid']; ?>"></td>
             <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>

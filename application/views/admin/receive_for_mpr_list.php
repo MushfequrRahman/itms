@@ -186,7 +186,7 @@
                       <td style="vertical-align:middle;"><?php echo $i++; ?></td>
                       <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
                       <td style="vertical-align:middle;"><input type="text" readonly class="form-control" id="mprid" name="mprid" value="<?php echo $row['mprid']; ?>"></td>
-                      <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
+                      <td style="vertical-align:middle;"><input type="text" readonly class="form-control" id="fid" name="fid" value="<?php echo $row['fid']; ?>"></td>
                       <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
                       <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
                       <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
@@ -279,6 +279,7 @@
         //			var wd= $("#wd").val();
         var userid = $("#userid").val();
         var mprid = $("#mprid").val();
+        var fid = $("#fid").val();
         var item = $("#item" + i + "").val();
 		
         var sipoid = $("#sipoid" + i + "").val();
@@ -309,7 +310,7 @@
                 dataType: "text",
                 data: 
                   {
-                    userid:userid,mprid:mprid,item:item,sipoid:sipoid,po:po,grn: grn,rqty:rqty,rremarks:rremarks,rdate:rdate,invoice:invoice,cdate:cdate
+                    userid:userid,mprid:mprid,fid:fid,item:item,sipoid:sipoid,po:po,grn: grn,rqty:rqty,rremarks:rremarks,rdate:rdate,invoice:invoice,cdate:cdate
                   },
                 success: function(data) 
                   {

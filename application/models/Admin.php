@@ -828,80 +828,6 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
-	//public function po_for_mpr_list($mprid)
-	//	{
-	//		
-	//		$query="SELECT * FROM mpr_insert 
-	//		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
-	//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-	//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-	//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-	//		JOIN department ON department.deptid=mpr_insert.mdeptid
-	//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
-	//		WHERE mprid='$mprid' AND mstatus!='1'";
-	//		$result=$this->db->query($query);
-	//		return $result->result_array();
-	//	}
-	//public function po_for_mpr_list($mprid)
-	//		{
-	//		
-	//		$query="SELECT mpr_insert.mprid,fid,pcname,pcapop,po_insert.simprid,
-	//		mpr_insert.qty,puom,description,price,remarks,uname,mdate,
-	//		SUM(pqty) AS pqty,SUM(pprice) AS pprice
-	// 		FROM po_insert 
-	//		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
-	//		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
-	//		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
-	//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-	//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-	//		JOIN department ON department.deptid=mpr_insert.mdeptid
-	//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
-	//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-	//		WHERE po_insert_id.mprid='$mprid'
-	//		GROUP BY po_insert.simprid";
-	//		$result=$this->db->query($query);
-	//		return $result->result_array();
-	//	    }
-	//public function po_for_mpr_list($mprid)
-	//		{
-	//		
-	//		$query="SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,model,product_capop_insert.pcapop,po_insert.simprid,
-	//		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
-	//		prqty,tpprice
-	// 		FROM po_insert 
-	//		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
-	//		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
-	//		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
-	//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-	//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-	//		JOIN department ON department.deptid=mpr_insert.mdeptid
-	//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
-	//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-	//		WHERE po_insert_id.mprid='$mprid'
-	//		GROUP BY po_insert.simprid";
-	//		$result=$this->db->query($query);
-	//		return $result->result_array();
-	//	    }
-
-	// public function po_for_mpr_list($mprid)
-	// {
-
-	// 	$query = "SELECT mpr_insert.mprid,mpr_insert.fid,product_category_insert.pcname,mpr_insert.model,product_capop_insert.pcapop,mpr_insert.simprid,
-	// 	mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
-	// 	prqty,tpprice
-	// 	FROM mpr_insert 
-	// 	JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-	// 	JOIN product_insert ON product_insert.pcode=mpr_insert.item
-	// 	JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
-	// 	JOIN department ON department.deptid=mpr_insert.mdeptid
-	// 	JOIN designation ON designation.desigid=mpr_insert.mdesigid
-	// 	LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
-	// 	LEFT JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
-	// 	WHERE mpr_insert.mprid='$mprid'
-	// 	GROUP BY mpr_insert.simprid";
-	// 	$result = $this->db->query($query);
-	// 	return $result->result_array();
-	// }
 
 	public function po_for_mpr_list($mprid)
 	{
@@ -927,51 +853,13 @@ class Admin extends CI_Model
 	public function receive_for_mpr_list($mprid)
 	{
 
-		//$query="SELECT mpr_insert.mprid,mpr_insert.fid,mpr_insert.model,product_category_insert.pcname,product_capop_insert.pcapop,
-		//		po_insert.simprid,po_insert.spoid,
-		//		po_insert.sipoid,
-		//		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
-		//		SUM(pqty) AS pqty,SUM(pprice) AS pprice
-		// 		FROM po_insert 
-		//		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
-		//		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
-		//		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
-		//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-		//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-		//		JOIN department ON department.deptid=mpr_insert.mdeptid
-		//		JOIN designation ON designation.desigid=mpr_insert.mdesigid
-		//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-		//		WHERE po_insert_id.mprid='$mprid'
-		//		GROUP BY po_insert.simprid";
-
-		// $query = "SELECT mpr_insert.mprid,mpr_insert.fid,mpr_insert.model,po_insert.po,product_category_insert.pcname,product_capop_insert.pcapop,
-		// po_insert.simprid,po_insert.spoid,
-		// po_insert.sipoid,
-		// mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
-		// pqty,pprice,SUM(rqty) AS rqty
-		// FROM po_insert 
-		// JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
-		// JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
-		// LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
-
-		// JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-		// JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-		// JOIN department ON department.deptid=mpr_insert.mdeptid
-		// JOIN designation ON designation.desigid=mpr_insert.mdesigid
-		// JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
-		// WHERE po_insert.po='$mprid'
-		// GROUP BY po_insert.sipoid";
-		// $result = $this->db->query($query);
-		// return $result->result_array();
-
-
-		$query = "SELECT mpr_insert.mprid,mpr_insert.fid,mpr_insert.model,po_insert.po,
+		$query = "SELECT mpr_insert.mprid,mpr_insert.fid,mpr_insert.model,fid,po_insert.po,
 		product_category_insert.pcname,
 				po_insert.simprid,po_insert.spoid,
 				po_insert.sipoid,
 				mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
 				pqty,pprice,SUM(rqty) AS rqty
-				 FROM po_insert 
+				FROM po_insert 
 				JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 				JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
 				LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
@@ -986,105 +874,7 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
-	// 		public function receive_create($data)
-	// 		{
-	// 		date_default_timezone_set('Asia/Dhaka');
-	// 		$data['rdate'] = date("Y-m-d", strtotime($data['rdate']));
-	// 		$d=date('Y-m-d');
-	// 		$t= date("H:i:s");
-	// 		$d1=str_replace("-","",$d);
-	// 		$t1=str_replace(":","",$t);
-	// 		$ccid=$d1.$t1;
-
-	// 		$d2=date('Y-m-d');
-	// 		$t2= date("H:i:s");
-	// 		$d21=str_replace("-","",$d2);
-	// 		$t21=str_replace(":","",$t2);
-	// 		$ccid1=$d21.$t21;
-	// 		$ccid1=$ccid1.$data['i'];
-
-	// 		$sql1="INSERT INTO receive_insert_id VALUES ('$ccid','$data[mprid]','$data[grn]')";
-	// 		$query1=$this->db->query($sql1);
-	// 		//if($data['pstatus']!=3)
-	// //		{
-	// 		$sql="INSERT INTO receive_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[item]','$data[sipoid]','$data[po]','$data[grn]','$data[rqty]','$data[rremarks]','$data[rdate]')";
-	// 		//}
-	// 		//else
-	// //		{
-	// //			$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','','$data[item]','$data[pqty]','$data[premarks]','','','','$data[pstatus]')";
-	// //		}
-	// //		
-	// //		$sql2="UPDATE mpr_insert SET mstatus='$data[pstatus]' WHERE simprid='$data[item]'";
-	// 		//$query2=$this->db->query($sql2);
-
-	// 		return $query=$this->db->query($sql);
-	// 	}
-	// 	public function receive_create($data)
-	// 		{
-	// 		date_default_timezone_set('Asia/Dhaka');
-	// 		$data['rdate'] = date("Y-m-d", strtotime($data['rdate']));
-	// 		$d=date('Y-m-d');
-	// 		$t= date("H:i:s");
-	// 		$d1=str_replace("-","",$d);
-	// 		$t1=str_replace(":","",$t);
-	// 		$ccid=$d1.$t1;
-
-	// 		$d2=date('Y-m-d');
-	// 		$t2= date("H:i:s");
-	// 		$d21=str_replace("-","",$d2);
-	// 		$t21=str_replace(":","",$t2);
-	// 		$ccid1=$d21.$t21;
-	// 		$ccid1=$ccid1.$data['i'];
-
-	// 		$sql1="INSERT INTO receive_insert_id VALUES ('$ccid','$data[mprid]','$data[grn]')";
-	// 		$query1=$this->db->query($sql1);
-	// 		//if($data['pstatus']!=3)
-	// //		{
-	// 		$sql="INSERT INTO receive_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[item]','$data[sipoid]','$data[po]','$data[grn]','$data[rqty]','$data[rremarks]','$data[rdate]')";
-	// 		//}
-	// 		//else
-	// //		{
-	// //			$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','','$data[item]','$data[pqty]','$data[premarks]','','','','$data[pstatus]')";
-	// //		}
-	// //		
-	// //		$sql2="UPDATE mpr_insert SET mstatus='$data[pstatus]' WHERE simprid='$data[item]'";
-	// 		//$query2=$this->db->query($sql2);
-
-	// 		return $query=$this->db->query($sql);
-	// 	}
-	// 	public function receive_create($data)
-	// 		{
-	// 		date_default_timezone_set('Asia/Dhaka');
-	// 		$data['rdate'] = date("Y-m-d", strtotime($data['rdate']));
-	// 		$d=date('Y-m-d');
-	// 		$t= date("H:i:s");
-	// 		$d1=str_replace("-","",$d);
-	// 		$t1=str_replace(":","",$t);
-	// 		$ccid=$d1.$t1;
-
-	// 		$d2=date('Y-m-d');
-	// 		$t2= date("H:i:s");
-	// 		$d21=str_replace("-","",$d2);
-	// 		$t21=str_replace(":","",$t2);
-	// 		$ccid1=$d21.$t21;
-	// 		$ccid1=$ccid1.$data['i'];
-
-	// 		$sql1="INSERT INTO receive_insert_id VALUES ('$ccid','$data[mprid]','$data[grn]')";
-	// 		$query1=$this->db->query($sql1);
-	// 		//if($data['pstatus']!=3)
-	// //		{
-	// 		$sql="INSERT INTO receive_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[item]','$data[sipoid]','$data[po]','$data[grn]','$data[rqty]','$data[rremarks]','$data[rdate]')";
-	// 		//}
-	// 		//else
-	// //		{
-	// //			$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','','$data[item]','$data[pqty]','$data[premarks]','','','','$data[pstatus]')";
-	// //		}
-	// //		
-	// //		$sql2="UPDATE mpr_insert SET mstatus='$data[pstatus]' WHERE simprid='$data[item]'";
-	// 		//$query2=$this->db->query($sql2);
-
-	// 		return $query=$this->db->query($sql);
-	// 	}
+	
 	public function receive_create($userid, $mprid, $item, $sipoid, $po, $grn, $rqty, $rdate, $invoice, $cdate, $rremarks)
 	{
 		date_default_timezone_set('Asia/Dhaka');

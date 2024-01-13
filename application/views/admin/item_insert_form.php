@@ -33,7 +33,7 @@
 										<form role="form" autocomplete="off" action="<?php echo base_url(); ?>Dashboard/item_insert" method="post" enctype="multipart/form-data">
 
 											<div class="form-group">
-												<label>Product Code<em>*</em></label>
+												<label>Product Name<em>*</em></label>
 												<select class="form-control" name="pcode" id="pcode">
 													<option value="">Select....</option>
 													<?php
@@ -47,7 +47,7 @@
 												<?php echo form_error('pcode', '<div class="error">', '</div>');  ?>
 											</div>
 											<div class="form-group">
-												<label>Name<em>*</em></label>
+												<label>Item Name/Model<em>*</em></label>
 												<input type="text" class="form-control" name="item" placeholder="Enter Item Name">
 												<?php echo form_error('item', '<div class="error">', '</div>');  ?>
 											</div>

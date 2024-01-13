@@ -40,7 +40,7 @@
 
 
 <!-- /.box-header -->
-<div class="box-body table-responsive no-padding">
+<div class="box-body no-padding">
   <form action="<?php echo base_url() ?>Dashboard/date_wise_mpr_list_xls" class="excel-upl" id="excel-upl" enctype="multipart/form-data" method="post" accept-charset="utf-8">
     <div class="row padall">
       <div class="col-lg-12">
