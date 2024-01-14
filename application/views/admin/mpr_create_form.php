@@ -20,6 +20,7 @@
 $item = '';
 $uom = '';
 $type = '';
+$brand = '';
 // foreach ($il as $row) {
 //   $item .= '<option value="' . $row["pcode"] . '">' . $row["item"] . '</option>';
 // }
@@ -28,6 +29,9 @@ foreach ($ul as $row) {
 }
 foreach ($col as $row) {
   $product .= '<option value="' . $row["pcode"] . '">' . $row["pname"] . '</option>';
+}
+foreach ($bl as $row) {
+  $brand .= '<option value="' . $row["brandid"] . '">' . $row["brandname"] . '</option>';
 }
 ?>
 
@@ -135,7 +139,7 @@ foreach ($col as $row) {
                               <tr>
                                 <th style="text-align:center;">Product<em>*</em></th>
                                 <th style="text-align:center;">Item/Model<em>*</em></th>
-                                <!-- <th style="text-align:center;">Type</th> -->
+                                <th style="text-align:center;">Brand<em>*</em></th>
                                 <th style="text-align:center;">Qty<em>*</em></th>
                                 <th style="text-align:center;">Unit<em>*</em></th>
                                 <th style="text-align:center;">Description</th>
@@ -178,7 +182,7 @@ foreach ($col as $row) {
         html += '<td><select name="product[]" class="form-control product" data-item="' + count + '"><option value="">Product</option><?php echo $product; ?></select></td>';
         //html += '<td><input type="text" name="model[]" class="form-control model" id="model' + count + '" /></td>';
         html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option></select></td>';
-        // html += '<td><select name="type[]" class="form-control type" id="type' + count + '"><option value="">Type</option><?php echo $type; ?></select></td>';
+        html += '<td><select name="brand[]" class="form-control brand" id="brand' + count + '"><option value="">Brand</option><?php echo $brand; ?></select></td>';
         html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
         html += '<td><select name="uom[]" class="form-control uom" id="uom' + count + '"><option value="">UOM</option><?php echo $uom; ?></select></td>';
         html += '<td><textarea class="form-control" rows="1" name="description[]" id="description"></textarea></td>';
@@ -235,14 +239,14 @@ foreach ($col as $row) {
           count = count + 1;
         });
 
-        // $('.type').each(function() {
-        //   var count = 1;
-        //   if ($(this).val() == '') {
-        //     error += '<p>Enter Type at ' + count + ' Row</p>';
-        //     return false;
-        //   }
-        //   count = count + 1;
-        // });
+        $('.brand').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Brand at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
 
         $('.qty').each(function() {
           var count = 1;
@@ -268,8 +272,6 @@ foreach ($col as $row) {
           count = count + 1;
 
         });
-
-
 
         $('.price').each(function() {
 

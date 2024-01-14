@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2024 at 10:52 AM
+-- Generation Time: Jan 14, 2024 at 11:21 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -44,6 +44,17 @@ INSERT INTO `antivirus` (`avid`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `brand_insert`
+--
+
+CREATE TABLE `brand_insert` (
+  `brandid` varchar(50) NOT NULL,
+  `brandname` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `department`
 --
 
@@ -63,7 +74,8 @@ INSERT INTO `department` (`deptid`, `departmentname`) VALUES
 (4, 'RND'),
 (5, 'HRD'),
 (6, 'QAD'),
-(7, 'PLANNING');
+(7, 'PLANNING'),
+(8, 'STORE');
 
 -- --------------------------------------------------------
 
@@ -87,7 +99,93 @@ INSERT INTO `designation` (`desigid`, `designation`) VALUES
 (5, 'DEPUTY MANAGER'),
 (6, 'EXECUTIVE'),
 (7, 'SENIOR MANAGER'),
-(8, 'SENIOR SUPERVISOR');
+(8, 'SENIOR SUPERVISOR'),
+(9, 'Assistant Manager'),
+(10, 'TECHNICIAN'),
+(11, 'SENIOR TECHNICIAN'),
+(12, 'Area Sales Manager'),
+(13, 'Assistant Cutting'),
+(14, 'Assistant Designer'),
+(15, 'Assistant General Manager'),
+(16, 'Assistant Merchandiser'),
+(17, 'Assistant Officer'),
+(18, 'Assistant Supervisor'),
+(19, 'Attendant'),
+(20, 'CEO'),
+(21, 'CFO'),
+(22, 'Co-Ordinator'),
+(23, 'Color Master'),
+(24, 'Commercial Assistant'),
+(25, 'Computer Operator'),
+(26, 'Content Writer'),
+(27, 'COO'),
+(28, 'Cutter Man'),
+(29, 'Data Entry Operator'),
+(30, 'Deputy General Manager'),
+(31, 'Deputy Regional Sales Manager'),
+(32, 'Designer'),
+(33, 'Digital Marketer'),
+(34, 'Director'),
+(35, 'Distribution Executive'),
+(36, 'Finance Controller'),
+(37, 'Fire man'),
+(38, 'Fire Safety Officer'),
+(39, 'Garments Technologist'),
+(40, 'GCEO'),
+(41, 'GCFO'),
+(42, 'General Manager'),
+(43, 'GGM'),
+(44, 'Graphics Designer'),
+(45, 'Group Senior Manager'),
+(46, 'Head Of Operation '),
+(47, 'Head Of SCM'),
+(48, 'Inspector (QA)'),
+(49, 'Internee'),
+(50, 'Junior Cutter Man'),
+(51, 'Junior Manager'),
+(52, 'Junior Officer '),
+(53, 'Junior Supervisor'),
+(54, 'Laser Designer'),
+(55, 'Logistics Officer'),
+(56, 'Management Trainee'),
+(57, 'Management Trainee Officer'),
+(58, 'Marchandiser'),
+(59, 'Marketing Assistant'),
+(60, 'Medical Assistant'),
+(61, 'Office Assistant'),
+(62, 'Office Attendent'),
+(63, 'Officer'),
+(64, 'Peramedical'),
+(65, 'POLE'),
+(66, 'Project Manager'),
+(67, 'Quality Inspector'),
+(68, 'RBDM'),
+(69, 'Sales Manager'),
+(70, 'Sample Man'),
+(71, 'Senior Designer'),
+(72, 'Senior Executive'),
+(73, 'Senior Graphic Designer'),
+(74, 'Senior Inspector'),
+(75, 'Senior Merchandiser'),
+(76, 'Senior QC'),
+(77, 'Senior Sales Executive'),
+(78, 'Senior Sample Man'),
+(79, 'Senior Shop in Charge'),
+(80, 'Shop in Charge'),
+(81, 'SMO'),
+(82, 'Software Engineer'),
+(83, 'Supervisor'),
+(84, 'Technical Services Executive'),
+(85, 'Territory Executive'),
+(86, 'Territory Manager'),
+(87, 'Trainee'),
+(88, 'Trainee Designer'),
+(89, 'Trainee Merchandiser'),
+(90, 'Trainee Officer'),
+(91, 'Trianee Welfare Officer'),
+(92, 'UI/UX Designer   '),
+(93, 'Walfare Officer'),
+(94, 'Wash Technician');
 
 -- --------------------------------------------------------
 
@@ -183,7 +281,20 @@ INSERT INTO `item_insert` (`itemcode`, `item`, `pcode`) VALUES
 ('20240111125223', 'HP ProBook 450 G5 ', 'LPT'),
 ('20240111125231', 'HP Probook 450 G5 7th Gen', 'LPT'),
 ('20240111125241', 'Hp probook 450G4', 'LPT'),
-('20240111125250', 'Lenovo Ideapad 330', 'LPT');
+('20240111125250', 'Lenovo Ideapad 330', 'LPT'),
+('20240111140218', 'Toner 26A', 'TNR'),
+('20240111140250', 'Toner 80A', 'TNR'),
+('20240113094733', 'Toner 05A', 'TNR'),
+('20240113094754', 'Toner 78A', 'TNR'),
+('20240113094956', 'Toner 85A', 'TNR'),
+('20240113095022', 'Toner 87A', 'TNR'),
+('20240113095222', 'Cartridge 45A', 'CTG'),
+('20240113095331', 'Canon 810', 'CTG'),
+('20240113095344', 'Canon 811', 'CTG'),
+('20240113103017', 'Toner 326A', 'TNR'),
+('20240113113547', 'Cat6 UTP Cable ', 'CBL'),
+('20240113122908', 'GRP 2601P', 'IPT'),
+('20240114102233', 'LIDE 300', 'SCN');
 
 -- --------------------------------------------------------
 
@@ -243,6 +354,7 @@ CREATE TABLE `mpr_insert` (
   `mdesigid` int(11) NOT NULL,
   `mpcode` varchar(50) NOT NULL,
   `model` varchar(300) NOT NULL,
+  `brandid` varchar(300) NOT NULL,
   `qty` float NOT NULL,
   `uom` int(11) NOT NULL,
   `description` varchar(500) NOT NULL,
@@ -257,10 +369,16 @@ CREATE TABLE `mpr_insert` (
 -- Dumping data for table `mpr_insert`
 --
 
-INSERT INTO `mpr_insert` (`smprid`, `simprid`, `suserid`, `mprid`, `fid`, `mdeptid`, `name`, `mdesigid`, `mpcode`, `model`, `qty`, `uom`, `description`, `price`, `remarks`, `uname`, `mdate`, `mstatus`) VALUES
-('20240111154038', '202401111540380', 'HO926', 'BGL1', 'BGL', 1, 'AAA', 2, 'LPT', '20240111124928', 1, 1, '', 55000, '', '', '2024-01-11', 0),
-('20240111154038', '202401111540381', 'HO926', 'BGL1', 'BGL', 1, 'AAA', 2, 'LPT', '20240111125135', 1, 1, '', 52000, '', '', '2024-01-11', 0),
-('20240111154038', '202401111540382', 'HO926', 'BGL1', 'BGL', 1, 'AAA', 2, 'DKTP', '20240111125117', 1, 1, '', 50000, '', '', '2024-01-11', 0);
+INSERT INTO `mpr_insert` (`smprid`, `simprid`, `suserid`, `mprid`, `fid`, `mdeptid`, `name`, `mdesigid`, `mpcode`, `model`, `brandid`, `qty`, `uom`, `description`, `price`, `remarks`, `uname`, `mdate`, `mstatus`) VALUES
+('20240113113926', '202401131139260', 'HO75', 'AKL7413', 'AKL', 1, 'Shukur Ali', 11, 'CBL', '20240113113547', '', 1, 2, 'Dintek UTP Cable', 19000, '', 'Support', '2024-01-13', 0),
+('20240113123136', '202401131231360', 'HO75', 'ATL278060', 'ATL', 8, 'Badiul Alam', 72, 'IPT', '20240113122908', '', 2, 1, '1 for Replacement and another for New', 4600, 'Replace faulty set and new one', 'Shafiq - Fabric store,', '2024-01-13', 0),
+('20240114102604', '202401141026040', 'ho12', 'AFL16330', 'AFL', 8, 'MR. JEWEL', 9, 'SCN', '20240114102233', '', 1, 5, 'SCANNER LIDE -300 CANNON', 20000, '', '', '2024-01-06', 0),
+('20240114104041', '202401141040410', 'ho12', 'AFL16316', 'AFL', 8, 'MR. JEWEL', 9, 'TNR', '20240111140218', '', 2, 1, '', 1, '', 'AFL USER', '2024-01-01', 0),
+('20240114104041', '202401141040411', 'ho12', 'AFL16316', 'AFL', 8, 'MR. JEWEL', 9, 'TNR', '20240111140250', '', 4, 1, '', 1, '', 'AFL USER', '2024-01-01', 0),
+('20240114104041', '202401141040412', 'ho12', 'AFL16316', 'AFL', 8, 'MR. JEWEL', 9, 'TNR', '20240113094956', '', 2, 1, '', 1, '', 'AFL USER', '2024-01-01', 0),
+('20240114104041', '202401141040413', 'ho12', 'AFL16316', 'AFL', 8, 'MR. JEWEL', 9, 'TNR', '20240113103017', '', 3, 1, '', 1, '', 'AFL USER', '2024-01-01', 0),
+('20240114104041', '202401141040414', 'ho12', 'AFL16316', 'AFL', 8, 'MR. JEWEL', 9, 'TNR', '20240113095022', '', 2, 1, '', 2, '', 'AFL USER', '2024-01-01', 0),
+('20240114104041', '202401141040415', 'ho12', 'AFL16316', 'AFL', 8, 'MR. JEWEL', 9, 'CTG', '20240113095222', '', 12, 3, '', 2, '', 'AFL USER', '2024-01-01', 0);
 
 -- --------------------------------------------------------
 
@@ -277,7 +395,10 @@ CREATE TABLE `mpr_insert_id` (
 --
 
 INSERT INTO `mpr_insert_id` (`smprid`) VALUES
-('20240111154038');
+('20240113113926'),
+('20240113123136'),
+('20240114102604'),
+('20240114104041');
 
 -- --------------------------------------------------------
 
@@ -330,15 +451,6 @@ CREATE TABLE `po_insert` (
   `pstatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `po_insert`
---
-
-INSERT INTO `po_insert` (`spoid`, `sipoid`, `suserid`, `mprid`, `po`, `simprid`, `pqty`, `premarks`, `pprice`, `supplier`, `pdate`, `pstatus`) VALUES
-('20240111154129', '202401111541290', 'HO926', 'BGL1', '1', '202401111540380', 1, '', 55000, '1', '2024-01-11', 0),
-('20240111154129', '202401111541291', 'HO926', 'BGL1', '', '202401111540381', 0, '', 0, '', '2024-01-11', 0),
-('20240111154129', '202401111541292', 'HO926', 'BGL1', '', '202401111540382', 0, '', 0, '', '2024-01-11', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -349,13 +461,6 @@ CREATE TABLE `po_insert_id` (
   `spoid` varchar(50) NOT NULL,
   `mprid` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `po_insert_id`
---
-
-INSERT INTO `po_insert_id` (`spoid`, `mprid`) VALUES
-('20240111154129', 'BGL1');
 
 -- --------------------------------------------------------
 
@@ -411,14 +516,6 @@ CREATE TABLE `product_asset_code` (
   `pcidnum` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `product_asset_code`
---
-
-INSERT INTO `product_asset_code` (`pacode`, `pafid`, `pcode`, `pcidnum`) VALUES
-('BGL-DKTP-1', 'BGL', 'DKTP', 1),
-('BGL-LPT-1', 'BGL', 'LPT', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -434,13 +531,6 @@ CREATE TABLE `product_assign_insert` (
   `rremarks` varchar(100) NOT NULL,
   `astatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `product_assign_insert`
---
-
-INSERT INTO `product_assign_insert` (`paiid`, `pacode`, `userid`, `adate`, `rdate`, `rremarks`, `astatus`) VALUES
-('20240111155032', 'BGL-LPT-1', 'HO926', '2024-01-11', '2024-01-11', '', 0);
 
 -- --------------------------------------------------------
 
@@ -548,13 +638,6 @@ CREATE TABLE `product_ihistory_insert` (
   `phstatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `product_ihistory_insert`
---
-
-INSERT INTO `product_ihistory_insert` (`phiid`, `pacode`, `factoryid`, `phstatus`) VALUES
-('20240111154845', 'BGL-LPT-1', 'BGL', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -576,17 +659,53 @@ CREATE TABLE `product_insert` (
 INSERT INTO `product_insert` (`pcode`, `pccode`, `pgid`, `psgid`, `pname`) VALUES
 ('AP', '20230820083743', '20230822072652', '20230822083026', 'Access Point'),
 ('AR', '20230820083743', '20230822072652', '20230822083344', 'Attendance Reader'),
+('CBL', '20230820083757', '20230822072519', '20240108102520', 'UTP Cable (Cat6)'),
+('CBTR', '20230820083757', '20230822072519', '20240108102520', 'CMOS Battery'),
+('CF', '20230820083757', '20230822072519', '20240108102520', 'Cooling Fan (CPU)'),
 ('CPR', '20230820083743', '20230822072652', '20230822082854', 'Copier'),
+('CPRDM', '20230820083757', '20230822072537', '20240108102127', 'Copier Drum'),
+('CPRDR', '20230820083757', '20230822072537', '20240108102127', 'Copier Developer'),
+('CPRGR', '20230820083757', '20230822072537', '20240108102127', 'Copier Gear'),
+('CSG', '20230820083757', '20230822072519', '20240108102520', 'Casing (CPU)'),
+('CTG', '20230820083757', '20230822072551', '20240108105112', 'Cartridge'),
 ('DKTP', '20230820083743', '20230822072652', '20230822082725', 'Desktop'),
+('FCBL', '20230820083757', '20230822072519', '20240108102520', 'Fiber Cable'),
 ('FW', '20230820083743', '20230822072652', '20230822082942', 'Firewall'),
+('HP', '20230820083757', '20230822072519', '20240108102520', 'Headphone'),
+('IPT', '20230820083743', '20230822072652', '20240113072651', 'IP Telephone'),
+('LBTR', '20230820083757', '20230822072519', '20240108102520', 'Laptop Battery'),
+('LC', '20230820083757', '20230822072519', '20240108102520', 'Lan Card'),
+('LCRG', '20230820083757', '20230822072519', '20240108102520', 'Laptop Charger'),
+('LDSP', '20230820083757', '20230822072519', '20240108102520', 'Laptop Display'),
+('LKB', '20230820083757', '20230822072519', '20240108102520', 'Laptop Keyboard'),
 ('LPT', '20230820083743', '20230822072652', '20230822082725', 'Laptop'),
+('LSTD', '20230820083757', '20230822072519', '20240108102520', 'Laptop Stand'),
+('MCVTR', '20230820083757', '20230822072519', '20240108102520', 'Converter (Multiport)'),
 ('MNT', '20230820083743', '20230822072652', '20230822083124', 'Monitor'),
+('NFP', '20230820083757', '20230822072519', '20240108102520', 'Faceplate'),
+('NMDL', '20230820083757', '20230822072519', '20240108102520', 'Modular'),
+('NPP', '20230820083757', '20230822072519', '20240108102520', 'Patch Panel'),
 ('NTRK', '20230820083743', '20230822072652', '20230822083502', 'Network Rack'),
 ('NTSW', '20230820083743', '20230822072652', '20230822083005', 'Network Switch'),
 ('NVR', '20230820083743', '20230822072652', '20230822083355', 'NVR'),
 ('OUPS', '20230820083743', '20230822072652', '20230822083051', 'Online UPS'),
+('PD', '20230820083757', '20230822072519', '20240108102520', 'Pendrive'),
 ('PJTR', '20230820083743', '20230822072652', '20230822082919', 'Projector'),
-('PTR', '20230820083743', '20230822072652', '20230822082821', 'Printer');
+('PP', '20230820083757', '20230822072519', '20240108102520', 'Patch Panel'),
+('PSU', '20230820083757', '20230822072519', '20240108102520', 'Power Supply'),
+('PTR', '20230820083743', '20230822072652', '20230822082821', 'Printer'),
+('PTRFF', '20230820083757', '20230822072537', '20240108102127', 'Fuser Film'),
+('PTRGR', '20230820083757', '20230822072537', '20240108102127', 'Printer Gear'),
+('PTRPCR', '20230820083757', '20230822072537', '20240108102127', 'Pickup Roller'),
+('PTRPR', '20230820083757', '20230822072537', '20240108102127', 'Pressure Roller'),
+('RJC', '20230820083757', '20230822072519', '20240108102520', 'RJ45 Connector'),
+('SCN', '20230820083743', '20230822072652', '20230822082828', 'Scanner'),
+('TNR', '20230820083757', '20230822072551', '20240108105102', 'Toner'),
+('UKB', '20230820083757', '20230822072519', '20240108102520', 'Keyboard USB'),
+('ULC', '20230820083757', '20230822072519', '20240108102520', 'USB Lan Card'),
+('UMS', '20230820083757', '20230822072519', '20240108102520', 'Mouse USB'),
+('WM', '20230820083757', '20230822072519', '20240108102520', 'Wire Manager'),
+('WMS', '20230820083757', '20230822072519', '20240108102520', 'Mouse Wireless');
 
 -- --------------------------------------------------------
 
@@ -609,13 +728,6 @@ CREATE TABLE `product_inventory` (
   `userid` varchar(50) NOT NULL,
   `pastatus` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `product_inventory`
---
-
-INSERT INTO `product_inventory` (`piv`, `sipoid`, `ifid`, `pacode`, `sn`, `idescription`, `iqty`, `warranty`, `pdate`, `adate`, `rdate`, `userid`, `pastatus`) VALUES
-('20240111154845', '202401111541290', 'BGL', 'BGL-LPT-1', '1', '', 1, 365, '2024-01-11', '2024-01-11', '2024-01-11', '', 0);
 
 -- --------------------------------------------------------
 
@@ -660,7 +772,21 @@ INSERT INTO `product_subgroup_insert` (`psgid`, `pccode`, `pgid`, `psgname`) VAL
 ('20230822083124', '20230820083743', '20230822072652', 'Monitor'),
 ('20230822083344', '20230820083743', '20230822072652', 'Attendance Reader'),
 ('20230822083355', '20230820083743', '20230822072652', 'NVR'),
-('20230822083502', '20230820083743', '20230822072652', 'Network Rack');
+('20230822083502', '20230820083743', '20230822072652', 'Network Rack'),
+('20240108095837', '20230820083757', '20230822072637', 'Internet Bill'),
+('20240108101032', '20230820083757', '20230822072637', 'Data Bill'),
+('20240108101047', '20230820083757', '20230822072637', 'IP Phone Bill'),
+('20240108101258', '20230820083757', '20230822072637', 'Internet Maintenance '),
+('20240108102127', '20230820083757', '20230822072537', 'Spare Parts'),
+('20240108102156', '20230820083757', '20230822072537', 'Repair Charge'),
+('20240108102520', '20230820083757', '20230822072519', 'Accessories'),
+('20240108105102', '20230820083757', '20230822072551', 'Toner'),
+('20240108105112', '20230820083757', '20230822072551', 'Cartridge'),
+('20240108105220', '20230820083757', '20230822072551', 'Ink'),
+('20240108105232', '20230820083757', '20230822072551', 'Ribbon'),
+('20240108105311', '20230820083757', '20230822072618', 'AMC/MMC'),
+('20240108105540', '20230820083757', '20230822072618', 'OTC/Service Charge'),
+('20240113072651', '20230820083743', '20230822072652', 'IP Telephone');
 
 -- --------------------------------------------------------
 
@@ -678,7 +804,17 @@ CREATE TABLE `product_uom_insert` (
 --
 
 INSERT INTO `product_uom_insert` (`puomid`, `puom`) VALUES
-(1, 'Pcs');
+(1, 'Pcs'),
+(2, 'Box'),
+(3, 'Set'),
+(4, 'Sets'),
+(5, 'Pc'),
+(6, 'Dozen'),
+(7, 'Meter'),
+(8, 'Year/s'),
+(9, 'Barcode St'),
+(10, 'Roll'),
+(11, 'Wireless M');
 
 -- --------------------------------------------------------
 
@@ -702,13 +838,6 @@ CREATE TABLE `receive_insert` (
   `cdate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `receive_insert`
---
-
-INSERT INTO `receive_insert` (`grnid`, `grnrid`, `suserid`, `mprid`, `simprid`, `sipoid`, `po`, `grn`, `rqty`, `rremarks`, `rdate`, `invoice`, `cdate`) VALUES
-('20240111154327', '20240111154327', 'HO926', 'BGL1', '202401111540380', '202401111541290', '1', '1', 1, '', '2024-01-11', '1', '2024-01-11');
-
 -- --------------------------------------------------------
 
 --
@@ -720,13 +849,6 @@ CREATE TABLE `receive_insert_id` (
   `mprid` varchar(50) NOT NULL,
   `grn` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `receive_insert_id`
---
-
-INSERT INTO `receive_insert_id` (`grnid`, `mprid`, `grn`) VALUES
-('20240111154327', 'BGL1', '1');
 
 -- --------------------------------------------------------
 
@@ -937,6 +1059,12 @@ ALTER TABLE `antivirus`
   ADD PRIMARY KEY (`avid`);
 
 --
+-- Indexes for table `brand_insert`
+--
+ALTER TABLE `brand_insert`
+  ADD PRIMARY KEY (`brandid`) USING BTREE;
+
+--
 -- Indexes for table `department`
 --
 ALTER TABLE `department`
@@ -964,7 +1092,7 @@ ALTER TABLE `internet`
 -- Indexes for table `item_insert`
 --
 ALTER TABLE `item_insert`
-  ADD PRIMARY KEY (`itemcode`);
+  ADD PRIMARY KEY (`itemcode`) USING BTREE;
 
 --
 -- Indexes for table `item_release_insert`
@@ -1130,13 +1258,13 @@ ALTER TABLE `antivirus`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `deptid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `deptid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `designation`
 --
 ALTER TABLE `designation`
-  MODIFY `desigid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `desigid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `internet`
@@ -1154,7 +1282,7 @@ ALTER TABLE `product_capop_insert`
 -- AUTO_INCREMENT for table `product_uom_insert`
 --
 ALTER TABLE `product_uom_insert`
-  MODIFY `puomid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `puomid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `supplier_insert`

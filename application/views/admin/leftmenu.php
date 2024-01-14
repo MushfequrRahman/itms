@@ -184,6 +184,8 @@
 								<li><a href="<?php echo base_url(); ?>Dashboard/item_release_type_insert_form"><i class="fa fa-circle-o"></i>Add Item Release Type</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/item_release_type_list"><i class="fa fa-circle-o"></i>Item release Type List</a></li>
 								<li><a href="<?php echo base_url();?>Dashboard/product_inventory_list"><i class="fa fa-circle-o"></i>Product Inventory List</a></li>
+								<li><a href="<?php echo base_url(); ?>Dashboard/brand_insert_form"><i class="fa fa-circle-o"></i>Add Brand</a></li>
+								<li><a href="<?php echo base_url(); ?>Dashboard/brand_list"><i class="fa fa-circle-o"></i>Brand List</a></li>
 							</ul>
 						</li>
 					</ul>

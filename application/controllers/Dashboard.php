@@ -1041,6 +1041,49 @@ class Dashboard extends CI_Controller
 		$data['ul'] = $this->Admin->item_list();
 		$this->load->view('admin/item_list', $data);
 	}
+	public function brand_insert_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Brand Insert';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/brand_insert_form', $data);
+	}
+	public function brand_insert()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		if ($this->input->post('submit')) {
+			$brand = $this->form_validation->set_rules('brand', 'Brand', 'required');
+			if ($this->form_validation->run() == FALSE) {
+				$this->brand_insert_form();
+			} else {
+				$brand = $this->input->post('brand');
+				$ins = $this->Admin->brand_insert($brand);
+
+				if ($ins == TRUE) {
+					$this->session->set_flashdata('Successfully', 'Successfully Inserted');
+				} else {
+					$this->session->set_flashdata('Successfully', 'Failed To Inserted');
+				}
+				redirect('Dashboard/brand_insert_form', 'refresh');
+			}
+		}
+	}
+	public function brand_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Brand List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$data['ul'] = $this->Admin->brand_list();
+		$this->load->view('admin/brand_list', $data);
+	}
 	public function product_details_insert_form()
 	{
 		$this->load->database();
@@ -1415,6 +1458,7 @@ class Dashboard extends CI_Controller
 		$data['dep'] = $this->Admin->department_list();
 		$data['des'] = $this->Admin->designation_list();
 		$data['col'] = $this->Admin->product_list();
+		$data['bl'] = $this->Admin->brand_list();
 		$this->load->view('admin/mpr_create_form', $data);
 	}
 	public function show_item()
@@ -1445,7 +1489,7 @@ class Dashboard extends CI_Controller
 		$mprdate = $this->input->get('mprdate');
 		$product = $this->input->get('product');
 		$item = $this->input->get('item');
-		// $type = $this->input->get('type');
+		$brand = $this->input->get('brand');
 		$qty = $this->input->get('qty');
 		$uom = $this->input->get('uom');
 		$description = $this->input->get('description');
@@ -1463,7 +1507,7 @@ class Dashboard extends CI_Controller
 			$data["mprdate"] = $mprdate;
 			$data["product"] = $product[$i];
 			$data["item"] = $item[$i];
-			// $data["type"] = $type[$i];
+			$data["brand"] = $brand[$i];
 			$data["qty"] = $qty[$i];
 			$data["uom"] = $uom[$i];
 			$data["description"] = $description[$i];
@@ -1525,16 +1569,17 @@ class Dashboard extends CI_Controller
 		$sheet->setCellValue('A1', 'MPR NO');
 		$sheet->setCellValue('B1', 'Unit');
 		$sheet->setCellValue('C1', 'MPR Prepared By');
-		$sheet->setCellValue('D1', 'Item');
-		$sheet->setCellValue('E1', 'Model');
-		$sheet->setCellValue('F1', 'Type');
-		$sheet->setCellValue('G1', 'Qty');
-		$sheet->setCellValue('H1', 'Description');
-		$sheet->setCellValue('I1', 'Unit Price');
-		$sheet->setCellValue('J1', 'Total Price');
-		$sheet->setCellValue('K1', 'Remarks');
-		$sheet->setCellValue('L1', 'User');
-		$sheet->setCellValue('M1', 'Date');
+		$sheet->setCellValue('D1', 'Category');
+		$sheet->setCellValue('E1', 'Item');
+		$sheet->setCellValue('F1', 'Model');
+		$sheet->setCellValue('G1', 'Brand');
+		$sheet->setCellValue('H1', 'Qty');
+		$sheet->setCellValue('I1', 'Description');
+		$sheet->setCellValue('J1', 'Unit Price');
+		$sheet->setCellValue('K1', 'Total Price');
+		$sheet->setCellValue('L1', 'Remarks');
+		$sheet->setCellValue('M1', 'User');
+		$sheet->setCellValue('N1', 'Date');
 
 		// 
 		$rowCount = 2;
@@ -1543,15 +1588,16 @@ class Dashboard extends CI_Controller
 			$sheet->setCellValue('B' . $rowCount, $element['fid']);
 			$sheet->setCellValue('C' . $rowCount, $element['name'] . '--' . $element['departmentname'] . '--' . $element['designation']);
 			$sheet->setCellValue('D' . $rowCount, $element['pcname']);
-			$sheet->setCellValue('E' . $rowCount, $element['model']);
-			$sheet->setCellValue('F' . $rowCount, $element['pcapop']);
-			$sheet->setCellValue('G' . $rowCount, $element['qty'] . ' ' . $element['puom']);
-			$sheet->setCellValue('H' . $rowCount, $element['description']);
-			$sheet->setCellValue('I' . $rowCount, $element['price']);
-			$sheet->setCellValue('J' . $rowCount, $element['qty'] * $element['price']);
-			$sheet->setCellValue('K' . $rowCount, $element['remarks']);
-			$sheet->setCellValue('L' . $rowCount, $element['uname']);
-			$sheet->setCellValue('M' . $rowCount, $element['mdate']);
+			$sheet->setCellValue('E' . $rowCount, $element['pname']);
+			$sheet->setCellValue('F' . $rowCount, $element['item']);
+			$sheet->setCellValue('G' . $rowCount, $element['brandname']);
+			$sheet->setCellValue('H' . $rowCount, $element['qty'] . ' ' . $element['puom']);
+			$sheet->setCellValue('I' . $rowCount, $element['description']);
+			$sheet->setCellValue('J' . $rowCount, $element['price']);
+			$sheet->setCellValue('K' . $rowCount, $element['qty'] * $element['price']);
+			$sheet->setCellValue('L' . $rowCount, $element['remarks']);
+			$sheet->setCellValue('M' . $rowCount, $element['uname']);
+			$sheet->setCellValue('N' . $rowCount, $element['mdate']);
 
 
 			$rowCount++;

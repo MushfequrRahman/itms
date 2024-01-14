@@ -71,7 +71,7 @@
         <th>Category</th>
         <th>Item</th>
         <th>Model</th>
-        <!--<th style="display:none;">Item Code</th>-->
+        <th>Brand</th>
         <th>Qty</th>
         <th>Description</th>
         <th>Unit Price</th>
@@ -94,7 +94,7 @@
           <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
-          <?php /*?><td style="vertical-align:middle; display:none;"><?php echo $row['simprid'];?></td><?php */ ?>
+          <td style="vertical-align:middle;"><?php echo $row['brandname']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>

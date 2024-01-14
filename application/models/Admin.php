@@ -475,6 +475,31 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
+	public function brand_insert($brand)
+	{
+		date_default_timezone_set('Asia/Dhaka');
+		$d = date('Y-m-d');
+		$t = date("H:i:s");
+		$d1 = str_replace("-", "", $d);
+		$t1 = str_replace(":", "", $t);
+		$ccid = $d1 . $t1;
+
+		$sql = "SELECT * FROM brand_insert WHERE brandname='$brand'";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() == 1) {
+			return false;
+		} else {
+			$sql = "INSERT INTO brand_insert VALUES ('$ccid','$brand')";
+			$query = $this->db->query($sql);
+			return $query;
+		}
+	}
+	public function brand_list()
+	{
+		$query = "SELECT * FROM brand_insert ORDER BY brandname ASC";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
 	public function product_details_insert($pcode, $factoryid, $supplierid, $mpr, $sn, $item, $description, $pqty, $puomid, $warranty, $pr, $pdate)
 	{
 		//$pdate = date("Y-m-d", strtotime($pdate));
@@ -711,7 +736,7 @@ class Admin extends CI_Model
 		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid')";
 		$query1 = $this->db->query($sql1);
 
-		$sql = "INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[product]','$data[item]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
+		$sql = "INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[product]','$data[item]','$data[brand]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
 		return $query = $this->db->query($sql);
 	}
 	//public function date_wise_mpr_list($pd, $wd)
@@ -738,6 +763,7 @@ class Admin extends CI_Model
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		LEFT JOIN brand_insert ON brand_insert.brandid=mpr_insert.brandid
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 		JOIN department ON department.deptid=mpr_insert.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert.mdesigid
