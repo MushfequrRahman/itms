@@ -411,7 +411,8 @@ class Admin extends CI_Model
 		$query = "SELECT * FROM product_insert
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 		JOIN product_group_insert ON product_group_insert.pgid=product_insert.pgid
-		JOIN product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid";
+		JOIN product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		ORDER BY pname ASC";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
