@@ -78,13 +78,6 @@
 											</div>
 										</div>
 									</div>
-									<!-- <div class="text-right-input">
-										<div class="row">
-											<div class="col-md-3 col-md-offset-9">
-												<input type='text' class="form-control" id='txt_searchall' placeholder='Enter Search Text'>
-											</div>
-										</div>
-									</div> -->
 									<div class="row">
 										<div class='filters'>
 											<div class="col-md-2">
@@ -308,58 +301,9 @@
 						</div>
 					</div>
 				</div>
+			</section>
 		</div>
-		</section>
 	</div>
-	<script type='text/javascript'>
-		$(document).ready(function() {
-
-
-			// Search all columns
-
-			$('#txt_searchall').keyup(function() {
-
-				var search = $(this).val();
-
-
-				$('table tbody tr').hide();
-
-
-				var len = $('table tbody tr:not(.notfound) td:contains("' + search + '")').length;
-
-
-				if (len > 0) {
-
-					$('table tbody tr:not(.notfound) td:contains("' + search + '")').each(function() {
-
-						$(this).closest('tr').show();
-
-					});
-
-				} else {
-
-					$('.notfound').show();
-
-				}
-
-
-
-			});
-
-		});
-
-		// Case-insensitive searching (Note - remove the below script for Case sensitive search )
-
-		$.expr[":"].contains = $.expr.createPseudo(function(arg) {
-
-			return function(elem) {
-
-				return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
-
-			};
-
-		});
-	</script>
 </body>
 
 </html>
