@@ -168,8 +168,6 @@ foreach ($bl as $row) {
   </div>
 
 
-
-
   <script>
     $(document).ready(function() {
 
@@ -186,7 +184,7 @@ foreach ($bl as $row) {
         html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
         html += '<td><select name="uom[]" class="form-control uom" id="uom' + count + '"><option value="">UOM</option><?php echo $uom; ?></select></td>';
         html += '<td><textarea class="form-control" rows="1" name="description[]" id="description"></textarea></td>';
-        html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + '" value="0.00" /></td>';
+        html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + ' /></td>';
         html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
         html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
         html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
@@ -326,6 +324,52 @@ foreach ($bl as $row) {
 
     });
   </script>
+
+<script>
+       $(document).ready(function () {
+            $(document).on('keydown', ".price", function (event) {
+
+
+                if (event.shiftKey == true) {
+                    event.preventDefault();
+                }
+
+                if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+                } else {
+                    event.preventDefault();
+                }
+
+                if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+                    event.preventDefault();
+
+            });
+        });
+    </script>
+
+<script>
+       $(document).ready(function () {
+            $(document).on('keydown', ".qty", function (event) {
+
+
+                if (event.shiftKey == true) {
+                    event.preventDefault();
+                }
+
+                if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+                } else {
+                    event.preventDefault();
+                }
+
+                if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+                    event.preventDefault();
+
+            });
+        });
+    </script>
+
+
 
 </body>
 
