@@ -179,8 +179,8 @@
 								<li><a href="<?php echo base_url(); ?>Dashboard/product_subgroup_list"><i class="fa fa-circle-o"></i>Product Sub Group List</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/product_insert_form"><i class="fa fa-circle-o"></i>Add Product</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/product_list"><i class="fa fa-circle-o"></i>Product List</a></li>
-								<li><a href="<?php echo base_url(); ?>Dashboard/item_insert_form"><i class="fa fa-circle-o"></i>Add Item</a></li>
-								<li><a href="<?php echo base_url(); ?>Dashboard/item_list"><i class="fa fa-circle-o"></i>Item List</a></li>
+								<li><a href="<?php echo base_url(); ?>Dashboard/item_insert_form"><i class="fa fa-circle-o"></i>Add Item/Model</a></li>
+								<li><a href="<?php echo base_url(); ?>Dashboard/item_list"><i class="fa fa-circle-o"></i>Item/Model List</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/item_release_type_insert_form"><i class="fa fa-circle-o"></i>Add Item Release Type</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/item_release_type_list"><i class="fa fa-circle-o"></i>Item release Type List</a></li>
 								<li><a href="<?php echo base_url();?>Dashboard/product_inventory_list"><i class="fa fa-circle-o"></i>Product Inventory List</a></li>
