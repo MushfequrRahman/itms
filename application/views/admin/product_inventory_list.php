@@ -287,7 +287,6 @@
 													}
 													?>
 												</tbody>
-
 											</table>
 										</div>
 									</div>

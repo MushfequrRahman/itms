@@ -425,7 +425,7 @@ class Admin extends CI_Model
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
 
-		$sql = "SELECT * FROM item_insert WHERE item='$item'";
+		$sql = "SELECT * FROM item_insert WHERE item='$item' AND pcode='$pcode'";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() == 1) {
 			return false;
