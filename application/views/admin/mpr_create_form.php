@@ -23,9 +23,9 @@
   })
 </script>
 <?php
-$item = '';
+//$item = '';
 $uom = '';
-$type = '';
+$product = '';
 $brand = '';
 // foreach ($il as $row) {
 //   $item .= '<option value="' . $row["pcode"] . '">' . $row["item"] . '</option>';
@@ -184,7 +184,7 @@ foreach ($bl as $row) {
         var html = '';
         html += '<tr>';
         html += '<td><select name="product[]" class="form-control product" data-item="' + count + '"><option value="">Product</option><?php echo $product; ?></select></td>';
-        //html += '<td><input type="text" name="model[]" class="form-control model" id="model' + count + '" /></td>';
+        //html += '<td><input type="hidden" name="model[]" class="form-control model" id="model' + count + '" /></td>';
         html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option></select></td>';
         html += '<td><select name="brand[]" class="form-control brand" id="brand' + count + '"><option value="">Brand</option><?php echo $brand; ?></select></td>';
         html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
@@ -192,7 +192,9 @@ foreach ($bl as $row) {
         html += '<td><textarea class="form-control" rows="1" name="description[]" id="description"></textarea></td>';
         html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + ' /></td>';
         html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
+        
         html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
+        html += '<td><input type="text" name="mo[]" class="form-control mo" id="mo' + count + '" /></td>';
         html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
         $('#item_table1').append(html);
       });
