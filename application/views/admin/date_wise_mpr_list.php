@@ -37,7 +37,47 @@
     font-variant: small-caps;
   }
 </style>
-
+<script>
+  $(function() {
+    $("table").tablesorter({
+      theme: 'blue',
+      widgets: ['math', 'zebra', 'filter'],
+      widgetOptions: {
+        math_data: 'math', // data-math attribute
+        math_ignore: [0, 1],
+        math_none: 'N/A', // no matching math elements found (text added to cell)
+        math_complete: function($cell, wo, result, value, arry) {
+          var txt = '<span class="align-decimal">' +
+            (value === wo.math_none ? '' : ' ') +
+            result + '</span>';
+          if ($cell.attr('data-math') === 'all-sum') {
+            // when the "all-sum" is processed, add a count to the end
+            return txt + ' (Sum of ' + arry.length + ' cells)';
+          }
+          return txt;
+        },
+        math_completed: function(c) {
+          // c = table.config
+          // called after all math calculations have completed
+          console.log('math calculations complete', c.$table.find('[data-math="all-sum"]:first').text());
+        },
+        // see "Mask Examples" section
+        math_mask: '#,##0.00',
+        math_prefix: '', // custom string added before the math_mask value (usually HTML)
+        math_suffix: '', // custom string added after the math_mask value
+        // event triggered on the table which makes the math widget update all data-math cells (default shown)
+        math_event: 'recalculate',
+        // math calculation priorities (default shown)... rows are first, then column above/below,
+        // then entire column, and lastly "all" which is not included because it should always be last
+        math_priority: ['row', 'above', 'below', 'col'],
+        // set row filter to limit which table rows are included in the calculation (v2.25.0)
+        // e.g. math_rowFilter : ':visible:not(.filtered)' (default behavior when math_rowFilter isn't set)
+        // or math_rowFilter : ':visible'; default is an empty string
+        math_rowFilter: ''
+      }
+    });
+  });
+</script>
 
 <!-- /.box-header -->
 <div class="box-body no-padding">
@@ -81,6 +121,17 @@
         <th>Date</th>
       </tr>
     </thead>
+    <tfoot>
+      <tr>
+        <th colspan="10">Totals</th>
+        <th data-math="col-sum">col-sum</th>
+        <th data-math="col-sum">col-sum</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+
+      </tr>
+    </tfoot>
     <tbody>
       <?php
       $i = 1;
@@ -106,7 +157,8 @@
 
 
         </tr>
+      <?php } ?>
     </tbody>
-  <?php } ?>
+
   </table>
 </div>
