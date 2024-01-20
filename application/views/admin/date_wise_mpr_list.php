@@ -148,8 +148,8 @@
           <td style="vertical-align:middle;"><?php echo $row['brandname']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['qty'] * $row['price']; ?></td>
+          <td style="vertical-align:middle;"><?php echo number_format($row['price'], 2, '.', ','); ?></td>
+          <td style="vertical-align:middle;"><?php echo number_format($row['qty'] * $row['price'], 2, '.', ','); ?></td>
           <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
           <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
