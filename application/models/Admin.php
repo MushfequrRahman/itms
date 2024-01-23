@@ -718,42 +718,40 @@ class Admin extends CI_Model
 	}
 	public function mpr_create($data)
 	{
-		date_default_timezone_set('Asia/Dhaka');
-		$data['mprdate'] = date("Y-m-d", strtotime($data['mprdate']));
-		$d = date('Y-m-d');
-		$t = date("H:i:s");
-		$d1 = str_replace("-", "", $d);
-		$t1 = str_replace(":", "", $t);
-		$ccid = $d1 . $t1;
+		// date_default_timezone_set('Asia/Dhaka');
+		// $data['mprdate'] = date("Y-m-d", strtotime($data['mprdate']));
+		// $d = date('Y-m-d');
+		// $t = date("H:i:s");
+		// $d1 = str_replace("-", "", $d);
+		// $t1 = str_replace(":", "", $t);
+		// $ccid = $d1 . $t1;
 
-		$d2 = date('Y-m-d');
-		$t2 = date("H:i:s");
-		$d21 = str_replace("-", "", $d2);
-		$t21 = str_replace(":", "", $t2);
-		$ccid1 = $d21 . $t21;
-		$ccid1 = $ccid1 . $data['i'];
+		// $d2 = date('Y-m-d');
+		// $t2 = date("H:i:s");
+		// $d21 = str_replace("-", "", $d2);
+		// $t21 = str_replace(":", "", $t2);
+		// $ccid1 = $d21 . $t21;
+		// $ccid1 = $ccid1 . $data['i'];
 
-		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid')";
-		$query1 = $this->db->query($sql1);
+		// $sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[mprdate]','0')";
+		// $query1 = $this->db->query($sql1);
 
-		$sql = "INSERT INTO mpr_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[factoryid]','$data[departmentid]','$data[name]','$data[designationid]','$data[product]','$data[item]','$data[brand]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','$data[mprdate]','0')";
+		$sql = "INSERT INTO mpr_insert VALUES ('$data[ccid]','$data[ccid1]','$data[product]','$data[item]','$data[brand]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','0')";
 		return $query = $this->db->query($sql);
 	}
-	//public function date_wise_mpr_list($pd, $wd)
-	//	{
-	//		$pd= date("Y-m-d", strtotime($pd));
-	//		$wd= date("Y-m-d", strtotime($wd));
-	//		$query="SELECT * FROM mpr_insert 
-	//		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
-	//		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-	//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
-	//		JOIN user ON user.userid=mpr_insert.cuserid
-	//		JOIN department ON department.deptid=user.departmentid
-	//		JOIN designation ON designation.desigid=user.designationid
-	//		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
-	//		$result=$this->db->query($query);
-	//		return $result->result_array();
-	//	}
+	public function date_wise_mpr($pd, $wd)
+	{
+		$pd = date("Y-m-d", strtotime($pd));
+		$wd = date("Y-m-d", strtotime($wd));
+		$query = "SELECT * FROM mpr_insert_id 
+			
+			
+			JOIN department ON department.deptid=mpr_insert_id.mdeptid
+			JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+			WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert_id.mprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
 	public function date_wise_mpr_list($pd, $wd)
 	{
 		$pd = date("Y-m-d", strtotime($pd));
@@ -765,11 +763,39 @@ class Admin extends CI_Model
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		LEFT JOIN brand_insert ON brand_insert.brandid=mpr_insert.brandid
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
-		JOIN department ON department.deptid=mpr_insert.mdeptid
-		JOIN designation ON designation.desigid=mpr_insert.mdesigid
-		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert_id.mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
+	}
+
+	public function single_mpr_id($smprid)
+	{
+		$query = "SELECT * FROM mpr_insert_id 
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		WHERE mpr_insert_id.smprid='$smprid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function single_mpr($smprid)
+	{
+		$query = "SELECT * FROM mpr_insert 
+		
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		LEFT JOIN brand_insert ON brand_insert.brandid=mpr_insert.brandid
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		WHERE mpr_insert.smprid='$smprid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function mpr_list_update($data)
+	{
+		$sql = "update mpr_insert SET mpcode='$data[product]',model='$data[item]',brandid='$data[brand]',qty='$data[qty]',uom='$data[uom]',description='$data[description]',price='$data[price]',remarks='$data[remarks]',uname='$data[uname]' WHERE simprid='$data[simprid]'";
+		return $query = $this->db->query($sql);
 	}
 	public function po_create($data)
 	{
@@ -801,6 +827,8 @@ class Admin extends CI_Model
 		//		
 		//		$sql2="UPDATE mpr_insert SET mstatus='$data[pstatus]' WHERE simprid='$data[item]'";
 		//		$query2=$this->db->query($sql2);
+		// $sqld = "DELETE FROM  po_insert WHERE pqty='0'";
+		// $queryd = $this->db->query($sqld);
 
 		return $query = $this->db->query($sql);
 	}
@@ -844,21 +872,22 @@ class Admin extends CI_Model
 		$query = "SELECT * FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.mprid=po_insert.mprid
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		
-		JOIN department ON department.deptid=mpr_insert.mdeptid
-		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
-		WHERE pdate between '$pd' AND '$wd' ORDER BY mpr_insert.mprid";
+		WHERE pdate between '$pd' AND '$wd' ORDER BY mpr_insert_id.mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
 
 	public function po_for_mpr_list($mprid)
 	{
-		$query = "SELECT mpr_insert.mprid,mpr_insert.fid,product_insert.pname,item,
+		$query = "SELECT mpr_insert_id.mprid,mpr_insert_id.fid,product_insert.pname,item,
 		mpr_insert.simprid,product_category_insert.pcname,
 		mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
 		prqty,tpprice,pprice 
@@ -868,11 +897,11 @@ class Admin extends CI_Model
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
-		JOIN department ON department.deptid=mpr_insert.mdeptid
-		JOIN designation ON designation.desigid=mpr_insert.mdesigid
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
 		LEFT JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
-		WHERE mpr_insert.mprid='$mprid'
+		WHERE mpr_insert_id.mprid='$mprid'
 		GROUP BY mpr_insert.simprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
@@ -880,7 +909,7 @@ class Admin extends CI_Model
 	public function receive_for_mpr_list($mprid)
 	{
 
-		$query = "SELECT mpr_insert.mprid,mpr_insert.fid,mpr_insert.model,fid,po_insert.po,
+		$query = "SELECT mpr_insert_id.mprid,mpr_insert_id.fid,item,fid,po_insert.po,
 		product_category_insert.pcname,
 				po_insert.simprid,po_insert.spoid,
 				po_insert.sipoid,
@@ -888,20 +917,22 @@ class Admin extends CI_Model
 				pqty,pprice,SUM(rqty) AS rqty
 				FROM po_insert 
 				JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+				JOIN mpr_insert_id ON mpr_insert_id.mprid=po_insert_id.mprid
 				JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+				JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 				LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
 				
 				JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 				JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 				JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
-				JOIN department ON department.deptid=mpr_insert.mdeptid
-				JOIN designation ON designation.desigid=mpr_insert.mdesigid
+				JOIN department ON department.deptid=mpr_insert_id.mdeptid
+				JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 		WHERE po_insert.po='$mprid'
 		GROUP BY po_insert.sipoid";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
-	
+
 	public function receive_create($userid, $mprid, $item, $sipoid, $po, $grn, $rqty, $rdate, $invoice, $cdate, $rremarks)
 	{
 		date_default_timezone_set('Asia/Dhaka');
@@ -1057,7 +1088,7 @@ class Admin extends CI_Model
 	{
 		$query = "SELECT  product_inventory.pacode,product_ihistory_insert.factoryid,
 		supplier_insert.supplier,
-		mpr_insert.mprid,sn,description,item,
+		mpr_insert_id.mprid,sn,description,item,
 		iqty,puom,warranty,price,pprice,
 		po_insert.pdate,adate,rdate,
 		ddate,dremarks,item_release_type_insert.irid,releasetype,
@@ -1066,6 +1097,7 @@ class Admin extends CI_Model
 		FROM product_inventory 
 		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.simprid
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom

@@ -3,7 +3,7 @@
  *************/
 /* overall */
 .tablesorter-blue {
-  width: 100%;
+	width: 100%;
 	background-color: #fff;
 	margin: 10px 0 15px;
 	text-align: left;
@@ -11,6 +11,7 @@
 	border: #cdcdcd 1px solid;
 	border-width: 1px 0 0 1px;
 }
+
 .tablesorter-blue th,
 .tablesorter-blue td {
 	border: #cdcdcd 1px solid;
@@ -27,12 +28,14 @@
 	padding: 4px;
 	text-shadow: 0 1px 0 rgba(204, 204, 204, 0.7);
 }
+
 .tablesorter-blue tbody td,
 .tablesorter-blue tfoot th,
 .tablesorter-blue tfoot td {
 	padding: 4px;
 	vertical-align: top;
 }
+
 .tablesorter-blue .header,
 .tablesorter-blue .tablesorter-header {
 	/* black (unsorted) double arrow */
@@ -47,6 +50,7 @@
 	white-space: normal;
 	cursor: pointer;
 }
+
 .tablesorter-blue .headerSortUp,
 .tablesorter-blue .tablesorter-headerSortUp,
 .tablesorter-blue .tablesorter-headerAsc {
@@ -58,6 +62,7 @@
 	/* image */
 	/* background-image: url(images/black-asc.gif); */
 }
+
 .tablesorter-blue .headerSortDown,
 .tablesorter-blue .tablesorter-headerSortDown,
 .tablesorter-blue .tablesorter-headerDesc {
@@ -69,6 +74,7 @@
 	/* image */
 	/* background-image: url(images/black-desc.gif); */
 }
+
 .tablesorter-blue thead .sorter-false {
 	background-image: none;
 	padding: 4px;
@@ -95,17 +101,18 @@
  you'll need to add additional lines for
  rows with more than 2 child rows
  */
-.tablesorter-blue tbody > tr:hover > td,
-.tablesorter-blue tbody > tr:hover + tr.tablesorter-childRow > td,
-.tablesorter-blue tbody > tr:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td,
-.tablesorter-blue tbody > tr.even:hover > td,
-.tablesorter-blue tbody > tr.even:hover + tr.tablesorter-childRow > td,
-.tablesorter-blue tbody > tr.even:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
+.tablesorter-blue tbody>tr:hover>td,
+.tablesorter-blue tbody>tr:hover+tr.tablesorter-childRow>td,
+.tablesorter-blue tbody>tr:hover+tr.tablesorter-childRow+tr.tablesorter-childRow>td,
+.tablesorter-blue tbody>tr.even:hover>td,
+.tablesorter-blue tbody>tr.even:hover+tr.tablesorter-childRow>td,
+.tablesorter-blue tbody>tr.even:hover+tr.tablesorter-childRow+tr.tablesorter-childRow>td {
 	background: #d9d9d9;
 }
-.tablesorter-blue tbody > tr.odd:hover > td,
-.tablesorter-blue tbody > tr.odd:hover + tr.tablesorter-childRow > td,
-.tablesorter-blue tbody > tr.odd:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
+
+.tablesorter-blue tbody>tr.odd:hover>td,
+.tablesorter-blue tbody>tr.odd:hover+tr.tablesorter-childRow>td,
+.tablesorter-blue tbody>tr.odd:hover+tr.tablesorter-childRow+tr.tablesorter-childRow>td {
 	background: #bfbfbf;
 }
 
@@ -121,6 +128,7 @@
 .tablesorter-blue tbody tr.odd td {
 	background-color: #ebf2fa;
 }
+
 .tablesorter-blue tbody tr.even td {
 	background-color: #fff;
 }
@@ -130,20 +138,25 @@
 .tablesorter-blue tr.odd td.primary {
 	background-color: #99b3e6;
 }
+
 .tablesorter-blue tr.even td.primary {
 	background-color: #c2d1f0;
 }
+
 .tablesorter-blue td.secondary,
 .tablesorter-blue tr.odd td.secondary {
 	background-color: #c2d1f0;
 }
+
 .tablesorter-blue tr.even td.secondary {
 	background-color: #d6e0f5;
 }
+
 .tablesorter-blue td.tertiary,
 .tablesorter-blue tr.odd td.tertiary {
 	background-color: #d6e0f5;
 }
+
 .tablesorter-blue tr.even td.tertiary {
 	background-color: #ebf0fa;
 }
@@ -157,18 +170,21 @@ caption {
 .tablesorter-blue .tablesorter-filter-row td {
 	background: #eee;
 	line-height: normal;
-	text-align: center; /* center the input */
+	text-align: center;
+	/* center the input */
 	-webkit-transition: line-height 0.1s ease;
 	-moz-transition: line-height 0.1s ease;
 	-o-transition: line-height 0.1s ease;
 	transition: line-height 0.1s ease;
 }
+
 /* optional disabled input styling */
 .tablesorter-blue .tablesorter-filter-row .disabled {
 	opacity: 0.5;
 	filter: alpha(opacity=50);
 	cursor: not-allowed;
 }
+
 /* hidden filter row */
 .tablesorter-blue .tablesorter-filter-row.hideme td {
 	/*** *********************************************** ***/
@@ -180,6 +196,7 @@ caption {
 	line-height: 0;
 	cursor: pointer;
 }
+
 .tablesorter-blue .tablesorter-filter-row.hideme .tablesorter-filter {
 	height: 1px;
 	min-height: 0;
@@ -190,6 +207,7 @@ caption {
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
+
 /* filters */
 .tablesorter-blue .tablesorter-filter {
 	width: 98%;

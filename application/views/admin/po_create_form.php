@@ -47,7 +47,7 @@ foreach ($ul as $row) {
 							<?php endif;?>
 						</div>
 					</div><?php */ ?>
-</div>
+                  </div>
                   <div class="box-body">
                     <span style="text-align:center" id="error"></span>
                     <div style="text-align:center" id="item_table"></div>
@@ -74,9 +74,9 @@ foreach ($ul as $row) {
                         <input type="text" class="form-control pd" readonly name="podate" value="<?php echo date('d-m-Y'); ?>">
                         <?php /*?><?php echo form_error('dobdate', '<div class="error">', '</div>');  ?><?php */ ?>
                       </div>
-<div id="AuGroup">
+                      <div id="AuGroup">
                         <div class="row">
-<table class="table table-bordered" id="item_table1">
+                          <table class="table table-bordered" id="item_table1">
                             <thead>
                               <tr>
                                 <th style="text-align:center;">Item Code</th>
@@ -89,8 +89,8 @@ foreach ($ul as $row) {
                             </thead>
                             <tbody></tbody>
                           </table>
-</div>
-</div>
+                        </div>
+                      </div>
                   </div>
                   <div class="box-footer text-center">
                     <input type="submit" class="btn btn-primary" name="submit" value="CREATE" />

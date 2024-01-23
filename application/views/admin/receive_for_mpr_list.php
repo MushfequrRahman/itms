@@ -190,7 +190,7 @@
                       <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
                       <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
                       <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
-                      <td style="vertical-align:middle;"><?php echo $row['model']; ?></td>
+                      <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
                       
                       <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="item<?php echo $i; ?>" name="item" value="<?php echo $row['simprid']; ?>" /></td>
                       <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="sipoid<?php echo $i; ?>" name="sipoid" value="<?php echo $row['sipoid']; ?>" /></td>

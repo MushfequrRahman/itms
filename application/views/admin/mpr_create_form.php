@@ -72,15 +72,10 @@ foreach ($bl as $row) {
                     <form role="form" name="insert_form" id="insert_form" autocomplete="off" method="post" enctype="multipart/form-data">
                       <input type="hidden" class="form-control" name="userid" id="userid" value="<?php echo $this->session->userdata('userid'); ?>">
                       <div class="row">
-                        <div class="col-md-4">
-                          <label>MPR Number<em>*</em></label>
-                          <input type="text" class="form-control mprid" name="mprid" id="mprid" placeholder="Enter MPR Number">
-                          <?php echo form_error('mpr', '<div class="error">', '</div>');  ?>
-                        </div>
 
                         <div class="col-md-4">
                           <label>Unit Name<em>*</em></label>
-                          <select class="form-control" name="factoryid" id="factoryid">
+                          <select class="form-control factoryid" name="factoryid" id="factoryid">
                             <option value="">Select....</option>
                             <?php
                             foreach ($fl as $row) {
@@ -93,8 +88,15 @@ foreach ($bl as $row) {
                           <?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
                         </div>
                         <div class="col-md-4">
+                          <label>MPR Number<em>*</em></label>
+                          <input type="text" class="form-control mprid" name="mprid" id="mprid" placeholder="Enter MPR Number">
+                          <?php echo form_error('mpr', '<div class="error">', '</div>');  ?>
+                        </div>
+
+
+                        <div class="col-md-4">
                           <label>Department<em>*</em></label>
-                          <select class="form-control" name="departmentid" id="departmentid">
+                          <select class="form-control departmentid" name="departmentid" id="departmentid">
                             <option value="">Select....</option>
                             <?php
                             foreach ($dep as $row) {
@@ -113,12 +115,12 @@ foreach ($bl as $row) {
 
                         <div class="col-md-4">
                           <label>Name<em>*</em></label>
-                          <input type="text" class="form-control" name="name" placeholder="Enter Name">
+                          <input type="text" class="form-control name" name="name" placeholder="Enter Name">
                           <?php echo form_error('name', '<div class="error">', '</div>');  ?>
                         </div>
                         <div class="col-md-4">
                           <label>Designation<em>*</em></label>
-                          <select class="form-control" name="designationid" id="designationid">
+                          <select class="form-control designationid" name="designationid" id="designationid">
                             <option value="">Select....</option>
                             <?php
                             foreach ($des as $row) {
@@ -160,7 +162,10 @@ foreach ($bl as $row) {
                         </div>
                       </div>
                       <div class="box-footer text-center">
-                        <input type="submit" class="btn btn-primary" name="submit" value="CREATE" />
+                        <!-- <input type="submit" class="btn btn-primary" name="submit" value="CREATE" /> -->
+                        <label>&nbsp;</label>
+                          <!-- <input type="submit" class="btn btn-primary " name="submit" id="btn" value="CREATE" /> -->
+                          <div id="response"></div>
                       </div>
                     </form>
                   </div>
@@ -192,7 +197,7 @@ foreach ($bl as $row) {
         html += '<td><textarea class="form-control" rows="1" name="description[]" id="description"></textarea></td>';
         html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + ' /></td>';
         html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
-        
+
         html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
         html += '<td><input type="text" name="mo[]" class="form-control mo" id="mo' + count + '" /></td>';
         html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
@@ -227,6 +232,42 @@ foreach ($bl as $row) {
       $('#insert_form').on('submit', function(event) {
         event.preventDefault();
         var error = '';
+        $('.factoryid').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Unit Name ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
+        $('.departmentid').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Department at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
+        $('.name').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Name at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
+        $('.designationid').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Designation at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
         $('.product').each(function() {
           var count = 1;
           if ($(this).val() == '') {
@@ -381,6 +422,43 @@ foreach ($bl as $row) {
       $(document).bind("contextmenu", function(e) {
         return false;
       });
+    });
+  </script>
+
+
+  <script>
+    $(document).ready(function() {
+
+      $("#mprid").keyup(function(event) {
+
+        var factoryid = $("#factoryid").val().trim();
+        var mprid = $("#mprid").val().trim();
+        // var ptid = $("#ptid").val().trim();
+        // var ctid = $("#ctid").val().trim();
+        // var dfactory = $("#dfactory").val().trim();
+
+        if (mprid != '') {
+
+          $.ajax({
+            url: "<?php echo base_url(); ?>Dashboard/mpr_available",
+            type: 'get',
+            data: {
+              factoryid: factoryid,
+              mprid: mprid
+            },
+            success: function(response) {
+
+              // Show response
+              $("#response").html(response);
+
+            }
+          });
+        } else {
+          $("#response").html("<span style='color: red;'>Enter valid info</span>");
+        }
+
+      });
+
     });
   </script>
 

@@ -58,6 +58,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <script src="<?php echo base_url(); ?>assets/admin/js/jquery.tablesorter.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/admin/js/jquery.tablesorter.widgets.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/admin/js/widget-math.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/admin/js/FileSaver.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/admin/js/excel-gen.js"></script>
+  <script src="<?php echo base_url(); ?>assets/admin/js/jszip.min.js"></script>
   
   <title><?php echo $title; ?></title>
 </head>

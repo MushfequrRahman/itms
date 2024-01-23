@@ -1461,6 +1461,41 @@ class Dashboard extends CI_Controller
 		$data['bl'] = $this->Admin->brand_list();
 		$this->load->view('admin/mpr_create_form', $data);
 	}
+	public function mpr_available()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$factoryid = $this->input->get('factoryid');
+		$mprid = $this->input->get('mprid');
+		$mprid=$factoryid.$mprid;
+		$sql = "SELECT COUNT(mprid) AS mprid FROM mpr_insert_id WHERE mprid='$mprid'";
+		$query = $this->db->query($sql);
+		$query = $query->result_array();
+		foreach ($query as $row) {
+			$mprid = $row['mprid'];
+		}
+		if ($mprid > 0) {
+
+			//$response = "<span style='color: red;'>This Info Already Inserted.</span>";
+			$response = '<span style="color: red;">This Info Already Inserted.</span><br/><input type="submit" class="btn btn-primary" name="submit" value="Submit" disabled="disabled" />';
+			//$sql = "INSERT INTO test VALUES ('$colorcode')";
+			//$query = $this->db->query($sql);
+		} else {
+			//$response = "<span style='color: green;'>Available.</span>";
+			$response = '<span style="color: green;">Available.</span><br/><input type="submit" class="btn btn-primary" name="submit" value="Submit" />';
+		}
+
+		echo $response;
+		die;
+	}
+	public function show_itemname()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$pcode = $this->input->get('pcode');
+		$data=$this->Admin->show_item($pcode);
+		echo json_encode($data); 
+	}
 	public function show_item()
 	{
 		$this->load->database();
@@ -1475,6 +1510,17 @@ class Dashboard extends CI_Controller
 	}
 	public function mpr_create()
 	{
+		date_default_timezone_set('Asia/Dhaka');
+		$mprdate = $this->input->get('mprdate');
+		$mprdate = date("Y-m-d", strtotime($mprdate));
+		$d = date('Y-m-d');
+		$t = date("H:i:s");
+		$d1 = str_replace("-", "", $d);
+		$t1 = str_replace(":", "", $t);
+		$ccid = $d1 . $t1;
+		
+		
+		
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
@@ -1493,11 +1539,20 @@ class Dashboard extends CI_Controller
 		$qty = $this->input->get('qty');
 		$uom = $this->input->get('uom');
 		$description = $this->input->get('description');
+		$description =  str_replace("'", "\'", $description);
 		$price = $this->input->get('price');
 		$remarks = $this->input->get('remarks');
+		$remarks =  str_replace("'", "\'", $remarks);
 		$uname = $this->input->get('uname');
+
+		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$userid','$mprid','$factoryid','$departmentid','$name','$designationid','$mprdate','0')";
+		$query1 = $this->db->query($sql1);
+
+
 		for ($i = 0; $i < count($item); $i++) {
 			$data["i"] = $i;
+			$data["ccid"] = $ccid;
+			$data["ccid1"] = $ccid . $i;
 			$data["userid"] = $userid;
 			$data["mprid"] = $mprid;
 			$data["factoryid"] = $factoryid;
@@ -1520,6 +1575,88 @@ class Dashboard extends CI_Controller
 			echo  "ok";
 		} else {
 			echo  "error";
+		}
+	}
+	public function date_wise_mpr_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'MPR Create List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/date_wise_mpr_form', $data);
+	}
+	public function date_wise_mpr()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		//$factoryid = $this->input->post('factoryid');
+		$pd = $this->input->post('pd');
+		$wd = $this->input->post('wd');
+		$data['pd'] = $pd;
+		$data['wd'] = $wd;
+		$data['ul'] = $this->Admin->date_wise_mpr($pd, $wd);
+		$this->load->view('admin/date_wise_mpr', $data);
+	}
+	public function mpr_list_up_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'MPR Update';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		//$data['il']=$this->Admin->item_list();
+		$smprid = $this->uri->segment(3);
+		$data['ul'] = $this->Admin->product_uom_list();
+		$data['fl'] = $this->Admin->factory_list();
+		$data['dep'] = $this->Admin->department_list();
+		$data['des'] = $this->Admin->designation_list();
+		$data['col'] = $this->Admin->product_list();
+		$data['bl'] = $this->Admin->brand_list();
+		$data['ml'] = $this->Admin->single_mpr_id($smprid);
+		$data['mll'] = $this->Admin->single_mpr($smprid);
+		$this->load->view('admin/mpr_list_up_form', $data);
+	}
+	public function mpr_list_update()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		if ($this->input->post('submit')) {
+		$simprid = $this->input->post('simprid');
+		$product = $this->input->post('product');
+		$item = $this->input->post('item');
+		$brand = $this->input->post('brand');
+		$qty = $this->input->post('qty');
+		$uom = $this->input->post('uom');
+		$description = $this->input->post('description');
+		$description =  str_replace("'", "\'", $description);
+		$price = $this->input->post('price');
+		$remarks = $this->input->post('remarks');
+		$remarks =  str_replace("'", "\'", $remarks);
+		$uname= $this->input->post('uname');
+		for ($i = 0; $i < count($simprid); $i++) {
+			$data["i"] = $i;
+			$data["simprid"] = $simprid[$i];
+			$data["product"] = $product[$i];
+			$data["item"] = $item[$i];
+			$data["brand"] = $brand[$i];
+			$data["qty"] = $qty[$i];
+			$data["uom"] = $uom[$i];
+			$data["description"] = $description[$i];
+			$data["price"] = $price[$i];
+			$data["remarks"] = $remarks[$i];
+			$data["uname"] = $uname[$i];
+			$ins = $this->Admin->mpr_list_update($data);
+		}
+		if ($ins == TRUE) {
+			$this->session->set_flashdata('Successfully', 'Successfully Inserted');
+		} else {
+			$this->session->set_flashdata('Successfully', 'Failed To Inserted');
+		}
+		redirect('Dashboard/date_wise_mpr_form', 'refresh');
 		}
 	}
 	public function date_wise_mpr_list_form()
