@@ -799,38 +799,43 @@ class Admin extends CI_Model
 	}
 	public function po_create($data)
 	{
-		date_default_timezone_set('Asia/Dhaka');
+		// date_default_timezone_set('Asia/Dhaka');
 		$data['podate'] = date("Y-m-d", strtotime($data['podate']));
-		$d = date('Y-m-d');
-		$t = date("H:i:s");
-		$d1 = str_replace("-", "", $d);
-		$t1 = str_replace(":", "", $t);
-		$ccid = $d1 . $t1;
+		// $d = date('Y-m-d');
+		// $t = date("H:i:s");
+		// $d1 = str_replace("-", "", $d);
+		// $t1 = str_replace(":", "", $t);
+		// $ccid = $d1 . $t1;
 
-		$d2 = date('Y-m-d');
-		$t2 = date("H:i:s");
-		$d21 = str_replace("-", "", $d2);
-		$t21 = str_replace(":", "", $t2);
-		$ccid1 = $d21 . $t21;
-		$ccid1 = $ccid1 . $data['i'];
+		// $d2 = date('Y-m-d');
+		// $t2 = date("H:i:s");
+		// $d21 = str_replace("-", "", $d2);
+		// $t21 = str_replace(":", "", $t2);
+		// $ccid1 = $d21 . $t21;
+		// $ccid1 = $ccid1 . $data['i'];
 
-		$sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$data[mprid]')";
-		$query1 = $this->db->query($sql1);
-		//if($data['pstatus']!=3)
-		//		{
-		$sql = "INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
-		//}
-		//		else
-		//		{
-		//			$sql="INSERT INTO po_insert VALUES ('$ccid','$ccid1','$data[userid]','$data[mprid]','','$data[item]','$data[pqty]','$data[premarks]','','','','$data[pstatus]')";
-		//		}
-		//		
-		//		$sql2="UPDATE mpr_insert SET mstatus='$data[pstatus]' WHERE simprid='$data[item]'";
-		//		$query2=$this->db->query($sql2);
-		// $sqld = "DELETE FROM  po_insert WHERE pqty='0'";
-		// $queryd = $this->db->query($sqld);
+		// $sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$data[mprid]')";
+		// $query1 = $this->db->query($sql1);
+	
+		$sql = "INSERT INTO po_insert VALUES ('$data[ccid]','$data[ccid1]','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
+		$query = $this->db->query($sql);
 
-		return $query = $this->db->query($sql);
+		$sqld = "DELETE FROM  po_insert WHERE pqty='0'";
+		$queryd = $this->db->query($sqld);
+
+		$sql1="SELECT simprid FROM po_insert WHERE simprid='$data[item]'";
+		$query1=$this->db->query($sql1);
+		$query1=$query1->result_array();
+		//echo "<br/>";
+		foreach($query1 as $row)
+		{
+			$simprid=$row['simprid'];
+			$sql2 = "UPDATE mpr_insert SET mstatus='1' WHERE simprid='$simprid'";
+			$query2 = $this->db->query($sql2);
+		}
+		return $query;
+
+		
 	}
 
 	//public function date_wise_po_list($pd, $wd)

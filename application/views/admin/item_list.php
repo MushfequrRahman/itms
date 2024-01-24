@@ -33,11 +33,11 @@
   }
 </style>
 <script type='text/javascript'>
-	//<![CDATA[
-	$(document).ready(function() {
-		$('.filter').multifilter()
-	})
-	//]]>
+  //<![CDATA[
+  $(document).ready(function() {
+    $('.filter').multifilter()
+  })
+  //]]>
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -62,33 +62,33 @@
                     </div>
                   </div>
                   <div class="row">
-										<div class='filters'>
-											<div class="col-md-4">
-												<div class='filter-container'>
-													<input autocomplete='off' class='filter form-control' name='ProductCode' placeholder='Product Code' data-col='ProductCode' />
-												</div>
-											</div>
+                    <div class='filters'>
                       <div class="col-md-4">
-												<div class='filter-container'>
-													<input autocomplete='off' class='filter form-control' name='Product' placeholder='Product' data-col='Product' />
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class='filter-container'>
-													<input autocomplete='off' class='filter form-control' name='Item' placeholder='Item' data-col='Item' />
-												</div>
-											</div>
-										</div>
-									</div>
-                  <br/>
+                        <div class='filter-container'>
+                          <input autocomplete='off' class='filter form-control' name='Product Code' placeholder='Product Code' data-col='Product Code' />
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class='filter-container'>
+                          <input autocomplete='off' class='filter form-control' name='Product Name' placeholder='Product Name' data-col='Product Name' />
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class='filter-container'>
+                          <input autocomplete='off' class='filter form-control' name='Item' placeholder='Item' data-col='Item' />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
                   <div class="box-body table-responsive no-padding">
                     <table id="tableData" class="table table-hover table-bordered">
                       <thead style="background:#91b9e6;">
                         <tr>
                           <th>SL</th>
                           <!--<th>Code</th>-->
-                          <th>ProductCode</th>
-                          <th>Product</th>
+                          <th>Product Code</th>
+                          <th>Product Name</th>
                           <th>Item</th>
                           <!--<th>Edit</th>-->
                         </tr>
@@ -105,26 +105,24 @@
                             <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
                             <?php /*?> <td style="vertical-align:middle;"><a href="<?php echo base_url();?>Dashboard/product_category_list_up/<?php echo $bn=$row['pccode'];?>"><i class="fa fa-edit" style="font-size:24px"></i></a></td><?php */ ?>
                           </tr>
-                          <?php } ?>
+                        <?php } ?>
                       </tbody>
-                    
                     </table>
                   </div>
                 </div>
-                <script type="text/javascript">
+                <!-- <script type="text/javascript">
                   $(document).ready(function() {
                     $('#tableData').paging({
                       limit: 50
                     });
                   });
-                </script>
+                </script> -->
               </div>
             </div>
           </div>
         </div>
+      </section>
     </div>
-    </section>
-  </div>
   </div>
 </body>
 

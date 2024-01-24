@@ -65,10 +65,10 @@
           <th>Category</th>
           <th style="display:none;">Item Code</th>
           <th>Qty</th>
-          <th>Description</th>
+          <!-- <th>Description</th> -->
           <th>MPR Unit Price</th>
-          <th>Remarks</th>
-          <th>User</th>
+          <!-- <th>Remarks</th> -->
+          <!-- <th>User</th> -->
           <th>Date</th>
           <th>PO Qty</th>
           <th>PO Unit Price</th>
@@ -100,10 +100,10 @@
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
             <td style="vertical-align:middle; display:none;"><input type="text" readonly="readonly" class="form-control" name="item[]" value="<?php echo $row['simprid']; ?>" /></td>
             <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
+            <!-- <td style="vertical-align:middle;"><?php echo $row['description']; ?></td> -->
             <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
+            <!-- <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td> -->
+            <!-- <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td> -->
 
             <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
             <td style="vertical-align:middle;"><?php echo $mdate; ?></td>

@@ -49,8 +49,8 @@
                   <div class="box-body">
                     <span style="text-align:center" id="error"></span>
                     <div style="text-align:center" id="item_table"></div>
-                    <form role="form" id="insert_form" autocomplete="off" method="post" action="<?php echo base_url();?>Dashboard/mpr_list_update" enctype="multipart/form-data">
-                    <!-- <form role="form" name="insert_form" id="insert_form" autocomplete="off" method="post" enctype="multipart/form-data"> -->
+                    <form role="form" id="insert_form" autocomplete="off" method="post" action="<?php echo base_url(); ?>Dashboard/mpr_list_update" enctype="multipart/form-data">
+                      <!-- <form role="form" name="insert_form" id="insert_form" autocomplete="off" method="post" enctype="multipart/form-data"> -->
                       <input type="hidden" class="form-control" name="userid" id="userid" value="<?php echo $this->session->userdata('userid'); ?>">
                       <?php
                       foreach ($ml as $row) {
@@ -111,7 +111,7 @@
                           <table class="table table-bordered" id="item_table1">
                             <thead>
                               <tr>
-                              <th style="text-align:center;display:none;">&nbsp;</th>
+                                <th style="text-align:center;display:none;">&nbsp;</th>
                                 <th style="text-align:center;">Product<em>*</em></th>
                                 <th style="text-align:center;">Item/Model<em>*</em></th>
                                 <th style="text-align:center;">Brand<em>*</em></th>
@@ -127,7 +127,10 @@
                             <tbody>
                               <?php
                               $i = 1;
-                              foreach ($mll as $row) { ?>
+                              foreach ($mll as $row) { 
+                                if($row['mstatus']=='0')
+                                {
+                                  ?>
                                 <tr>
                                   <td style="vertical-align:middle; display:none;"><input type="text" class="form-control" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td>
                                   <td style="vertical-align:middle;">
@@ -149,7 +152,7 @@
                                     </select>
                                   </td>
                                   <td style="vertical-align:middle;">
-                                  <select class="form-control brand" name="brand[]" id="brand">
+                                    <select class="form-control brand" name="brand[]" id="brand">
                                       <option value="<?php echo $row['brandid']; ?>"><?php echo $row['brandname']; ?></option>
                                       <?php
                                       foreach ($bl as $row2) {
@@ -159,11 +162,11 @@
                                       }
                                       ?>
                                     </select>
-                                </td>
+                                  </td>
                                   <td style="vertical-align:middle;"><input type="text" class="form-control qty" name="qty[]" value="<?php echo $row['qty']; ?>"></td>
-                                  
+
                                   <td style="vertical-align:middle;">
-                                  <select class="form-control brand" name="uom[]" id="uom">
+                                    <select class="form-control brand" name="uom[]" id="uom">
                                       <option value="<?php echo $row['uom']; ?>"><?php echo $row['puom']; ?></option>
                                       <?php
                                       foreach ($ul as $row3) {
@@ -173,17 +176,81 @@
                                       }
                                       ?>
                                     </select>
-                                </td>
-                                <td style="vertical-align:middle;"><input type="text" class="form-control" name="description[]" value="<?php echo $row['description']; ?>"></td>
-                                <td style="vertical-align:middle;"><input type="text" class="form-control price" name="price[]" value="<?php echo $row['price']; ?>"></td>
-                                <td style="vertical-align:middle;"><input type="text" class="form-control" name="remarks[]" value="<?php echo $row['remarks']; ?>"></td>
-                                <td style="vertical-align:middle;"><input type="text" class="form-control" name="uname[]" value="<?php echo $row['uname']; ?>"></td> 
-                                  
-                                  
-                                  
+                                  </td>
+                                  <td style="vertical-align:middle;"><input type="text" class="form-control" name="description[]" value="<?php echo $row['description']; ?>"></td>
+                                  <td style="vertical-align:middle;"><input type="text" class="form-control price" name="price[]" value="<?php echo $row['price']; ?>"></td>
+                                  <td style="vertical-align:middle;"><input type="text" class="form-control" name="remarks[]" value="<?php echo $row['remarks']; ?>"></td>
+                                  <td style="vertical-align:middle;"><input type="text" class="form-control" name="uname[]" value="<?php echo $row['uname']; ?>"></td>
+
+
+
                                 </tr>
+                                <?php }
+                              
+                              else
+                              {
+                                ?>
+<tr>
+                                  <td style="vertical-align:middle; display:none;"><input type="text" class="form-control" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td>
+                                  <td style="vertical-align:middle;">
+                                    <select class="form-control product" readonly  name="product[]" id="product_<?php echo $i++; ?>">
+                                      <option value="<?php echo $row['pcode']; ?>"><?php echo $row['pname']; ?></option>
+                                      <?php
+                                      foreach ($col as $row1) {
+                                      ?>
+                                        <option value="<?php echo $row1['pcode']; ?>"><?php echo $row1['pname']; ?></option>
+                                      <?php
+                                      }
+                                      ?>
+                                    </select>
+                                  </td>
+                                  <td style="vertical-align:middle;">
+                                    <select class="form-control item" readonly name="item[]" id="item_<?php echo $i++; ?>">
+                                      <option value="<?php echo $row['model']; ?>"><?php echo $row['item']; ?></option>
+
+                                    </select>
+                                  </td>
+                                  <td style="vertical-align:middle;">
+                                    <select class="form-control brand" readonly name="brand[]" id="brand">
+                                      <option value="<?php echo $row['brandid']; ?>"><?php echo $row['brandname']; ?></option>
+                                      <?php
+                                      foreach ($bl as $row2) {
+                                      ?>
+                                        <option value="<?php echo $row2['brandid']; ?>"><?php echo $row2['brandname']; ?></option>
+                                      <?php
+                                      }
+                                      ?>
+                                    </select>
+                                  </td>
+                                  <td style="vertical-align:middle;"><input type="text" class="form-control qty" readonly name="qty[]" value="<?php echo $row['qty']; ?>"></td>
+
+                                  <td style="vertical-align:middle;">
+                                    <select class="form-control brand" readonly name="uom[]" id="uom">
+                                      <option value="<?php echo $row['uom']; ?>"><?php echo $row['puom']; ?></option>
+                                      <?php
+                                      foreach ($ul as $row3) {
+                                      ?>
+                                        <option value="<?php echo $row3['puomid']; ?>"><?php echo $row3['puom']; ?></option>
+                                      <?php
+                                      }
+                                      ?>
+                                    </select>
+                                  </td>
+                                  <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="description[]" value="<?php echo $row['description']; ?>"></td>
+                                  <td style="vertical-align:middle;"><input type="text" readonly class="form-control price" name="price[]" value="<?php echo $row['price']; ?>"></td>
+                                  <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="remarks[]" value="<?php echo $row['remarks']; ?>"></td>
+                                  <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="uname[]" value="<?php echo $row['uname']; ?>"></td>
+
+
+
+                                </tr>
+                                <?php
+
+                              }
+                              
+                              }?>
                             </tbody>
-                          <?php } ?>
+                          
                           </tbody>
                           </table>
                         </div>

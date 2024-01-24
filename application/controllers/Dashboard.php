@@ -1467,7 +1467,7 @@ class Dashboard extends CI_Controller
 		$this->load->model('Admin');
 		$factoryid = $this->input->get('factoryid');
 		$mprid = $this->input->get('mprid');
-		$mprid=$factoryid.$mprid;
+		$mprid = $factoryid . $mprid;
 		$sql = "SELECT COUNT(mprid) AS mprid FROM mpr_insert_id WHERE mprid='$mprid'";
 		$query = $this->db->query($sql);
 		$query = $query->result_array();
@@ -1493,8 +1493,8 @@ class Dashboard extends CI_Controller
 		$this->load->database();
 		$this->load->model('Admin');
 		$pcode = $this->input->get('pcode');
-		$data=$this->Admin->show_item($pcode);
-		echo json_encode($data); 
+		$data = $this->Admin->show_item($pcode);
+		echo json_encode($data);
 	}
 	public function show_item()
 	{
@@ -1518,9 +1518,9 @@ class Dashboard extends CI_Controller
 		$d1 = str_replace("-", "", $d);
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
-		
-		
-		
+
+
+
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
@@ -1528,7 +1528,7 @@ class Dashboard extends CI_Controller
 		$userid = $this->input->get('userid');
 		$mprid = $this->input->get('mprid');
 		$factoryid = $this->input->get('factoryid');
-		$mprid = $factoryid.$mprid;
+		$mprid = $factoryid . $mprid;
 		$departmentid = $this->input->get('departmentid');
 		$name = $this->input->get('name');
 		$designationid = $this->input->get('designationid');
@@ -1625,38 +1625,38 @@ class Dashboard extends CI_Controller
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
 		if ($this->input->post('submit')) {
-		$simprid = $this->input->post('simprid');
-		$product = $this->input->post('product');
-		$item = $this->input->post('item');
-		$brand = $this->input->post('brand');
-		$qty = $this->input->post('qty');
-		$uom = $this->input->post('uom');
-		$description = $this->input->post('description');
-		$description =  str_replace("'", "\'", $description);
-		$price = $this->input->post('price');
-		$remarks = $this->input->post('remarks');
-		$remarks =  str_replace("'", "\'", $remarks);
-		$uname= $this->input->post('uname');
-		for ($i = 0; $i < count($simprid); $i++) {
-			$data["i"] = $i;
-			$data["simprid"] = $simprid[$i];
-			$data["product"] = $product[$i];
-			$data["item"] = $item[$i];
-			$data["brand"] = $brand[$i];
-			$data["qty"] = $qty[$i];
-			$data["uom"] = $uom[$i];
-			$data["description"] = $description[$i];
-			$data["price"] = $price[$i];
-			$data["remarks"] = $remarks[$i];
-			$data["uname"] = $uname[$i];
-			$ins = $this->Admin->mpr_list_update($data);
-		}
-		if ($ins == TRUE) {
-			$this->session->set_flashdata('Successfully', 'Successfully Inserted');
-		} else {
-			$this->session->set_flashdata('Successfully', 'Failed To Inserted');
-		}
-		redirect('Dashboard/date_wise_mpr_form', 'refresh');
+			$simprid = $this->input->post('simprid');
+			$product = $this->input->post('product');
+			$item = $this->input->post('item');
+			$brand = $this->input->post('brand');
+			$qty = $this->input->post('qty');
+			$uom = $this->input->post('uom');
+			$description = $this->input->post('description');
+			$description =  str_replace("'", "\'", $description);
+			$price = $this->input->post('price');
+			$remarks = $this->input->post('remarks');
+			$remarks =  str_replace("'", "\'", $remarks);
+			$uname = $this->input->post('uname');
+			for ($i = 0; $i < count($simprid); $i++) {
+				$data["i"] = $i;
+				$data["simprid"] = $simprid[$i];
+				$data["product"] = $product[$i];
+				$data["item"] = $item[$i];
+				$data["brand"] = $brand[$i];
+				$data["qty"] = $qty[$i];
+				$data["uom"] = $uom[$i];
+				$data["description"] = $description[$i];
+				$data["price"] = $price[$i];
+				$data["remarks"] = $remarks[$i];
+				$data["uname"] = $uname[$i];
+				$ins = $this->Admin->mpr_list_update($data);
+			}
+			if ($ins == TRUE) {
+				$this->session->set_flashdata('Successfully', 'Successfully Updated');
+			} else {
+				$this->session->set_flashdata('Successfully', 'Failed To Updated');
+			}
+			redirect('Dashboard/date_wise_mpr_form', 'refresh');
 		}
 	}
 	public function date_wise_mpr_list_form()
@@ -1773,6 +1773,16 @@ class Dashboard extends CI_Controller
 	}
 	public function po_create()
 	{
+		date_default_timezone_set('Asia/Dhaka');
+		//$podate = $this->input->post('podate');
+		//$podate = date("Y-m-d", strtotime($podate));
+		$d = date('Y-m-d');
+		$t = date("H:i:s");
+		$d1 = str_replace("-", "", $d);
+		$t1 = str_replace(":", "", $t);
+		$ccid = $d1 . $t1;
+
+
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
@@ -1789,11 +1799,17 @@ class Dashboard extends CI_Controller
 			$premarks = $this->input->post('premarks');
 			$pprice = $this->input->post('pprice');
 			$pstatus = $this->input->post('pstatus');
+
+			$sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$mprid')";
+			$query1 = $this->db->query($sql1);
+
 			for ($i = 0; $i < count($item); $i++) {
 				$data["i"] = $i;
+				$data["ccid"] = $ccid;
+				$data["ccid1"] = $ccid . $i;
 				$data["userid"] = $userid;
 				$data["mprid"] = $mprid;
-				$data["po"] = $fid.$po[$i];
+				$data["po"] = $fid . $po[$i];
 				$data["supplier"] = $supplier[$i];
 				$data["podate"] = $podate[$i];
 				$data["item"] = $item[$i];
@@ -1967,7 +1983,7 @@ class Dashboard extends CI_Controller
 		$sipoid = $this->input->post('sipoid');
 		$po = $this->input->post('po');
 		$grn = $this->input->post('grn');
-		$grn = $fid.$grn;
+		$grn = $fid . $grn;
 		$rqty = $this->input->post('rqty');
 		$rdate = $this->input->post('rdate');
 		$invoice = $this->input->post('invoice');

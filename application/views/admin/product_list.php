@@ -33,11 +33,11 @@
   }
 </style>
 <script type='text/javascript'>
-	//<![CDATA[
-	$(document).ready(function() {
-		$('.filter').multifilter()
-	})
-	//]]>
+  //<![CDATA[
+  $(document).ready(function() {
+    $('.filter').multifilter()
+  })
+  //]]>
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -62,30 +62,30 @@
                     </div>
                   </div>
                   <div class="row">
-										<div class='filters'>
-											<div class="col-md-3">
-												<div class='filter-container'>
-													<input autocomplete='off' class='filter form-control' name='Category' placeholder='Category' data-col='Category' />
-												</div>
-											</div>
-											<div class="col-md-3">
-												<div class='filter-container'>
-													<input autocomplete='off' class='filter form-control' name='Group Name' placeholder='Group Name' data-col='Group Name' />
-												</div>
-											</div>
-											<div class="col-md-3">
-												<div class='filter-container'>
-													<input autocomplete='off' class='filter form-control' name='Sub Group Name' placeholder='Sub Group Name' data-col='Sub Group Name' />
-												</div>
-											</div>
-											<div class="col-md-3">
-												<div class='filter-container'>
-													<input autocomplete='off' class='filter form-control' name='Product Name' placeholder='Product Name' data-col='Product Name' />
-												</div>
-											</div>
-										</div>
-									</div>
-                  <br/>
+                    <div class='filters'>
+                      <div class="col-md-3">
+                        <div class='filter-container'>
+                          <input autocomplete='off' class='filter form-control' name='Category' placeholder='Category' data-col='Category' />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class='filter-container'>
+                          <input autocomplete='off' class='filter form-control' name='Group Name' placeholder='Group Name' data-col='Group Name' />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class='filter-container'>
+                          <input autocomplete='off' class='filter form-control' name='Sub Group Name' placeholder='Sub Group Name' data-col='Sub Group Name' />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class='filter-container'>
+                          <input autocomplete='off' class='filter form-control' name='Product Name' placeholder='Product Name' data-col='Product Name' />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
                   <div class="box-body table-responsive no-padding">
                     <table id="tableData" class="table table-hover table-bordered">
                       <thead style="background:#91b9e6;">
@@ -111,12 +111,12 @@
                             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
                             <td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
                             <td style="vertical-align:middle;"><?php echo $row['psgname']; ?></td>
-                            <!-- <td style="vertical-align:middle;"><a href="<?php echo base_url();?>Dashboard/product_details_insert_form/<?php echo $bn=$row['pcode'];?>"><?php echo $row['pcode'];?></a></td> -->
-                            <td style="vertical-align:middle;"><?php echo $row['pcode'];?></td>
+                            <!-- <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_details_insert_form/<?php echo $bn = $row['pcode']; ?>"><?php echo $row['pcode']; ?></a></td> -->
+                            <td style="vertical-align:middle;"><?php echo $row['pcode']; ?></td>
                             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
                             <?php /*?> <td style="vertical-align:middle;"><a href="<?php echo base_url();?>Dashboard/product_category_list_up/<?php echo $bn=$row['pccode'];?>"><i class="fa fa-edit" style="font-size:24px"></i></a></td><?php */ ?>
                           </tr>
-                          <?php } ?>
+                        <?php } ?>
                       </tbody>
                     </table>
                   </div>
@@ -132,9 +132,8 @@
             </div>
           </div>
         </div>
+      </section>
     </div>
-    </section>
-  </div>
   </div>
 </body>
 

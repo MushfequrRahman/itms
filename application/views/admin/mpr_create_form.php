@@ -114,7 +114,7 @@ foreach ($bl as $row) {
                       <div class="row">
 
                         <div class="col-md-4">
-                          <label>Name<em>*</em></label>
+                          <label>Name(Prepared By)<em>*</em></label>
                           <input type="text" class="form-control name" name="name" placeholder="Enter Name">
                           <?php echo form_error('name', '<div class="error">', '</div>');  ?>
                         </div>
