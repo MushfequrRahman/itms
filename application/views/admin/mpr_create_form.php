@@ -194,12 +194,12 @@ foreach ($bl as $row) {
         html += '<td><select name="brand[]" class="form-control brand" id="brand' + count + '"><option value="">Brand</option><?php echo $brand; ?></select></td>';
         html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
         html += '<td><select name="uom[]" class="form-control uom" id="uom' + count + '"><option value="">UOM</option><?php echo $uom; ?></select></td>';
-        html += '<td><textarea class="form-control" rows="1" name="description[]" id="description"></textarea></td>';
+        html += '<td><textarea class="form-control description" rows="1" name="description[]" id="description"></textarea></td>';
         html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + ' /></td>';
-        html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
-
-        html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
         html += '<td><input type="text" name="mo[]" class="form-control mo" id="mo' + count + '" /></td>';
+        html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
+        html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
+        
         html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
         $('#item_table1').append(html);
       });
@@ -332,6 +332,7 @@ foreach ($bl as $row) {
           count = count + 1;
 
         });
+        
         // $('.uname').each(function() {
 
         //   var count = 1;
@@ -347,11 +348,15 @@ foreach ($bl as $row) {
 
         var form_data = $(this).serialize();
         //alert(form_data);
+        //form_data = form_data.replaceAll(/["']/g, "");
+        //form_data = form_data.replaceAll(/'/g,"\\'");
+        
 
         if (error == '') {
+          $('input[type="submit"]').attr('disabled', true);
           $.ajax({
             url: "<?php echo base_url(); ?>Dashboard/mpr_create",
-            method: "get",
+            method: "post",
             data: form_data,
             success: function(data) {
               //alert(url);
