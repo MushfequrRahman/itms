@@ -58,12 +58,11 @@
                     </div>
                   </div>
                 </div>
-                <div id="ajax-content-container">
-                </div>
+                <div id="ajax-content-container"></div>
               </div>
             </div>
           </div>
-
+        </div>
       </section>
     </div>
   </div>

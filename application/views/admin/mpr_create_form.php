@@ -438,9 +438,39 @@ foreach ($bl as $row) {
 
         var factoryid = $("#factoryid").val().trim();
         var mprid = $("#mprid").val().trim();
-        // var ptid = $("#ptid").val().trim();
-        // var ctid = $("#ctid").val().trim();
-        // var dfactory = $("#dfactory").val().trim();
+
+        if (mprid != '') {
+
+          $.ajax({
+            url: "<?php echo base_url(); ?>Dashboard/mpr_available",
+            type: 'get',
+            data: {
+              factoryid: factoryid,
+              mprid: mprid
+            },
+            success: function(response) {
+
+              // Show response
+              $("#response").html(response);
+
+            }
+          });
+        } else {
+          $("#response").html("<span style='color: red;'>Enter valid info</span>");
+        }
+
+      });
+
+    });
+  </script>
+
+<script>
+    $(document).ready(function() {
+
+      $("#factoryid").change(function(event) {
+
+        var factoryid = $("#factoryid").val().trim();
+        var mprid = $("#mprid").val().trim();
 
         if (mprid != '') {
 

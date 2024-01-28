@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2024 at 12:46 PM
+-- Generation Time: Jan 27, 2024 at 12:55 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -62,7 +62,8 @@ INSERT INTO `brand_insert` (`brandid`, `brandname`) VALUES
 ('20240117105230', 'Dintek'),
 ('20240117105342', 'Safenet'),
 ('20240120115642', 'Canon'),
-('20240120115732', 'A4Tech');
+('20240120115732', 'A4Tech'),
+('20240127121456', 'TP Link');
 
 -- --------------------------------------------------------
 
@@ -91,7 +92,9 @@ INSERT INTO `department` (`deptid`, `departmentname`) VALUES
 (9, 'Commercial'),
 (10, 'CAD'),
 (11, 'Sample'),
-(12, 'Accounts');
+(12, 'Accounts'),
+(13, 'Logistic'),
+(14, 'CNF');
 
 -- --------------------------------------------------------
 
@@ -402,7 +405,9 @@ INSERT INTO `item_insert` (`itemcode`, `item`, `pcode`) VALUES
 ('20240124160337', 'None', 'RCB'),
 ('20240124160451', 'None', 'CLB'),
 ('20240124160541', 'e-Studio 3018', 'CPRDM'),
-('20240125133141', 'Toner 76A', 'TNR');
+('20240125133141', 'Toner 76A', 'TNR'),
+('20240127121416', 'Archer AX20', 'Wifi'),
+('20240127121433', 'None', 'Wifi');
 
 -- --------------------------------------------------------
 
@@ -496,7 +501,11 @@ INSERT INTO `mpr_insert` (`smprid`, `simprid`, `mpcode`, `model`, `brandid`, `qt
 ('20240122103642', '202401221036420', 'CTG', '20240113095222', '20240117104145', 8, 1, 'BOK Cartridge', 2060, '', 'For Feb 24 use', 0),
 ('20240125114230', '202401251142300', 'LPT', '20240111124947', '20240117104145', 1, 5, 'Core i3, 8GB RAM, SSD 256, HDD 1TB, 14 inch', 68000, '', 'Previous Finishing Manager old laptop were handove', 0),
 ('20240125133417', '202401251334170', 'TNR', '20240125133141', '20240117104145', 2, 1, 'Monthly', 1650, '', 'Store Stock', 0),
-('20240125133417', '202401251334171', 'HDD', '20240121120834', '20240116164212', 1, 1, 'For emergency support', 5000, '', 'Store Stock', 0);
+('20240125133417', '202401251334171', 'HDD', '20240121120834', '20240116164212', 1, 1, 'For emergency support', 5000, '', 'Store Stock', 0),
+('20240127113145', '202401271131450', 'DKTP', '20240123153853', '20240117104145', 4, 1, '', 35000, 'Proccesor,Mother Board,RAM,HDD', 'Firoz-CNF', 0),
+('20240127121900', '202401271219000', 'Wifi', '20240127121416', '20240127121456', 1, 1, 'TP-Link Archer AX20 1800Mbps', 9500, 'For newly install at old washing', 'Batch, R&D, Store, display', 0),
+('20240127165313', '202401271653130', 'CTG', '20240113095331', '20240120115642', 3, 1, 'Handtag print purpose', 3400, 'for 4 months use', 'Sample', 0),
+('20240127165313', '202401271653131', 'CTG', '20240113095344', '20240120115642', 3, 1, 'Handtag print purpose', 3400, 'for 4 months use', 'Sample', 0);
 
 -- --------------------------------------------------------
 
@@ -537,7 +546,10 @@ INSERT INTO `mpr_insert_id` (`smprid`, `suserid`, `mprid`, `fid`, `mdeptid`, `na
 ('20240121130912', '', '', '', 0, '', 0, '0000-00-00', 0),
 ('20240122103642', 'HO75', 'AKL7199', 'AKL', 10, 'Alamgir Sheak', 72, '2024-01-22', 0),
 ('20240125114230', 'HO75', 'AFL27390', 'AFL', 5, 'Mostakim Rahman', 9, '2024-01-21', 0),
-('20240125133417', 'HO75', 'ATL278067', 'ATL', 8, 'Badiul Alam', 4, '2024-01-25', 0);
+('20240125133417', 'HO75', 'ATL278067', 'ATL', 8, 'Badiul Alam', 4, '2024-01-25', 0),
+('20240127113145', 'HO537', 'BGL18409', 'BGL', 14, 'Firoz -CTG-CNF', 4, '2024-01-15', 0),
+('20240127121900', 'HO75', 'ATL24383', 'ATL', 5, 'Mostakin Rahman', 9, '2024-01-27', 0),
+('20240127165313', 'HO75', 'AKL7420', 'AKL', 11, 'Sirajul Alam', 9, '2024-01-27', 0);
 
 -- --------------------------------------------------------
 
@@ -854,6 +866,7 @@ INSERT INTO `product_insert` (`pcode`, `pccode`, `pgid`, `psgid`, `pname`) VALUE
 ('UKB', '20230820083757', '20230822072519', '20240108102520', 'Keyboard USB'),
 ('ULC', '20230820083757', '20230822072519', '20240108102520', 'USB Lan Card'),
 ('UMS', '20230820083757', '20230822072519', '20240108102520', 'Mouse USB'),
+('Wifi', '20230820083743', '20230822072652', '20230822082952', 'Wifi Router'),
 ('WKB', '20230820083757', '20230822072519', '20240108102520', 'Keyboard Wire'),
 ('WM', '20230820083757', '20230822072519', '20240108102520', 'Wire Manager'),
 ('WMS', '20230820083757', '20230822072519', '20240108102520', 'Mouse Wire');
@@ -1411,7 +1424,7 @@ ALTER TABLE `antivirus`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `deptid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `deptid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `designation`

@@ -22,7 +22,24 @@
     });
   })
 </script>
-
+<?php
+//$item = '';
+$uom = '';
+$product = '';
+$brand = '';
+// foreach ($il as $row) {
+//   $item .= '<option value="' . $row["pcode"] . '">' . $row["item"] . '</option>';
+// }
+foreach ($ul as $row) {
+  $uom .= '<option value="' . $row["puomid"] . '">' . $row["puom"] . '</option>';
+}
+foreach ($col as $row) {
+  $product .= '<option value="' . $row["pcode"] . '">' . $row["pname"] . '</option>';
+}
+foreach ($bl as $row) {
+  $brand .= '<option value="' . $row["brandid"] . '">' . $row["brandname"] . '</option>';
+}
+?>
 
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -49,9 +66,10 @@
                   <div class="box-body">
                     <span style="text-align:center" id="error"></span>
                     <div style="text-align:center" id="item_table"></div>
-                    <form role="form" id="insert_form" autocomplete="off" method="post" action="<?php echo base_url(); ?>Dashboard/mpr_list_update" enctype="multipart/form-data">
-                      <!-- <form role="form" name="insert_form" id="insert_form" autocomplete="off" method="post" enctype="multipart/form-data"> -->
+                    <!-- <form role="form" id="insert_form" autocomplete="off" method="post" action="<?php echo base_url(); ?>Dashboard/mpr_list_add" enctype="multipart/form-data"> -->
+                      <form role="form" name="insert_form" id="insert_form" autocomplete="off" method="post" enctype="multipart/form-data">
                       <input type="hidden" class="form-control" name="userid" id="userid" value="<?php echo $this->session->userdata('userid'); ?>">
+                      <input type="hidden" class="form-control" name="smprid" id="smprid" value="<?php echo $smprid; ?>">
                       <?php
                       foreach ($ml as $row) {
                       ?>
@@ -121,135 +139,19 @@
                                 <th style="text-align:center;">Unit Price</th>
                                 <th style="text-align:center;">Remarks</th>
                                 <th style="text-align:center;">User</th>
-
+                                <th style="vertical-align:middle; text-align:center;"><button type="button" name="add" class="btn btn-success btn-xs add"><span class="glyphicon glyphicon-plus"></span></button></th>
                               </tr>
                             </thead>
                             <tbody>
-                              <?php
-                              $i = 1;
-                              foreach ($mll as $row) {
-                                if ($row['mstatus'] == '0') {
-                              ?>
-                                  <tr>
-                                    <td style="vertical-align:middle; display:none;"><input type="text" class="form-control" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td>
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control product" name="product[]" id="product_<?php echo $i++; ?>">
-                                        <option value="<?php echo $row['pcode']; ?>"><?php echo $row['pname']; ?></option>
-                                        <?php
-                                        foreach ($col as $row1) {
-                                        ?>
-                                          <option value="<?php echo $row1['pcode']; ?>"><?php echo $row1['pname']; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control item" name="item[]" id="item_<?php echo $i++; ?>">
-                                        <option value="<?php echo $row['model']; ?>"><?php echo $row['item']; ?></option>
-
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control brand" name="brand[]" id="brand">
-                                        <option value="<?php echo $row['brandid']; ?>"><?php echo $row['brandname']; ?></option>
-                                        <?php
-                                        foreach ($bl as $row2) {
-                                        ?>
-                                          <option value="<?php echo $row2['brandid']; ?>"><?php echo $row2['brandname']; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;"><input type="text" class="form-control qty" name="qty[]" value="<?php echo $row['qty']; ?>"></td>
-
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control brand" name="uom[]" id="uom">
-                                        <option value="<?php echo $row['uom']; ?>"><?php echo $row['puom']; ?></option>
-                                        <?php
-                                        foreach ($ul as $row3) {
-                                        ?>
-                                          <option value="<?php echo $row3['puomid']; ?>"><?php echo $row3['puom']; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;"><input type="text" class="form-control" name="description[]" value="<?php echo $row['description']; ?>"></td>
-                                    <td style="vertical-align:middle;"><input type="text" class="form-control price" name="price[]" value="<?php echo $row['price']; ?>"></td>
-                                    <td style="vertical-align:middle;"><input type="text" class="form-control" name="remarks[]" value="<?php echo $row['remarks']; ?>"></td>
-                                    <td style="vertical-align:middle;"><input type="text" class="form-control" name="uname[]" value="<?php echo $row['uname']; ?>"></td>
-
-
-
-                                  </tr>
-                                <?php } else {
-                                ?>
-                                  <tr>
-                                    <td style="vertical-align:middle; display:none;"><input type="text" class="form-control" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td>
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control product" readonly name="product[]" id="product_<?php echo $i++; ?>">
-                                        <option value="<?php echo $row['pcode']; ?>"><?php echo $row['pname']; ?></option>
-                                        <?php
-                                        foreach ($col as $row1) {
-                                        ?>
-                                          <option value="<?php echo $row1['pcode']; ?>"><?php echo $row1['pname']; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control item" readonly name="item[]" id="item_<?php echo $i++; ?>">
-                                        <option value="<?php echo $row['model']; ?>"><?php echo $row['item']; ?></option>
-
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control brand" readonly name="brand[]" id="brand">
-                                        <option value="<?php echo $row['brandid']; ?>"><?php echo $row['brandname']; ?></option>
-                                        <?php
-                                        foreach ($bl as $row2) {
-                                        ?>
-                                          <option value="<?php echo $row2['brandid']; ?>"><?php echo $row2['brandname']; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;"><input type="text" class="form-control qty" readonly name="qty[]" value="<?php echo $row['qty']; ?>"></td>
-
-                                    <td style="vertical-align:middle;">
-                                      <select class="form-control brand" readonly name="uom[]" id="uom">
-                                        <option value="<?php echo $row['uom']; ?>"><?php echo $row['puom']; ?></option>
-                                        <?php
-                                        foreach ($ul as $row3) {
-                                        ?>
-                                          <option value="<?php echo $row3['puomid']; ?>"><?php echo $row3['puom']; ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                      </select>
-                                    </td>
-                                    <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="description[]" value="<?php echo $row['description']; ?>"></td>
-                                    <td style="vertical-align:middle;"><input type="text" readonly class="form-control price" name="price[]" value="<?php echo $row['price']; ?>"></td>
-                                    <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="remarks[]" value="<?php echo $row['remarks']; ?>"></td>
-                                    <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="uname[]" value="<?php echo $row['uname']; ?>"></td>
-
-
-
-                                  </tr>
-                              <?php
-
-                                }
-                              } ?>
+                              
                             </tbody>
+
+                            
                           </table>
                         </div>
                       </div>
                       <div class="box-footer text-center">
-                        <input type="submit" class="btn btn-primary" name="submit" value="EDIT" />
+                        <input type="submit" class="btn btn-primary" name="submit" value="ADD" />
                       </div>
                     </form>
                   </div>
@@ -261,6 +163,179 @@
       </section>
     </div>
   </div>
+
+
+
+  <script>
+    $(document).ready(function() {
+
+      var count = 0;
+
+      $(document).on('click', '.add', function() {
+        count++;
+        var html = '';
+        html += '<tr>';
+        html += '<td><select name="product[]" class="form-control product" data-item="' + count + '"><option value="">Product</option><?php echo $product; ?></select></td>';
+        //html += '<td><input type="hidden" name="model[]" class="form-control model" id="model' + count + '" /></td>';
+        html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option></select></td>';
+        html += '<td><select name="brand[]" class="form-control brand" id="brand' + count + '"><option value="">Brand</option><?php echo $brand; ?></select></td>';
+        html += '<td><input type="text" name="qty[]" class="form-control qty" id="qty' + count + '" /></td>';
+        html += '<td><select name="uom[]" class="form-control uom" id="uom' + count + '"><option value="">UOM</option><?php echo $uom; ?></select></td>';
+        html += '<td><textarea class="form-control description" rows="1" name="description[]" id="description"></textarea></td>';
+        html += '<td><input type="text" name="price[]" class="form-control price" id="price' + count + ' /></td>';
+        html += '<td><input type="text" name="mo[]" class="form-control mo" id="mo' + count + '" /></td>';
+        html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
+        html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
+        
+        html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
+        $('#item_table1').append(html);
+      });
+
+      $(document).on('click', '.remove', function() {
+        $(this).closest('tr').remove();
+      });
+
+      $(document).on('change', '.product', function() {
+        var pcode = $(this).val();
+        var item = $(this).data('item');
+        $.ajax({
+          url: "<?php echo base_url(); ?>Dashboard/show_item",
+          dataType: "json",
+          method: "get",
+          data: {
+            pcode: pcode
+          },
+          success: function(data) {
+            var html = '<option value="">Item</option>';
+
+
+            html += data;
+
+            $('#item' + item).html(html);
+          }
+        })
+      });
+
+      $('#insert_form').on('submit', function(event) {
+        event.preventDefault();
+        var error = '';
+        
+
+       
+
+        
+
+       
+        $('.product').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Product at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
+        $('.item').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Item at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
+        $('.brand').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Brand at ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
+        $('.qty').each(function() {
+          var count = 1;
+
+          if ($(this).val() == '') {
+            error += '<p>Enter Qty at ' + count + ' row</p>';
+            return false;
+          }
+
+          count = count + 1;
+
+        });
+
+        $('.uom').each(function() {
+
+          var count = 1;
+
+          if ($(this).val() == '') {
+            error += '<p>Enter Uom at ' + count + ' Row</p> ';
+            return false;
+          }
+
+          count = count + 1;
+
+        });
+
+        $('.price').each(function() {
+
+          var count = 1;
+
+          if ($(this).val() == '') {
+            error += '<p>Enter Price at ' + count + ' Row</p> ';
+            return false;
+          }
+
+          count = count + 1;
+
+        });
+        
+        // $('.uname').each(function() {
+
+        //   var count = 1;
+
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Uname at ' + count + ' Row</p> ';
+        //     return false;
+        //   }
+
+        //   count = count + 1;
+
+        // });
+
+        var form_data = $(this).serialize();
+        //alert(form_data);
+        //form_data = form_data.replaceAll(/["']/g, "");
+        //form_data = form_data.replaceAll(/'/g,"\\'");
+        
+
+        if (error == '') {
+          $('input[type="submit"]').attr('disabled', true);
+          $.ajax({
+            url: "<?php echo base_url(); ?>Dashboard/mpr_list_add",
+            method: "post",
+            data: form_data,
+            success: function(data) {
+              //alert(url);
+              if (data == 'ok') {
+                document.forms['insert_form'].reset();
+                $('#item_table1').find('tr:gt(0)').remove();
+                $('#error').html('<div class="alert alert-success">MPR Details Saved</div>');
+                window.setTimeout(function() {
+                  location.reload()
+                }, 3000)
+              }
+            }
+          });
+        } else {
+          $('#error').html('<div class="alert alert-danger">' + error + '</div>');
+        }
+
+      });
+
+    });
+  </script>
 
   <script type="text/javascript">
     $(document).ready(function() {

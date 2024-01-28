@@ -797,6 +797,20 @@ class Admin extends CI_Model
 		$sql = "update mpr_insert SET mpcode='$data[product]',model='$data[item]',brandid='$data[brand]',qty='$data[qty]',uom='$data[uom]',description='$data[description]',price='$data[price]',remarks='$data[remarks]',uname='$data[uname]' WHERE simprid='$data[simprid]'";
 		return $query = $this->db->query($sql);
 	}
+	public function mpr_list_add($data)
+	{
+		//date_default_timezone_set('Asia/Dhaka');
+		//$data['mprdate'] = date("Y-m-d", strtotime($data['mprdate']));
+		// $d = date('Y-m-d');
+		// $t = date("H:i:s");
+		// $d1 = str_replace("-", "", $d);
+		// $t1 = str_replace(":", "", $t);
+		// $ccid = $d1 . $t1;
+		// $ccid = $ccid . $data['i'];
+
+		$sql = "INSERT INTO mpr_insert VALUES ('$data[smprid]','$data[ccid]','$data[product]','$data[item]','$data[brand]','$data[qty]','$data[uom]','$data[description]','$data[price]','$data[remarks]','$data[uname]','0')";
+		return $query = $this->db->query($sql);
+	}
 	public function po_create($data)
 	{
 		// date_default_timezone_set('Asia/Dhaka');

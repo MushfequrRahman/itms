@@ -1511,15 +1511,13 @@ class Dashboard extends CI_Controller
 	public function mpr_create()
 	{
 		date_default_timezone_set('Asia/Dhaka');
-		$mprdate = $this->input->get('mprdate');
+		$mprdate = $this->input->post('mprdate');
 		$mprdate = date("Y-m-d", strtotime($mprdate));
 		$d = date('Y-m-d');
 		$t = date("H:i:s");
 		$d1 = str_replace("-", "", $d);
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
-
-
 
 		$this->load->database();
 		$this->load->library('form_validation');
@@ -1658,6 +1656,76 @@ class Dashboard extends CI_Controller
 			}
 			redirect('Dashboard/date_wise_mpr_form', 'refresh');
 		}
+	}
+	public function mpr_list_add_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'MPR ADD';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		//$data['il']=$this->Admin->item_list();
+		$smprid = $this->uri->segment(3);
+		$data['ul'] = $this->Admin->product_uom_list();
+		$data['fl'] = $this->Admin->factory_list();
+		$data['dep'] = $this->Admin->department_list();
+		$data['des'] = $this->Admin->designation_list();
+		$data['col'] = $this->Admin->product_list();
+		$data['bl'] = $this->Admin->brand_list();
+		$data['ml'] = $this->Admin->single_mpr_id($smprid);
+		$data['mll'] = $this->Admin->single_mpr($smprid);
+		$data['smprid'] = $smprid;
+		$this->load->view('admin/mpr_list_add_form', $data);
+	}
+	public function mpr_list_add()
+	{
+		date_default_timezone_set('Asia/Dhaka');
+		$mprdate = $this->input->get('mprdate');
+		$mprdate = date("Y-m-d", strtotime($mprdate));
+		$d = date('Y-m-d');
+		$t = date("H:i:s");
+		$d1 = str_replace("-", "", $d);
+		$t1 = str_replace(":", "", $t);
+		$ccid = $d1 . $t1;
+		
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		// if ($this->input->post('submit')) {
+			$smprid = $this->input->post('smprid');
+			$product = $this->input->post('product');
+			$item = $this->input->post('item');
+			$brand = $this->input->post('brand');
+			$qty = $this->input->post('qty');
+			$uom = $this->input->post('uom');
+			$description = $this->input->post('description');
+			$description =  str_replace("'", "\'", $description);
+			$price = $this->input->post('price');
+			$remarks = $this->input->post('remarks');
+			$remarks =  str_replace("'", "\'", $remarks);
+			$uname = $this->input->post('uname');
+			for ($i = 0; $i < count($product); $i++) {
+				$data["i"] = $i;
+				$data["ccid"] = $ccid . $i;
+				$data["smprid"] = $smprid;
+				$data["product"] = $product[$i];
+				$data["item"] = $item[$i];
+				$data["brand"] = $brand[$i];
+				$data["qty"] = $qty[$i];
+				$data["uom"] = $uom[$i];
+				$data["description"] = $description[$i];
+				$data["price"] = $price[$i];
+				$data["remarks"] = $remarks[$i];
+				$data["uname"] = $uname[$i];
+				$ins = $this->Admin->mpr_list_add($data);
+			}
+			if ($ins) {
+				echo  "ok";
+			} else {
+				echo  "error";
+			}
+		// }
 	}
 	public function date_wise_mpr_list_form()
 	{
