@@ -24,6 +24,21 @@ class Dashboard extends CI_Controller
 		$userid = $this->session->userdata('userid');
 		$usertype = $this->session->userdata('user_type');
 		$factoryid = $this->session->userdata('factoryid');
+
+		$query =  $this->db->query("SELECT fid,SUM(price*qty) AS price,qty FROM mpr_insert_id
+		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		WHERE MONTH(mdate)=MONTH(NOW()) AND YEAR(mdate)=YEAR(NOW())
+		GROUP BY fid");
+			$record = $query->result();
+			$data = array();
+			foreach ($record as $row) {
+
+				$data['label'][] = $row->fid;
+
+				$data['data'][] = (int) $row->price;
+			}
+
+			$data['chart_data'] = json_encode($data);
 		$this->load->view('admin/toprightnav', $data);
 		$this->load->view('admin/leftmenu');
 		$this->load->view('admin/dashboard', $data);
@@ -1513,6 +1528,9 @@ class Dashboard extends CI_Controller
 		date_default_timezone_set('Asia/Dhaka');
 		$mprdate = $this->input->post('mprdate');
 		$mprdate = date("Y-m-d", strtotime($mprdate));
+		$fmy = strtotime($mprdate);
+		$month = date("F", $fmy);
+		$year = date("Y", $fmy);
 		$d = date('Y-m-d');
 		$t = date("H:i:s");
 		$d1 = str_replace("-", "", $d);
@@ -1543,7 +1561,7 @@ class Dashboard extends CI_Controller
 		$remarks =  str_replace("'", "\'", $remarks);
 		$uname = $this->input->post('uname');
 
-		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$userid','$mprid','$factoryid','$departmentid','$name','$designationid','$mprdate','0')";
+		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$userid','$mprid','$factoryid','$departmentid','$name','$designationid','$mprdate','$month','$year','0')";
 		$query1 = $this->db->query($sql1);
 
 
@@ -1688,43 +1706,43 @@ class Dashboard extends CI_Controller
 		$d1 = str_replace("-", "", $d);
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
-		
+
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
 		// if ($this->input->post('submit')) {
-			$smprid = $this->input->post('smprid');
-			$product = $this->input->post('product');
-			$item = $this->input->post('item');
-			$brand = $this->input->post('brand');
-			$qty = $this->input->post('qty');
-			$uom = $this->input->post('uom');
-			$description = $this->input->post('description');
-			$description =  str_replace("'", "\'", $description);
-			$price = $this->input->post('price');
-			$remarks = $this->input->post('remarks');
-			$remarks =  str_replace("'", "\'", $remarks);
-			$uname = $this->input->post('uname');
-			for ($i = 0; $i < count($product); $i++) {
-				$data["i"] = $i;
-				$data["ccid"] = $ccid . $i;
-				$data["smprid"] = $smprid;
-				$data["product"] = $product[$i];
-				$data["item"] = $item[$i];
-				$data["brand"] = $brand[$i];
-				$data["qty"] = $qty[$i];
-				$data["uom"] = $uom[$i];
-				$data["description"] = $description[$i];
-				$data["price"] = $price[$i];
-				$data["remarks"] = $remarks[$i];
-				$data["uname"] = $uname[$i];
-				$ins = $this->Admin->mpr_list_add($data);
-			}
-			if ($ins) {
-				echo  "ok";
-			} else {
-				echo  "error";
-			}
+		$smprid = $this->input->post('smprid');
+		$product = $this->input->post('product');
+		$item = $this->input->post('item');
+		$brand = $this->input->post('brand');
+		$qty = $this->input->post('qty');
+		$uom = $this->input->post('uom');
+		$description = $this->input->post('description');
+		$description =  str_replace("'", "\'", $description);
+		$price = $this->input->post('price');
+		$remarks = $this->input->post('remarks');
+		$remarks =  str_replace("'", "\'", $remarks);
+		$uname = $this->input->post('uname');
+		for ($i = 0; $i < count($product); $i++) {
+			$data["i"] = $i;
+			$data["ccid"] = $ccid . $i;
+			$data["smprid"] = $smprid;
+			$data["product"] = $product[$i];
+			$data["item"] = $item[$i];
+			$data["brand"] = $brand[$i];
+			$data["qty"] = $qty[$i];
+			$data["uom"] = $uom[$i];
+			$data["description"] = $description[$i];
+			$data["price"] = $price[$i];
+			$data["remarks"] = $remarks[$i];
+			$data["uname"] = $uname[$i];
+			$ins = $this->Admin->mpr_list_add($data);
+		}
+		if ($ins) {
+			echo  "ok";
+		} else {
+			echo  "error";
+		}
 		// }
 	}
 	public function date_wise_mpr_list_form()
