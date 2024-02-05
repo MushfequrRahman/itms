@@ -1014,6 +1014,8 @@ class Admin extends CI_Model
  		FROM mpr_wise_receive_list_view 
 		
 		JOIN po_insert ON po_insert.sipoid=mpr_wise_receive_list_view.sipoid
+
+		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
 		WHERE mpr_wise_receive_list_view.mprid='$mprid'";
 		$result = $this->db->query($query);
 		return $result->result_array();

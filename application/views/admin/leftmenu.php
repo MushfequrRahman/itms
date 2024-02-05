@@ -199,7 +199,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<?php /*?><li><a href="<?php echo base_url();?>Dashboard/po_create_form"><i class="fa fa-circle-o"></i>Add PO</a></li><?php */ ?>
 								<li><a href="<?php echo base_url(); ?>Dashboard/receive_from_mpr_form"><i class="fa fa-circle-o"></i>Add Receive</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_receive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Receive List</a></li>
-								<li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_sreceive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Summary List</a></li>
+								<!-- <li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_sreceive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Summary List</a></li> -->
 							</ul>
 						</li>
 						<li class="treeview">
@@ -281,7 +281,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<?php /*?><li><a href="<?php echo base_url();?>Dashboard/po_create_form"><i class="fa fa-circle-o"></i>Add PO</a></li><?php */ ?>
 								<li><a href="<?php echo base_url(); ?>Dashboard/receive_from_mpr_form"><i class="fa fa-circle-o"></i>Add Receive</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_receive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Receive List</a></li>
-								<li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_sreceive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Summary List</a></li>
+								<!-- <li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_sreceive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Summary List</a></li> -->
 							</ul>
 						</li>
 						<li class="treeview">
