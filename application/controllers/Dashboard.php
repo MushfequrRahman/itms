@@ -1895,7 +1895,7 @@ class Dashboard extends CI_Controller
 				$data["ccid1"] = $ccid . $i;
 				$data["userid"] = $userid;
 				$data["mprid"] = $mprid;
-				$data["po"] = $fid . $po[$i];
+				$data["po"] = $fid."-". $po[$i];
 				$data["supplier"] = $supplier[$i];
 				$data["podate"] = $podate[$i];
 				$data["item"] = $item[$i];
@@ -2069,7 +2069,7 @@ class Dashboard extends CI_Controller
 		$sipoid = $this->input->post('sipoid');
 		$po = $this->input->post('po');
 		$grn = $this->input->post('grn');
-		$grn = $fid . $grn;
+		//$grn = $fid . $grn;
 		$rqty = $this->input->post('rqty');
 		$rdate = $this->input->post('rdate');
 		$invoice = $this->input->post('invoice');

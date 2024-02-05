@@ -40,8 +40,6 @@
                     </div>
                   </div>
                   <div class="box-body ">
-
-
                     <div class="row">
                       <div class="col-md-5">
                         <label>Start Date<em>*</em></label>

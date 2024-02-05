@@ -1116,7 +1116,7 @@ class Admin extends CI_Model
 		FROM product_inventory 
 		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
-		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom

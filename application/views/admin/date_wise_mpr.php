@@ -116,40 +116,41 @@
     Generate Excel</button>
 
   <br /><br />
-  <table id="tableData" class="table table-hover table-bordered">
-    <thead style="background:#91b9e6;">
-      <tr>
-        <th>SL</th>
-        <th>MPR NO</th>
-        <th>Unit</th>
-        <th>MPR Prepared By</th>
-        <th>Department</th>
-        <th>Designation</th>
-        <th>Date</th>
-        <th class="filter-false">Edit/Details</th>
-        <th class="filter-false">ADD</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      $i = 1;
-      foreach ($ul as $row) { ?>
+  <div class="table-responsive">
+    <table id="tableData" class="table table-hover table-bordered">
+      <thead style="background:#91b9e6;">
         <tr>
-
-          <td style="vertical-align:middle;"><?php echo $i++; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['name']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['departmentname']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['designation']; ?></td>
-          <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
-          <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
-          <td style="vertical-align:middle;"><a href="<?php echo base_url();?>Dashboard/mpr_list_up_form/<?php echo $bn=$row['smprid'];?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
-          <td style="vertical-align:middle;"><a href="<?php echo base_url();?>Dashboard/mpr_list_add_form/<?php echo $bn=$row['smprid'];?>"><i class="fa fa-plus" style="font-size:18px"></i></a></td>
-
+          <th>SL</th>
+          <th>MPR NO</th>
+          <th>Unit</th>
+          <th>MPR Prepared By</th>
+          <th>Department</th>
+          <th>Designation</th>
+          <th>Date</th>
+          <th class="filter-false">Edit/Details</th>
+          <th class="filter-false">ADD</th>
         </tr>
-      <?php } ?>
-    </tbody>
+      </thead>
+      <tbody>
+        <?php
+        $i = 1;
+        foreach ($ul as $row) { ?>
+          <tr>
 
-  </table>
+            <td style="vertical-align:middle;"><?php echo $i++; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['name']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['departmentname']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['designation']; ?></td>
+            <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
+            <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
+            <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_list_up_form/<?php echo $bn = $row['smprid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
+            <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_list_add_form/<?php echo $bn = $row['smprid']; ?>"><i class="fa fa-plus" style="font-size:18px"></i></a></td>
+
+          </tr>
+        <?php } ?>
+      </tbody>
+    </table>
+  </div>
 </div>
