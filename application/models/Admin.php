@@ -763,6 +763,8 @@ class Admin extends CI_Model
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		LEFT JOIN brand_insert ON brand_insert.brandid=mpr_insert.brandid
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
 		JOIN department ON department.deptid=mpr_insert_id.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 		WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert_id.mprid";

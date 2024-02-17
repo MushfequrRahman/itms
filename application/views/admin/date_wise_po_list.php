@@ -113,29 +113,31 @@
         <tr>
           <th>SL</th>
           <th>MPR NO</th>
+          <th>MPR Date</th>
           <th>Unit</th>
           <th>MPR Issued By</th>
           <th>Category</th>
-          <th>Item</th>
-          <th>Model</th>
+          <th>Group</th>
+          <th>Sub Group</th>
+          <th>Product</th>
+          <th>Item/Model</th>
           <th>MPR Qty</th>
           <th>MPR Description</th>
           <th>MPR Unit Price</th>
           <th>Total Price</th>
-          <th>MPR Date</th>
           <th>PO NO</th>
+          <th>PO Date</th>
           <th>PO Qty</th>
           <th>PO Unit Price</th>
           <th>Total PO Price</th>
           <th>PO Remarks</th>
           <th>Supplier</th>
-          <th>PO Date</th>
         </tr>
       </thead>
       <tfoot>
         <tr>
-          <th colspan="14">Totals</th>
-          <th data-math="col-sum">col-sum</th>
+          <th colspan="17">Totals</th>
+          <th>&nbsp;</th>
           <th data-math="col-sum">col-sum</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
@@ -149,25 +151,29 @@
           <tr>
             <td style="vertical-align:middle;"><?php echo $i++; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
+            <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
+            <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['name'] . '--' . $row['departmentname'] . '--' . $row['designation']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['psgname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['qty'] * $row['price']; ?></td>
-            <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
-            <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
+            
             <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
+            <?php $pdate = date("d-m-Y", strtotime($row['pdate'])); ?>
+            <td style="vertical-align:middle;"><?php echo $pdate; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
             <td style="vertical-align:middle;"><?php echo number_format($row['pprice'], 2, '.', ','); ?></td>
             <td style="vertical-align:middle;"><?php echo number_format($row['pqty'] * $row['pprice'], 2, '.', ','); ?></td>
             <td style="vertical-align:middle;"><?php echo $row['premarks']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
-            <?php $pdate = date("d-m-Y", strtotime($row['pdate'])); ?>
-            <td style="vertical-align:middle;"><?php echo $pdate; ?></td>
+            
           </tr>
         <?php } ?>
       </tbody>

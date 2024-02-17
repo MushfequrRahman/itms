@@ -25,7 +25,9 @@ class Dashboard extends CI_Controller
 		$usertype = $this->session->userdata('user_type');
 		$factoryid = $this->session->userdata('factoryid');
 
-		$query =  $this->db->query("SELECT fid,SUM(price*qty) AS price,qty FROM mpr_insert_id
+		$query =  $this->db->query("SELECT fid,SUM(price*qty) AS price,
+		COUNT(DISTINCT(mpr_insert_id.smprid)) AS tsmprid,
+		qty FROM mpr_insert_id
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
 		WHERE MONTH(mdate)=MONTH(NOW()) AND YEAR(mdate)=YEAR(NOW())
 		GROUP BY fid");
@@ -33,7 +35,7 @@ class Dashboard extends CI_Controller
 			$data = array();
 			foreach ($record as $row) {
 
-				$data['label'][] = $row->fid;
+				$data['label'][] = $row->fid.'('.$row->tsmprid.')';
 
 				$data['data'][] = (int) $row->price;
 			}

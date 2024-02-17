@@ -122,9 +122,12 @@
         <tr>
           <th>SL</th>
           <th>MPR NO</th>
+          <th>MPR Date</th>
           <th>Unit</th>
           <th>MPR Prepared By</th>
           <th>Category</th>
+          <th>Group</th>
+          <th>Sub Group</th>
           <th>Item</th>
           <th>Model</th>
           <th>Brand</th>
@@ -134,13 +137,13 @@
           <th>Total Price</th>
           <th>Remarks</th>
           <th>User</th>
-          <th>Date</th>
+          
         </tr>
       </thead>
       <tfoot>
         <tr>
-          <th colspan="10">Totals</th>
-          <th data-math="col-sum">col-sum</th>
+          <th colspan="13">Totals</th>
+          <th>&nbsp;</th>
           <th data-math="col-sum">col-sum</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
@@ -156,9 +159,13 @@
 
             <td style="vertical-align:middle;"><?php echo $i++; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
+            <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
+            <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['name'] . '--' . $row['departmentname'] . '--' . $row['designation']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['psgname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['brandname']; ?></td>
@@ -168,8 +175,7 @@
             <td style="vertical-align:middle;"><?php echo number_format($row['qty'] * $row['price'], 2, '.', ','); ?></td>
             <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
-            <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
-            <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
+            
 
 
           </tr>
