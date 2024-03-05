@@ -28,12 +28,13 @@
 
   th,
   td {
-    font-size: 12px;
+    font-size: 10px;
     text-align: center;
   }
 
   td {
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 10px;
     /* font-variant: small-caps; */
   }
 
@@ -141,27 +142,27 @@
                   <tr>
                     <th>SL</th>
                     <!--<th>Select</th>-->
-                    <th>MPR NO</th>
-                    <th>Unit</th>
+                    <th style="width: 10%;">MPR NO</th>
+                    <!-- <th>Unit</th> -->
                     <!--<th>MPR Prepared By</th>-->
-                    <th>Category</th>
-                    <th>Item</th>
+                    <!-- <th>Category</th> -->
+                    <th>Product</th>
                     <th>Model</th>
                     
                     <th style="display:none;">Item Code</th>
                     <th style="display:none;">PO Code</th>
-                    <th>Qty</th>
-                    <th>Description</th>
-                    <th>MPR Price</th>
-                    <th>Remarks</th>
-                    <th>User</th>
-                    <th>Date</th>
+                    <!-- <th>MPR Qty</th> -->
+                    <!-- <th>Description</th> -->
+                    <!-- <th>MPR Price</th> -->
+                    <!-- <th>Remarks</th> -->
+                    <!-- <th>User</th> -->
+                    <!-- <th>Date</th> -->
                     <th>PO Qty</th>
-                    <th>Remaining Qty</th>
+                    <th style="width: 5%;">Remaining Qty</th>
                     <!--<th>PO Unit Price</th>-->
-                    <th>PO NO</th>
-                    <th>GRN NO</th>
-                    <th>Receive Qty</th>
+                    <th style="width: 12%;">PO NO</th>
+                    <th style="width: 10%;">GRN NO</th>
+                    <th style="width: 5%;">Receive Qty</th>
 
                     <!--<th>PO Qty Price</th>-->
 
@@ -185,35 +186,35 @@
 
                       <td style="vertical-align:middle;"><?php echo $i++; ?></td>
                       <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
-                      <td style="vertical-align:middle;"><input type="text" readonly class="form-control" id="mprid" name="mprid" value="<?php echo $row['mprid']; ?>"></td>
-                      <td style="vertical-align:middle;"><input type="text" readonly class="form-control" id="fid" name="fid" value="<?php echo $row['fid']; ?>"></td>
+                      <td style="vertical-align:middle;width: 10%;"><input type="text" readonly class="form-control" id="mprid" name="mprid" value="<?php echo $row['mprid']; ?>"></td>
+                      <!-- <td style="vertical-align:middle;"><input type="text" readonly class="form-control" id="fid" name="fid" value="<?php echo $row['fid']; ?>"></td> -->
                       <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
-                      <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
-                      <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
+                      <!-- <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td> -->
+                      <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
                       <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
                       
                       <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="item<?php echo $i; ?>" name="item" value="<?php echo $row['simprid']; ?>" /></td>
                       <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="sipoid<?php echo $i; ?>" name="sipoid" value="<?php echo $row['sipoid']; ?>" /></td>
-                      <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
-                      <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
+                      <!-- <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td> -->
+                      <!-- <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
                       <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
                       <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td>
                       <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
 
                       <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
-                      <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
+                      <td style="vertical-align:middle;"><?php echo $mdate; ?></td> -->
                       <?php /*?><td style="vertical-align:middle;"><?php echo $row['qty']-$row['pqty']." ".$row['puom'];?></td><?php */ ?>
                       <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
                       <!-- <td style="vertical-align:middle;" id="reqty<?php echo $i; ?>"><?php echo $row['pqty'] - $row['rqty']; ?></td>
                        -->
-                      <td style="vertical-align:middle;"><input type="text" readonly="readonly" class="form-control" id="reqty<?php echo $i; ?>" name="reqty" value="<?php echo $row['pqty'] - $row['rqty']; ?>"></td>
+                      <td style="vertical-align:middle; width:5%;"><input type="text" readonly="readonly" class="form-control" id="reqty<?php echo $i; ?>" name="reqty" value="<?php echo $row['pqty'] - $row['rqty']; ?>"></td>
                       <?php /*?><td style="vertical-align:middle;"><?php echo $row['pprice'];?></td><?php */ ?>
                       <?php
                       if (($row['rqty'] < $row['pqty'])) {
                       ?>
-                        <td style="vertical-align:middle;"><input type="text" readonly="readonly" class="form-control" id="po<?php echo $i; ?>" name="po" value="<?php echo $row['po']; ?>"></td>
-                        <td style="vertical-align:middle;"><input type="text" class="form-control" id="grn<?php echo $i; ?>" name="grn" placeholder="GRN PO"></td>
-                        <td style="vertical-align:middle;"><input type="text" class="form-control" id="rqty<?php echo $i; ?>" name="rqty" placeholder="Qty"></td>
+                        <td style="vertical-align:middle; width:12%;"><input type="text" readonly="readonly" class="form-control" id="po<?php echo $i; ?>" name="po" value="<?php echo $row['po']; ?>"></td>
+                        <td style="vertical-align:middle; width: 10%;"><input type="text" class="form-control" id="grn<?php echo $i; ?>" name="grn" placeholder="GRN PO"></td>
+                        <td style="vertical-align:middle; width: 5%;"><input type="text" class="form-control" id="rqty<?php echo $i; ?>" name="rqty" placeholder="Qty"></td>
                         <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="pprice[]" placeholder="Price"></td>-->
 
                         <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="supplier[]" placeholder=" supplier"></td>-->

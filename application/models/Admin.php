@@ -931,7 +931,7 @@ class Admin extends CI_Model
 	{
 
 		$query = "SELECT mpr_insert_id.mprid,mpr_insert_id.fid,item,fid,po_insert.po,
-		product_category_insert.pcname,
+		product_category_insert.pcname,pname,
 				po_insert.simprid,po_insert.spoid,
 				po_insert.sipoid,
 				mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
@@ -1012,7 +1012,10 @@ class Admin extends CI_Model
 		//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
 		//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
 		//		WHERE receive_insert.mprid='$mprid' AND grn!=''";
-		$query = "SELECT *
+		$query = "SELECT mpr_wise_receive_list_view.mprid AS mprid,fid,pccode,item,pcname,model,
+		mpr_wise_receive_list_view.po AS po,qty,puom,price,remarks,uname,mdate,grn,
+		rqty,rdate,description,mpr_wise_receive_list_view.simprid AS simprid,mpr_wise_receive_list_view.sipoid AS sipoid,pcode,
+		pname,pqty,pprice,iqty
  		FROM mpr_wise_receive_list_view 
 		
 		JOIN po_insert ON po_insert.sipoid=mpr_wise_receive_list_view.sipoid

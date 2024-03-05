@@ -1897,7 +1897,7 @@ class Dashboard extends CI_Controller
 				$data["ccid1"] = $ccid . $i;
 				$data["userid"] = $userid;
 				$data["mprid"] = $mprid;
-				$data["po"] = $fid."-". $po[$i];
+				$data["po"] = $po[$i];
 				$data["supplier"] = $supplier[$i];
 				$data["podate"] = $podate[$i];
 				$data["item"] = $item[$i];
