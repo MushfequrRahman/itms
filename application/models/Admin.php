@@ -1026,6 +1026,27 @@ class Admin extends CI_Model
 		return $result->result_array();
 	}
 
+	public function date_wise_receive_list($pd, $wd)
+	{
+
+		$pd = date("Y-m-d", strtotime($pd));
+		$wd = date("Y-m-d", strtotime($wd));
+		$query = "SELECT mpr_wise_receive_list_view1.mprid AS mprid,fid,pccode,item,pcname,model,
+		mpr_wise_receive_list_view1.po AS po,qty,puom,price,remarks,uname,mdate,grn,
+		rqty,rdate,description,mpr_wise_receive_list_view1.simprid AS simprid,
+		mpr_wise_receive_list_view1.sipoid AS sipoid,pcode,
+		pname,pqty,pprice,iqty
+ 		FROM mpr_wise_receive_list_view1 
+		
+		LEFT JOIN po_insert ON po_insert.sipoid=mpr_wise_receive_list_view1.sipoid
+
+		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
+		WHERE mpr_wise_receive_list_view1.mdate between '$pd' AND '$wd' 
+		ORDER BY mpr_wise_receive_list_view1.mprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+
 	public function mpr_wise_sreceive_list($mprid)
 	{
 		$query = "SELECT * FROM po_qty_remaining 

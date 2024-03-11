@@ -2125,6 +2125,28 @@ class Dashboard extends CI_Controller
 		$data['ul'] = $this->Admin->mpr_wise_sreceive_list($mprid);
 		$this->load->view('admin/mpr_wise_sreceive_list', $data);
 	}
+	public function date_wise_receive_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Receive List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/date_wise_receive_form', $data);
+	}
+	public function date_wise_receive_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		//$factoryid = $this->input->post('factoryid');
+		$pd = $this->input->post('pd');
+		$wd = $this->input->post('wd');
+		$data['pd'] = $pd;
+		$data['wd'] = $wd;
+		$data['ul'] = $this->Admin->date_wise_receive_list($pd, $wd);
+		$this->load->view('admin/date_wise_receive_list', $data);
+	}
 	public function product_inventory_insert_form()
 	{
 		$this->load->database();
