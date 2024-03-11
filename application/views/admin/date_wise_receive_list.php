@@ -128,7 +128,8 @@
         <th>Receive Qty</th>
         <th>Received Date</th>
         <th>Inventory Qty</th>
-        <th>Po Status</th>
+        <!-- <th>Po Status</th> -->
+        <th>Status</th>
         <!--<th>PO Qty</th>
                   <th>PO Qty Price</th>
                   
@@ -143,6 +144,7 @@
         <th colspan="13">Totals</th>
 
         <th data-math="col-sum">col-sum</th>
+        <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
@@ -203,12 +205,23 @@
             <!-- <?php echo date("d-m-Y", strtotime($row['rdate'])); ?> -->
           </td>
           <td style="vertical-align:middle;"><?php echo $row['iqty'] . " " . $row['puom']; ?></td>
-          <td style="vertical-align:middle;">
+          <!-- <td style="vertical-align:middle;">
             <?php
             if ($row['po'] != '') {
               echo "Created";
             } else {
               echo "Remaining";
+            }
+            ?></td> -->
+            <td style="vertical-align:middle;">
+            <?php
+            if (($row['rqty'] < $row['pqty']) ) {
+              echo "pending";
+            } elseif ($row['pqty']=='') {
+              echo "Remaining";
+            }
+            else{
+              echo "Received";
             }
             ?></td>
         </tr>
