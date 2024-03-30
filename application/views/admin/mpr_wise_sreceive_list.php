@@ -114,8 +114,9 @@ td{font-weight: 600; font-variant:small-caps;}
                   <td style="vertical-align:middle;"><?php echo $row['rqty']." ".$row['puom'];?></td>
                   
                 </tr>
+                <?php } ?>
                 </tbody>
-               <?php } ?>
+               
               
               </table>
               

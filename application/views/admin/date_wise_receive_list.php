@@ -143,7 +143,8 @@
       <tr>
         <th colspan="13">Totals</th>
 
-        <th data-math="col-sum">col-sum</th>
+        <!-- <th data-math="col-sum">col-sum</th> -->
+
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
@@ -213,14 +214,13 @@
               echo "Remaining";
             }
             ?></td> -->
-            <td style="vertical-align:middle;">
+          <td style="vertical-align:middle;">
             <?php
-            if (($row['rqty'] < $row['pqty']) ) {
+            if (($row['rqty'] < $row['pqty'])) {
               echo "pending";
-            } elseif ($row['pqty']=='') {
+            } elseif ($row['pqty'] == '') {
               echo "Remaining";
-            }
-            else{
+            } else {
               echo "Received";
             }
             ?></td>
