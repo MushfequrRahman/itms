@@ -155,6 +155,22 @@
 									</div>
 									<br /> -->
 									<div class="box-body table-responsive no-padding">
+										<form action="<?php echo base_url() ?>Dashboard/product_inventory_list_xls" class="excel-upl" id="excel-upl" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+											<div class="row padall">
+												<div class="col-lg-12">
+													<div class="float-right">
+
+														<input type="radio" checked="checked" name="export_type" value="xlsx"> .xlsx
+														<input type="radio" name="export_type" value="xls"> .xls
+														<input type="radio" name="export_type" value="csv"> .csv
+														<button type="submit" name="import" class="btn btn-primary btn-xs">Export</button>
+													</div>
+												</div>
+											</div>
+										</form>
+
+
+
 										<!-- <div class="scrollable-table-wrapper"> -->
 										<table id="tableData" class="table table-hover tablesorter">
 											<!-- <thead style="background:#91b9e6;position: sticky;top: 0;"> -->

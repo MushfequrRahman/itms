@@ -31,16 +31,16 @@ class Dashboard extends CI_Controller
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
 		WHERE MONTH(mdate)=MONTH(NOW()) AND YEAR(mdate)=YEAR(NOW())
 		GROUP BY fid");
-			$record = $query->result();
-			$data = array();
-			foreach ($record as $row) {
+		$record = $query->result();
+		$data = array();
+		foreach ($record as $row) {
 
-				$data['label'][] = $row->fid.'('.$row->tsmprid.')';
+			$data['label'][] = $row->fid . '(' . $row->tsmprid . ')';
 
-				$data['data'][] = (int) $row->price;
-			}
+			$data['data'][] = (int) $row->price;
+		}
 
-			$data['chart_data'] = json_encode($data);
+		$data['chart_data'] = json_encode($data);
 		$this->load->view('admin/toprightnav', $data);
 		$this->load->view('admin/leftmenu');
 		$this->load->view('admin/dashboard', $data);
@@ -2206,5 +2206,144 @@ class Dashboard extends CI_Controller
 		//		$data['il']=$this->Admin->internet();
 		$data['ul'] = $this->Admin->product_inventory_list();
 		$this->load->view('admin/product_inventory_list', $data);
+	}
+
+	public function product_inventory_list_xls()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		//$factoryid = $this->input->post('factoryid');
+		// $pd = $this->input->post('pd');
+		// $wd = $this->input->post('wd');
+		$extension = $this->input->post('export_type');
+		if (!empty($extension)) {
+			$extension = $extension;
+		} else {
+			$extension = 'xlsx';
+		}
+		$this->load->helper('download');
+		$data = array();
+		$data['title'] = 'Export Excel Sheet';
+		// get employee list
+		$empInfo = $this->Admin->product_inventory_list();
+		$fileName = 'product_inventory_list-' . time();
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+
+		$sheet->setCellValue('A1', 'Code');
+		$sheet->setCellValue('B1', 'Factory');
+		$sheet->setCellValue('C1', 'Supplier');
+		$sheet->setCellValue('D1', 'Category');
+		$sheet->setCellValue('E1', 'Group');
+		$sheet->setCellValue('F1', 'Sub Group');
+		$sheet->setCellValue('G1', 'MPR');
+		$sheet->setCellValue('H1', 'Name');
+		$sheet->setCellValue('I1', 'Serial Number');
+		$sheet->setCellValue('J1', 'Item');
+		$sheet->setCellValue('K1', 'Description');
+		$sheet->setCellValue('L1', 'PO Price');
+		$sheet->setCellValue('M1', 'Qty');
+		$sheet->setCellValue('N1', 'Purchase Date');
+		$sheet->setCellValue('O1', 'Warranty');
+		$sheet->setCellValue('P1', 'End Date');
+		$sheet->setCellValue('Q1', 'Remaining Day');
+		$sheet->setCellValue('R1', 'Status/Return');
+		$sheet->setCellValue('S1', 'UserID');
+		$sheet->setCellValue('T1', 'UserName');
+		$sheet->setCellValue('U1', 'UserDepartment');
+		$sheet->setCellValue('V1', 'Given Date');
+
+		// 
+		$rowCount = 2;
+		foreach ($empInfo as $element) {
+			$sheet->setCellValue('A' . $rowCount, $element['pacode']);
+			$sheet->setCellValue('B' . $rowCount, $element['factoryid']);
+			$sheet->setCellValue('C' . $rowCount, $element['supplier']);
+			$sheet->setCellValue('D' . $rowCount, $element['pcname']);
+			$sheet->setCellValue('E' . $rowCount, $element['pgname']);
+			$sheet->setCellValue('F' . $rowCount, $element['psgname']);
+			$sheet->setCellValue('G' . $rowCount, $element['mprid']);
+			$sheet->setCellValue('H' . $rowCount, $element['pname']);
+			$sheet->setCellValue('I' . $rowCount, $element['sn']);
+			$sheet->setCellValue('J' . $rowCount, $element['item']);
+			$sheet->setCellValue('K' . $rowCount, $element['description']);
+			$sheet->setCellValue('L' . $rowCount, number_format($element['pprice'], 2, '.', ','));
+			$sheet->setCellValue('M' . $rowCount, $element['iqty'] . " " . $element['puom']);
+			$sheet->setCellValue('N' . $rowCount, date("d-m-Y", strtotime($element['pdate'])));
+
+			$convert = $element['warranty']; // days you want to convert
+			$years = ($convert / 365); // days / 365 days
+			$years = floor($years); // Remove all decimals
+			$month = ($convert % 365) / 30.5; // I choose 30.5 for Month (30,31) ;)
+			$month = floor($month); // Remove all decimals
+			$days = ($convert % 365) % 30.5; // the rest of days
+
+			$sheet->setCellValue('O' . $rowCount,  $years . ' years - ' . $month . ' month - ' . $days . ' days');
+			$sheet->setCellValue('P' . $rowCount, date("d-m-Y", strtotime("+" . $element['warranty'] . " days", strtotime($element['pdate']))));
+
+			$enddate = date("d-m-Y", strtotime("+" . $element['warranty'] . " days", strtotime($element['pdate'])));
+			$now = time(); // or your date as well
+			$enddate = strtotime($enddate);
+			$datediff = $enddate - $now;
+			$remain = round($datediff / (60 * 60 * 24));
+
+			$sheet->setCellValue('Q' . $rowCount, $remain);
+
+			if ($element['pastatus'] == 1) {
+				$sheet->setCellValue('R' . $rowCount, "Using");
+			} elseif ($element['pastatus'] == 0) {
+				$sheet->setCellValue('R' . $rowCount, "Free");
+			} elseif ($element['pastatus'] == 2) {
+				$sheet->setCellValue('R' . $rowCount, $element['releasetype']);
+			}
+			if ($element['pastatus'] == 1) {
+				$sheet->setCellValue('S' . $rowCount, $element['userid']);
+			} 
+			else {
+				$sheet->setCellValue('S' . $rowCount, "");
+			}
+			if ($element['pastatus'] == 1) {
+				$sheet->setCellValue('T' . $rowCount, $element['name']);
+			}
+			else {
+				$sheet->setCellValue('T' . $rowCount, "");
+			}
+			if ($element['pastatus'] == 1) {
+				$sheet->setCellValue('U' . $rowCount, $element['departmentname']);
+			}
+			else {
+				$sheet->setCellValue('U' . $rowCount, "");
+			}
+			if ($element['pastatus'] == 1) {
+				$sheet->setCellValue('V' . $rowCount, date("d-m-Y", strtotime($element['adate'])));
+			}
+			else {
+				$sheet->setCellValue('V' . $rowCount, "");
+			}
+			
+			
+
+
+			$rowCount++;
+		}
+
+		if ($extension == 'csv') {
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
+			$fileName = $fileName . '.csv';
+		} elseif ($extension == 'xlsx') {
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+			$fileName = $fileName . '.xlsx';
+		} else {
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+			$fileName = $fileName . '.xls';
+		}
+
+		$this->output->set_header('Content-Type: application/vnd.ms-excel');
+		$this->output->set_header("Content-type: application/csv");
+		$this->output->set_header('Cache-Control: max-age=0');
+		$writer->save(ROOT_UPLOAD_PATH . $fileName);
+		//redirect(HTTP_UPLOAD_PATH.$fileName); 
+		$filepath = file_get_contents(ROOT_UPLOAD_PATH . $fileName);
+		force_download($fileName, $filepath);
 	}
 }
