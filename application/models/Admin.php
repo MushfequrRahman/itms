@@ -1062,9 +1062,11 @@ class Admin extends CI_Model
 
 
 		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
-		description,remarks,mdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty FROM mpr_insert_id 
+		description,remarks,mdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,invoice 
+		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
 		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 		LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
 		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model

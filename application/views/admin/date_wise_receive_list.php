@@ -119,6 +119,8 @@
         <!--<th>User</th>
                   <th>Date</th>-->
         <th>PO</th>
+        <th>Supplier</th>
+        <th>Invoice</th>
         <th>PO Qty</th>
         <th>Total Price</th>
         <!-- <th>Remarks</th>
@@ -145,6 +147,7 @@
 
         <!-- <th data-math="col-sum">col-sum</th> -->
 
+        <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
@@ -190,6 +193,8 @@
           <?php /*?><?php $mdate=date("d-m-Y", strtotime($row['mdate']));?>
                   <td style="vertical-align:middle;"><?php echo $mdate;?></td><?php */ ?>
           <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] * $row['pprice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['grn']; ?></td>
