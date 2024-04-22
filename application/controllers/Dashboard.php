@@ -1847,6 +1847,18 @@ class Dashboard extends CI_Controller
 		$filepath = file_get_contents(ROOT_UPLOAD_PATH . $fileName);
 		force_download($fileName, $filepath);
 	}
+	public function mpr_wise_mpr_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Product Details List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$mprid = $this->uri->segment(3);
+		$data['ul'] = $this->Admin->mpr_wise_mpr_list($mprid);
+		$this->load->view('admin/mpr_wise_mpr_list', $data);
+	}
 	public function po_create_form()
 	{
 		$this->load->database();

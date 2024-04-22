@@ -771,6 +771,23 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
+	public function mpr_wise_mpr_list($mprid)
+	{
+		$query = "SELECT * FROM mpr_insert 
+		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		LEFT JOIN brand_insert ON brand_insert.brandid=mpr_insert.brandid
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		WHERE  mpr_insert_id.mprid='$mprid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
 
 	public function single_mpr_id($smprid)
 	{

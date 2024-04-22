@@ -246,7 +246,7 @@
 														<td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
 														<td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
 														<td style="vertical-align:middle;"><?php echo $row['psgname']; ?></td>
-														<td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
+														<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_mpr_list/<?php echo $bn = $row['mprid']; ?>"><?php echo $row['mprid']; ?></a></td>
 														<td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
 
 														<td style="vertical-align:middle;"><?php echo $row['sn']; ?></td>
