@@ -99,46 +99,27 @@
       </tr>
       <tr>
         <th>SL</th>
-        <!--<th>Select</th>-->
         <th>MPR NO</th>
         <th>Unit</th>
         <th>User</th>
-        <!--<th>MPR Prepared By</th>-->
         <th>Category</th>
         <th>Product</th>
         <th>Item/Model</th>
-
-        <!--<th>Item Code</th>-->
         <th>MPR Qty</th>
         <th>Description</th>
         <th>Remarks</th>
-        <th>MPR Date</th>
-        <!--<th>Description</th>-->
-        <!--<th>MPR Price</th>-->
-        <!--<th>Remarks</th>-->
-        <!--<th>User</th>
-                  <th>Date</th>-->
-        <th>PO</th>
+        <th>MPR Submission Date</th>
+        <!-- <th>PO</th>
         <th>Supplier</th>
         <th>Invoice</th>
         <th>PO Qty</th>
         <th>Total Price</th>
-        <!-- <th>Remarks</th>
-                  <th>Date</th> -->
-        <!--<th>PO NO</th>-->
         <th>GRN</th>
         <th>Receive Qty</th>
         <th>Received Date</th>
-        <th>Inventory Qty</th>
-        <!-- <th>Po Status</th> -->
+        <th>Inventory Qty</th> -->
         <th>Status</th>
-        <!--<th>PO Qty</th>
-                  <th>PO Qty Price</th>
-                  
-                  <th>Supplier</th>
-                  <th>Date</th>
-                  <th>Remarks</th>-->
-        <!--<th>Status</th>-->
+        <th>Count Days</th>
       </tr>
     </thead>
     <tfoot>
@@ -147,14 +128,14 @@
 
         <!-- <th data-math="col-sum">col-sum</th> -->
 
+        <!-- <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
+        <th>&nbsp;</th> -->
       </tr>
     </tfoot>
     <tbody>
@@ -179,28 +160,28 @@
           <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td>
-          <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['mdate'])); ?></td>
-          <?php /*?><td style="vertical-align:middle;"><?php echo $row['description'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['price'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['remarks'];?></td><?php */ ?>
-          <?php /*?><td style="vertical-align:middle;"><?php echo $row['po'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['pqty']." ".$row['puom'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['pprice'];?></td>
-                  <td style="vertical-align:middle;"><?php echo $row['premarks'];?></td>
-                  <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['pdate']));?></td><?php */ ?>
-          <?php /*?><td style="vertical-align:middle;"><?php echo $row['po'];?></td><?php */ ?>
-          <?php /*?><td style="vertical-align:middle;"><?php echo $row['uname'];?></td><?php */ ?>
-
-          <?php /*?><?php $mdate=date("d-m-Y", strtotime($row['mdate']));?>
-                  <td style="vertical-align:middle;"><?php echo $mdate;?></td><?php */ ?>
-          <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
+          <?php if($row['msdate']=='0000-00-00')
+          {
+            ?>
+            <td style="vertical-align:middle;">0000-00-00</td>
+            <?php
+          }
+          else{
+            ?>
+            <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['msdate'])); ?></td>
+            <?php
+          }
+           
+          ?>
+          
+          <!-- <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] * $row['pprice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['grn']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['rqty'] . " " . $row['puom']; ?></td>
-          <td style="vertical-align:middle;">
+          <td style="vertical-align:middle;"><?php echo $row['rqty'] . " " . $row['puom']; ?></td> -->
+          <!-- <td style="vertical-align:middle;">
             <?php
             if ($row['rdate'] != '') {
               echo date("d-m-Y", strtotime($row['rdate']));
@@ -209,9 +190,9 @@
             }
             ?>
 
-            <!-- <?php echo date("d-m-Y", strtotime($row['rdate'])); ?> -->
-          </td>
-          <td style="vertical-align:middle;"><?php echo $row['iqty'] . " " . $row['puom']; ?></td>
+           
+          </td> -->
+          
           <!-- <td style="vertical-align:middle;">
             <?php
             if ($row['po'] != '') {
@@ -230,6 +211,7 @@
               echo "Received";
             }
             ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['cday']; ?></td>
         </tr>
       <?php } ?>
     </tbody>

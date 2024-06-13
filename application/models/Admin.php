@@ -1062,7 +1062,8 @@ class Admin extends CI_Model
 
 
 		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
-		description,remarks,mdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,invoice 
+		description,remarks,mdate,msdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,
+		invoice,DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
 		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid

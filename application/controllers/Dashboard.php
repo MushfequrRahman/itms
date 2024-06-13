@@ -1530,7 +1530,11 @@ class Dashboard extends CI_Controller
 		date_default_timezone_set('Asia/Dhaka');
 		$mprdate = $this->input->post('mprdate');
 		$mprdate = date("Y-m-d", strtotime($mprdate));
-		$fmy = strtotime($mprdate);
+
+		$mprsdate = $this->input->post('mprsdate');
+		$mprsdate = date("Y-m-d", strtotime($mprsdate));
+
+		$fmy = strtotime($mprsdate);
 		$month = date("F", $fmy);
 		$year = date("Y", $fmy);
 		$d = date('Y-m-d');
@@ -1538,6 +1542,9 @@ class Dashboard extends CI_Controller
 		$d1 = str_replace("-", "", $d);
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
+
+
+		
 
 		$this->load->database();
 		$this->load->library('form_validation');
@@ -1563,7 +1570,7 @@ class Dashboard extends CI_Controller
 		$remarks =  str_replace("'", "\'", $remarks);
 		$uname = $this->input->post('uname');
 
-		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$userid','$mprid','$factoryid','$departmentid','$name','$designationid','$mprdate','$month','$year','0')";
+		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$userid','$mprid','$factoryid','$departmentid','$name','$designationid','$mprdate','$mprsdate','$month','$year','0')";
 		$query1 = $this->db->query($sql1);
 
 
@@ -2158,6 +2165,28 @@ class Dashboard extends CI_Controller
 		$data['wd'] = $wd;
 		$data['ul'] = $this->Admin->date_wise_receive_list($pd, $wd);
 		$this->load->view('admin/date_wise_receive_list', $data);
+	}
+	public function date_wise_remaining_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Remaining List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/date_wise_remaining_form', $data);
+	}
+	public function date_wise_remaining_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		//$factoryid = $this->input->post('factoryid');
+		$pd = $this->input->post('pd');
+		$wd = $this->input->post('wd');
+		$data['pd'] = $pd;
+		$data['wd'] = $wd;
+		$data['ul'] = $this->Admin->date_wise_receive_list($pd, $wd);
+		$this->load->view('admin/date_wise_remaining_list', $data);
 	}
 	public function product_inventory_insert_form()
 	{

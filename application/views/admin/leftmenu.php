@@ -200,6 +200,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<li><a href="<?php echo base_url(); ?>Dashboard/receive_from_mpr_form"><i class="fa fa-circle-o"></i>Add Receive</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_receive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Receive List</a></li>
 								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_receive_form"><i class="fa fa-circle-o"></i>Date Wise Receive List</a></li>
+								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_remaining_form"><i class="fa fa-circle-o"></i>Date Wise Remaining List</a></li>
 								<!-- <li><a href="<?php echo base_url(); ?>Dashboard/mpr_wise_sreceive_list_form"><i class="fa fa-circle-o"></i>MPR Wise Summary List</a></li> -->
 							</ul>
 						</li>

@@ -113,12 +113,12 @@ foreach ($bl as $row) {
                       <br />
                       <div class="row">
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <label>Name(Prepared By)<em>*</em></label>
                           <input type="text" class="form-control name" name="name" placeholder="Enter Name">
                           <?php echo form_error('name', '<div class="error">', '</div>');  ?>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <label>Designation<em>*</em></label>
                           <select class="form-control designationid" name="designationid" id="designationid">
                             <option value="">Select....</option>
@@ -132,11 +132,13 @@ foreach ($bl as $row) {
                           </select>
                           <?php echo form_error('designationid', '<div class="error">', '</div>');  ?>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <label>MPR Create Date<em>*</em></label>
                           <input type="text" class="form-control pd" readonly name="mprdate" id="mprdate" value="<?php echo date('d-m-Y'); ?>">
-                          <!--<input type="date" class="form-control" name="mprdate" id="mprdate">-->
-                          <?php /*?><?php echo form_error('dobdate', '<div class="error">', '</div>');  ?><?php */ ?>
+                        </div>
+                        <div class="col-md-3">
+                          <label>MPR Submission Date<em>*</em></label>
+                          <input type="text" class="form-control pd" readonly name="mprsdate" id="mprsdate" value="<?php echo date('d-m-Y'); ?>">
                         </div>
                       </div>
                       <br />
