@@ -743,7 +743,7 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT * FROM mpr_insert_id 
+		$query = "SELECT mprid,mdate,fid,name,departmentname,designation,smprid FROM mpr_insert_id 
 			
 			
 			JOIN department ON department.deptid=mpr_insert_id.mdeptid
@@ -756,7 +756,9 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT * FROM mpr_insert 
+		$query = "SELECT mprid,mdate,fid,name,departmentname,designation,pcname,
+		pgname,psgname,pname,item,brandname,qty,puom,description,price,remarks,uname
+		 FROM mpr_insert 
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
@@ -773,7 +775,10 @@ class Admin extends CI_Model
 	}
 	public function mpr_wise_mpr_list($mprid)
 	{
-		$query = "SELECT * FROM mpr_insert 
+		$query = "SELECT mprid,mdate,fid,name,
+		departmentname,designation,pcname,pgname,psgname,pname,item,brandname,qty,puom,description,price,
+		remarks,uname
+		 FROM mpr_insert 
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
@@ -904,7 +909,10 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT * FROM po_insert 
+		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
+		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
+		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid
+		 FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
 		JOIN mpr_insert_id ON mpr_insert_id.mprid=po_insert.mprid
@@ -938,6 +946,67 @@ class Admin extends CI_Model
 		LEFT JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
 		WHERE mpr_insert_id.mprid='$mprid'
 		GROUP BY mpr_insert.simprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function single_po($sipoid)
+	{
+		$pd = date("Y-m-d", strtotime($pd));
+		$wd = date("Y-m-d", strtotime($wd));
+		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
+		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
+		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,po_insert.spoid,po_insert.simprid,supplierid
+		 FROM po_insert 
+		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.mprid=po_insert.mprid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert.simprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		WHERE sipoid='$sipoid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function po_list_update($spoid,$sipoid,$userid,$mprid,$po,$simprid,$pqty,$premarks,$pprice,$supplier,$podate )
+	{
+		date_default_timezone_set('Asia/Dhaka');
+		$d = date('Y-m-d');
+		$t = date("H:i:s");
+		$d1 = str_replace("-", "", $d);
+		$t1 = str_replace(":", "", $t);
+		$ccid = $d1 . $t1;
+		
+		$podate = date("Y-m-d", strtotime($podate));
+		$sql = "update po_insert SET po='$po',pqty='$pqty',premarks='$premarks',pprice='$pprice',supplier='$supplier',pdate='$podate' WHERE sipoid='$sipoid'";
+		
+
+		$sql1 = "INSERT INTO po_insert_edit_log VALUES ('$ccid','$spoid','$sipoid','$userid','$mprid','$po','$simprid','$pqty','$premarks','$pprice','$supplier','$podate',CURDATE(),CURTIME())";
+		$query1 = $this->db->query($sql1);
+		return $query = $this->db->query($sql);
+	}
+	public function po_list_log($sipoid)
+	{
+		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
+		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
+		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,
+		po_insert_edit_log.spoid,po_insert_edit_log.simprid,supplierid,
+		pedate,petime
+		 FROM po_insert_edit_log 
+		JOIN po_insert_id ON po_insert_edit_log.spoid=po_insert_id.spoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert_edit_log.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.mprid=po_insert_edit_log.mprid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN po_qty_remaining ON po_qty_remaining.simprid=po_insert_edit_log.simprid
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		JOIN supplier_insert ON supplier_insert.supplierid=po_insert_edit_log.supplier
+		WHERE sipoid='$sipoid'";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
@@ -1027,7 +1096,7 @@ class Admin extends CI_Model
 		//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
 		//		WHERE receive_insert.mprid='$mprid' AND grn!=''";
 		$query = "SELECT mpr_wise_receive_list_view.mprid AS mprid,fid,pccode,item,pcname,model,
-		mpr_wise_receive_list_view.po AS po,qty,puom,price,remarks,uname,mdate,grn,
+		mpr_wise_receive_list_view.po AS po,qty,puom,price,remarks,uname,mdate,grn,invoice,
 		rqty,rdate,description,mpr_wise_receive_list_view.simprid AS simprid,mpr_wise_receive_list_view.sipoid AS sipoid,pcode,
 		pname,pqty,pprice,iqty
  		FROM mpr_wise_receive_list_view 
@@ -1045,20 +1114,6 @@ class Admin extends CI_Model
 
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		// $query = "SELECT mpr_wise_receive_list_view1.mprid AS mprid,fid,pccode,item,pcname,model,
-		// mpr_wise_receive_list_view1.po AS po,qty,puom,price,remarks,uname,mdate,grn,
-		// rqty,rdate,description,mpr_wise_receive_list_view1.simprid AS simprid,
-		// mpr_wise_receive_list_view1.sipoid AS sipoid,pcode,
-		// pname,pqty,pprice,iqty
-		// FROM mpr_wise_receive_list_view1 
-
-		// LEFT JOIN po_insert ON po_insert.sipoid=mpr_wise_receive_list_view1.sipoid
-
-		// LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
-		// WHERE mpr_wise_receive_list_view1.mdate between '$pd' AND '$wd' 
-		// ORDER BY mpr_wise_receive_list_view1.mprid";
-		// $result = $this->db->query($query);
-		// return $result->result_array();
 
 
 		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
@@ -1076,7 +1131,34 @@ class Admin extends CI_Model
 						JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 						JOIN department ON department.deptid=mpr_insert_id.mdeptid
 						JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
-		WHERE mpr_insert_id .mdate between '$pd' AND '$wd' 
+		WHERE rdate between '$pd' AND '$wd' 
+		ORDER BY mpr_insert_id .mprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function date_wise_remaining_list($pd, $wd)
+	{
+
+		$pd = date("Y-m-d", strtotime($pd));
+		$wd = date("Y-m-d", strtotime($wd));
+
+
+		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
+		description,remarks,mdate,msdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,
+		invoice,DATEDIFF(CURDATE(),msdate) AS cday
+		FROM mpr_insert_id 
+		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
+		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+						JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+						JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+						JOIN department ON department.deptid=mpr_insert_id.mdeptid
+						JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		WHERE mdate between '$pd' AND '$wd' 
 		ORDER BY mpr_insert_id .mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();

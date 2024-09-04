@@ -85,6 +85,7 @@
                   <th>Date</th> -->
         <!--<th>PO NO</th>-->
         <th>GRN</th>
+        <th>Invoice</th>
         <th>Receive Qty</th>
         <th>Date</th>
         <th>Inventory Qty</th>
@@ -136,6 +137,7 @@
           <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] * $row['pprice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['grn']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['rqty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['rdate'])); ?></td>
           <td style="vertical-align:middle;"><?php echo $row['iqty'] . " " . $row['puom']; ?></td>

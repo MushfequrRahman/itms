@@ -132,6 +132,8 @@
           <th>Total PO Price</th>
           <th>PO Remarks</th>
           <th>Supplier</th>
+          <th>Edit</th>
+          <th>PO Log</th>
         </tr>
       </thead>
       <tfoot>
@@ -141,7 +143,7 @@
           <th data-math="col-sum">col-sum</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <th>&nbsp;</th>
+          
         </tr>
       </tfoot>
       <tbody>
@@ -173,7 +175,8 @@
             <td style="vertical-align:middle;"><?php echo number_format($row['pqty'] * $row['pprice'], 2, '.', ','); ?></td>
             <td style="vertical-align:middle;"><?php echo $row['premarks']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
-            
+            <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_up_form/<?php echo $bn = $row['sipoid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
+            <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_log/<?php echo $bn = $row['sipoid']; ?>"><i class="fa fa-history" style="font-size:20px"></i></a></td>
           </tr>
         <?php } ?>
       </tbody>

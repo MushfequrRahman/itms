@@ -1544,7 +1544,7 @@ class Dashboard extends CI_Controller
 		$ccid = $d1 . $t1;
 
 
-		
+
 
 		$this->load->database();
 		$this->load->library('form_validation');
@@ -2055,6 +2055,97 @@ class Dashboard extends CI_Controller
 		$data['sl'] = $this->Admin->supplier_list();
 		$this->load->view('admin/po_for_mpr_list', $data);
 	}
+	public function po_list_up_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'PO Update';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		//$data['il']=$this->Admin->item_list();
+		$sipoid = $this->uri->segment(3);
+		$data['sl'] = $this->Admin->supplier_list();
+
+		$data['pl'] = $this->Admin->single_po($sipoid);
+		$this->load->view('admin/po_list_up_form', $data);
+	}
+	public function po_list_update()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		$sipoid = $this->input->post('sipoid');
+		// if ($this->input->post('submit')) {
+		// 	$simprid = $this->input->post('simprid');
+		// 	$product = $this->input->post('product');
+		// 	$item = $this->input->post('item');
+		// 	$brand = $this->input->post('brand');
+		// 	$qty = $this->input->post('qty');
+		// 	$uom = $this->input->post('uom');
+		// 	$description = $this->input->post('description');
+		// 	$description =  str_replace("'", "\'", $description);
+		// 	$price = $this->input->post('price');
+		// 	$remarks = $this->input->post('remarks');
+		// 	$remarks =  str_replace("'", "\'", $remarks);
+		// 	$uname = $this->input->post('uname');
+
+
+			if ($this->input->post('submit')) {
+				$po = $this->form_validation->set_rules('po', 'PO', 'required');
+				$pqty = $this->form_validation->set_rules('pqty', 'Qty', 'required');
+				$pprice = $this->form_validation->set_rules('pprice', 'Price', 'required');
+				if ($this->form_validation->run() == FALSE) {
+					$this->session->set_flashdata('validation_errors', validation_errors());
+					redirect('Dashboard/po_list_up_form/' . $sipoid . '/');
+				} else {
+					$userid = $this->input->post('userid');
+					$spoid = $this->input->post('spoid');
+					$sipoid = $this->input->post('sipoid');
+					$mprid = $this->input->post('mprid');
+					$simprid = $this->input->post('simprid');
+					$po = $this->input->post('po');
+					$podate = $this->input->post('podate');
+					$pqty = $this->input->post('pqty');
+					$pprice = $this->input->post('pprice');
+					$premarks = $this->input->post('premarks');
+					$premarks =  str_replace("'", "\'", $premarks);
+					$supplier = $this->input->post('supplier');
+	
+					$ins = $this->Admin->po_list_update($spoid,$sipoid,$userid,$mprid,$po,$simprid,$pqty,$premarks,$pprice,$supplier,$podate );
+	
+					if ($ins == TRUE) {
+						$this->session->set_flashdata('Successfully', 'Successfully Updated');
+					} else {
+						$this->session->set_flashdata('Successfully', 'Failed To Updated');
+					}
+					redirect('Dashboard/po_list_up_form/' . $sipoid . '/');
+				}
+			}
+
+
+
+			
+			// if ($ins == TRUE) {
+			// 	$this->session->set_flashdata('Successfully', 'Successfully Updated');
+			// } else {
+			// 	$this->session->set_flashdata('Successfully', 'Failed To Updated');
+			// }
+			// redirect('Dashboard/date_wise_mpr_form', 'refresh');
+		//}
+	}
+	public function po_list_log()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'PO Log List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$sipoid = $this->uri->segment(3);
+		$data['ul'] = $this->Admin->po_list_log($sipoid);
+		$this->load->view('admin/po_list_log', $data);
+	}
 	public function receive_from_mpr_form()
 	{
 		$this->load->database();
@@ -2185,7 +2276,7 @@ class Dashboard extends CI_Controller
 		$wd = $this->input->post('wd');
 		$data['pd'] = $pd;
 		$data['wd'] = $wd;
-		$data['ul'] = $this->Admin->date_wise_receive_list($pd, $wd);
+		$data['ul'] = $this->Admin->date_wise_remaining_list($pd, $wd);
 		$this->load->view('admin/date_wise_remaining_list', $data);
 	}
 	public function product_inventory_insert_form()
@@ -2339,30 +2430,26 @@ class Dashboard extends CI_Controller
 			}
 			if ($element['pastatus'] == 1) {
 				$sheet->setCellValue('S' . $rowCount, $element['userid']);
-			} 
-			else {
+			} else {
 				$sheet->setCellValue('S' . $rowCount, "");
 			}
 			if ($element['pastatus'] == 1) {
 				$sheet->setCellValue('T' . $rowCount, $element['name']);
-			}
-			else {
+			} else {
 				$sheet->setCellValue('T' . $rowCount, "");
 			}
 			if ($element['pastatus'] == 1) {
 				$sheet->setCellValue('U' . $rowCount, $element['departmentname']);
-			}
-			else {
+			} else {
 				$sheet->setCellValue('U' . $rowCount, "");
 			}
 			if ($element['pastatus'] == 1) {
 				$sheet->setCellValue('V' . $rowCount, date("d-m-Y", strtotime($element['adate'])));
-			}
-			else {
+			} else {
 				$sheet->setCellValue('V' . $rowCount, "");
 			}
-			
-			
+
+
 
 
 			$rowCount++;

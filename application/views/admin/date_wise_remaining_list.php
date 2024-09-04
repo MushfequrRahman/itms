@@ -109,8 +109,8 @@
         <th>Description</th>
         <th>Remarks</th>
         <th>MPR Submission Date</th>
-        <!-- <th>PO</th>
-        <th>Supplier</th>
+        <th>PO</th>
+        <!-- <th>Supplier</th>
         <th>Invoice</th>
         <th>PO Qty</th>
         <th>Total Price</th>
@@ -124,7 +124,7 @@
     </thead>
     <tfoot>
       <tr>
-        <th colspan="13">Totals</th>
+        <th colspan="14"></th>
 
         <!-- <th data-math="col-sum">col-sum</th> -->
 
@@ -174,8 +174,8 @@
            
           ?>
           
-          <!-- <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
-          <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
+          <!-- <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] * $row['pprice']; ?></td>
@@ -198,15 +198,15 @@
             if ($row['po'] != '') {
               echo "Created";
             } else {
-              echo "Remaining";
+              echo "Pending";
             }
             ?></td> -->
           <td style="vertical-align:middle;">
             <?php
             if (($row['rqty'] < $row['pqty'])) {
-              echo "pending";
-            } elseif ($row['pqty'] == '') {
               echo "Remaining";
+            } elseif ($row['pqty'] == '') {
+              echo "Pending";
             } else {
               echo "Received";
             }
