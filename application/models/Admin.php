@@ -911,7 +911,7 @@ class Admin extends CI_Model
 		$wd = date("Y-m-d", strtotime($wd));
 		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
 		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
-		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid
+		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,pstatus
 		 FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
@@ -1060,6 +1060,9 @@ class Admin extends CI_Model
 		//if($data['pstatus']!=3)
 		//		{
 		$sql = "INSERT INTO receive_insert VALUES ('$ccid','$ccid1','$userid','$mprid','$item','$sipoid','$po','$grn','$rqty','$rremarks','$rdate','$invoice','$cdate')";
+
+		$sql2="UPDATE po_insert SET pstatus='1' WHERE sipoid='$sipoid'";
+		$query2=$this->db->query($sql2);
 		//}
 		//else
 		//		{

@@ -143,7 +143,7 @@
           <th data-math="col-sum">col-sum</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          
+          <th>&nbsp;</th>
         </tr>
       </tfoot>
       <tbody>
@@ -166,7 +166,7 @@
             <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['qty'] * $row['price']; ?></td>
-            
+
             <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
             <?php $pdate = date("d-m-Y", strtotime($row['pdate'])); ?>
             <td style="vertical-align:middle;"><?php echo $pdate; ?></td>
@@ -175,7 +175,19 @@
             <td style="vertical-align:middle;"><?php echo number_format($row['pqty'] * $row['pprice'], 2, '.', ','); ?></td>
             <td style="vertical-align:middle;"><?php echo $row['premarks']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
-            <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_up_form/<?php echo $bn = $row['sipoid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
+            <?php
+            if ($row['pstatus'] == '0') {
+            ?>
+              <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_up_form/<?php echo $bn = $row['sipoid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
+            <?php
+            } else {
+            ?>
+              <td style="vertical-align:middle;">Received</td>
+            <?php
+            }
+
+            ?>
+
             <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_log/<?php echo $bn = $row['sipoid']; ?>"><i class="fa fa-history" style="font-size:20px"></i></a></td>
           </tr>
         <?php } ?>
