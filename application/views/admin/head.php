@@ -62,6 +62,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <script src="<?php echo base_url(); ?>assets/admin/js/excel-gen.js"></script>
   <script src="<?php echo base_url(); ?>assets/admin/js/jszip.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/admin/js/Chart.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/admin/js/xlsx.full.min.js"></script>
   
   <title><?php echo $title; ?></title>
 </head>

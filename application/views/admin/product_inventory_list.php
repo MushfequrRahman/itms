@@ -26,7 +26,12 @@
 		text-align: center;
 	}
 
-	th,
+	th {
+		font-size: 10px;
+		text-align: center;
+		border: 1px solid #cccccc !important;
+	}
+
 	td {
 		font-size: 11px;
 		text-align: center;
@@ -48,7 +53,13 @@
 		width: 100%;
 		padding: 0 10px 0 0;
 	}
+
+	input[type="checkbox"] {
+		width: 10px;
+		height: 10px;
+	}
 </style>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script> -->
 <script>
 	$(function() {
 		$("table").tablesorter({
@@ -87,6 +98,66 @@
 				// or math_rowFilter : ':visible'; default is an empty string
 				math_rowFilter: ''
 			}
+		}).on("sortEnd", function() {
+			countVisibleRows();
+		});
+		// Function to count visible rows
+		function countVisibleRows() {
+			var visibleRowsCount = $('#tableData tbody tr:visible').length;
+			$('#rowCount').text("No. Rows:" + visibleRowsCount);
+		}
+
+		// Initial count of visible rows
+		countVisibleRows();
+
+		// Filter rows with search input
+		//$('<input type="text" class="tablesorter-filter" placeholder="Search...">').insertBefore('#tableData');
+
+		$('.tablesorter-filter').on('keyup', function() {
+			var searchTerm = $(this).val().toLowerCase();
+			$('#tableData tbody tr').each(function() {
+				$(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
+			});
+			countVisibleRows(); // Update the count after filtering
+		});
+
+
+		// Download selected rows and columns as Excel
+		$("#downloadExcel").on("click", function() {
+			var wb = XLSX.utils.book_new(); // Create a new workbook
+			var ws_data = [];
+
+			// Prepare header row based on selected columns
+			var headers = [];
+			$('#tableData thead th').each(function() {
+				var $checkbox = $(this).find('.column-select');
+				if ($checkbox.length === 0 || $checkbox.is(':checked')) {
+					headers.push($(this).text());
+				}
+			});
+			ws_data.push(headers); // Push headers as the first row
+
+			// Add the selected rows
+			$('#tableData tbody tr:visible').each(function() {
+				var $checkbox = $(this).find('.row-select');
+				if ($checkbox.is(':checked')) {
+					var row = [];
+					$(this).find('td').each(function(index) {
+						var $colCheckbox = $(this).closest('table').find('thead th').eq(index).find('.column-select');
+						if ($colCheckbox.length === 0 || $colCheckbox.is(':checked')) {
+							row.push($(this).text());
+						}
+					});
+					ws_data.push(row);
+				}
+			});
+
+			// Create a worksheet from the data
+			var ws = XLSX.utils.aoa_to_sheet(ws_data);
+			XLSX.utils.book_append_sheet(wb, ws, "Selected Rows");
+
+			// Export the Excel file
+			XLSX.writeFile(wb, 'product_inventory.xlsx');
 		});
 	});
 </script>
@@ -104,6 +175,9 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-md-12">
+						<!-- <p id="rowCount"></p> -->
+
+
 						<div class="row">
 							<div class="col-md-12">
 								<div class="box box-danger">
@@ -155,19 +229,30 @@
 									</div>
 									<br /> -->
 									<div class="box-body table-responsive no-padding">
-										<form action="<?php echo base_url() ?>Dashboard/product_inventory_list_xls" class="excel-upl" id="excel-upl" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-											<div class="row padall">
-												<div class="col-lg-12">
-													<div class="float-right">
 
-														<input type="radio" checked="checked" name="export_type" value="xlsx"> .xlsx
-														<input type="radio" name="export_type" value="xls"> .xls
-														<input type="radio" name="export_type" value="csv"> .csv
-														<button type="submit" name="import" class="btn btn-primary btn-xs">Export</button>
+										<div class="row padall">
+											<div class="col-lg-12">
+												<div class="row">
+													<div class="col-md-6">
+														<div class="float-left">
+															<form action="<?php echo base_url() ?>Dashboard/product_inventory_list_xls" class="excel-upl" id="excel-upl" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+																<input type="radio" checked="checked" name="export_type" value="xlsx"> .xlsx
+																<input type="radio" name="export_type" value="xls"> .xls
+																<input type="radio" name="export_type" value="csv"> .csv
+																<button type="submit" name="import" class="btn btn-primary btn-xs">Export</button>
+															</form>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="float-right" style="text-align: right;">
+															<button id="downloadExcel" class="btn btn-success btn-xs">Download Visible Rows as Excel</button>
+														</div>
 													</div>
 												</div>
+
 											</div>
-										</form>
+										</div>
+
 
 
 
@@ -176,37 +261,39 @@
 											<!-- <thead style="background:#91b9e6;position: sticky;top: 0;"> -->
 											<thead>
 												<tr>
-													<th>SL</th>
-													<th>Code/Assign</th>
-													<th>Factory</th>
-													<th>Supplier</th>
-													<th>Category</th>
-													<th>Group</th>
-													<th>Sub Group</th>
-													<th>MPR</th>
-													<th>Name</th>
-													<th>Serial Number</th>
-													<th>Item</th>
-													<th>Description</th>
-													<th>PO Price</th>
-													<th>Qty</th>
-													<th>Purchase Date</th>
-													<th>Warranty</th>
-													<th>End Date</th>
-													<th>Remaining Day</th>
-													<th>Status/Return</th>
-													<th>UserID</th>
-													<th>UserName</th>
-													<th>UserDepartment</th>
-													<th>Given Date</th>
-													<th class="filter-false">Edit</th>
-													<th class="filter-false">Transfer</th>
-													<th class="filter-false">Release</th>
+													<th><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
+													<th><input type="checkbox" class="column-select" data-col-index="2" checked><br />Assign</th>
+													<th><input type="checkbox" class="column-select" data-col-index="3" checked><br />Factory</th>
+													<th><input type="checkbox" class="column-select" data-col-index="4" checked><br />Supplier</th>
+													<th><input type="checkbox" class="column-select" data-col-index="5" checked><br />Category</th>
+													<th><input type="checkbox" class="column-select" data-col-index="6" checked><br />Group</th>
+													<th><input type="checkbox" class="column-select" data-col-index="7" checked><br />S/Group</th>
+													<th><input type="checkbox" class="column-select" data-col-index="8" checked><br />MPR</th>
+													<th><input type="checkbox" class="column-select" data-col-index="9" checked><br />Name</th>
+													<th><input type="checkbox" class="column-select" data-col-index="10" checked><br />S/N</th>
+													<th><input type="checkbox" class="column-select" data-col-index="11" checked><br />Product</th>
+													<th><input type="checkbox" class="column-select" data-col-index="12" checked><br />Description</th>
+													<th><input type="checkbox" class="column-select" data-col-index="13" checked><br />PO Price</th>
+													<th><input type="checkbox" class="column-select" data-col-index="14" checked><br />Qty</th>
+													<th><input type="checkbox" class="column-select" data-col-index="15" checked><br />Purchase Date</th>
+													<th><input type="checkbox" class="column-select" data-col-index="16" checked><br />Warranty</th>
+													<th><input type="checkbox" class="column-select" data-col-index="17" checked><br />End Date</th>
+													<th><input type="checkbox" class="column-select" data-col-index="18" checked><br />Remaining Day</th>
+													<th><input type="checkbox" class="column-select" data-col-index="19" checked><br />Status/Return</th>
+													<th><input type="checkbox" class="column-select" data-col-index="20" checked><br />UserID</th>
+													<th><input type="checkbox" class="column-select" data-col-index="21" checked><br />UserName</th>
+													<th><input type="checkbox" class="column-select" data-col-index="22" checked><br />UserDepartment</th>
+													<th><input type="checkbox" class="column-select" data-col-index="23" checked><br />Given Date</th>
+													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="24" checked><br />Edit</th>
+													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="25" checked><br />Transfer</th>
+													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="26" checked><br />Release</th>
 												</tr>
 											</thead>
 											<tfoot>
 												<tr>
-													<th colspan="12">Totals</th>
+													<th id="rowCount"></th>
+													<th colspan="10">Totals</th>
+													<th id="rowCount"></th>
 													<th data-math="col-sum">col-sum</th>
 													<th>&nbsp;</th>
 													<th>&nbsp;</th>
@@ -229,7 +316,7 @@
 												foreach ($ul as $row) {
 												?>
 													<tr>
-														<td style="vertical-align:middle;"><?php echo $i++; ?></td>
+														<td style="vertical-align:middle;"><input type="checkbox" class="row-select" checked><?php echo $i++; ?></td>
 														<?php
 														if ($row['pastatus'] == 1 || $row['pastatus'] == 2) {
 														?>

@@ -182,7 +182,7 @@
             <?php
             } else {
             ?>
-              <td style="vertical-align:middle;">Received</td>
+              <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_up_form/<?php echo $bn = $row['sipoid']; ?>">Received</a></td>
             <?php
             }
 

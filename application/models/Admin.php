@@ -983,9 +983,11 @@ class Admin extends CI_Model
 		$podate = date("Y-m-d", strtotime($podate));
 		$sql = "update po_insert SET po='$po',pqty='$pqty',premarks='$premarks',pprice='$pprice',supplier='$supplier',pdate='$podate' WHERE sipoid='$sipoid'";
 		
-
+		$sqlr = "update receive_insert SET po='$po' WHERE sipoid='$sipoid'";
+		
 		$sql1 = "INSERT INTO po_insert_edit_log VALUES ('$ccid','$spoid','$sipoid','$userid','$mprid','$po','$simprid','$pqty','$premarks','$pprice','$supplier','$podate',CURDATE(),CURTIME())";
 		$query1 = $this->db->query($sql1);
+		$queryr = $this->db->query($sqlr);
 		return $query = $this->db->query($sql);
 	}
 	public function po_list_log($sipoid)
