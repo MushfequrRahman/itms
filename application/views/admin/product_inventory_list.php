@@ -261,7 +261,7 @@ function countVisibleRows() {
 													</div>
 													<div class="col-md-6">
 														<div class="float-right" style="text-align: right;">
-															<button id="downloadExcel" class="btn btn-success btn-xs">Download Visible Rows as Excel</button>
+															<button id="downloadExcel" class="btn btn-success btn-xs">Download As Excel</button>
 														</div>
 													</div>
 												</div>
