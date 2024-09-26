@@ -55,8 +55,8 @@
 	}
 
 	input[type="checkbox"] {
-		width: 10px;
-		height: 10px;
+		width: 12px;
+		height: 12px;
 	}
 </style>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script> -->
@@ -98,30 +98,46 @@
 				// or math_rowFilter : ':visible'; default is an empty string
 				math_rowFilter: ''
 			}
-		}).on("sortEnd", function() {
+		}).on("filterEnd sortEnd", function() {
 			countVisibleRows();
 		});
-		// Function to count visible rows
-		function countVisibleRows() {
-			var visibleRowsCount = $('#tableData tbody tr:visible').length;
-			$('#rowCount').text("No. Rows:" + visibleRowsCount);
-		}
-
-		// Initial count of visible rows
-		countVisibleRows();
-
-		// Filter rows with search input
-		//$('<input type="text" class="tablesorter-filter" placeholder="Search...">').insertBefore('#tableData');
-
-		$('.tablesorter-filter').on('keyup', function() {
-			var searchTerm = $(this).val().toLowerCase();
-			$('#tableData tbody tr').each(function() {
-				$(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
-			});
-			countVisibleRows(); // Update the count after filtering
-		});
 
 
+		// // Function to count visible rows
+		// function countVisibleRows() {
+		// 	var visibleRowsCount = $('#tableData tbody tr:visible').length;
+		// 	$('#rowCount').text("No. Rows:" + visibleRowsCount);
+		// }
+
+		// // Initial count of visible rows
+		// countVisibleRows();
+
+		// // Filter rows with search input
+		// //$('<input type="text" class="tablesorter-filter" placeholder="Search...">').insertBefore('#tableData');
+
+		// $('.tablesorter-filter').on('keyup', function() {
+		// 	var searchTerm = $(this).val().toLowerCase();
+		// 	$('#tableData tbody tr').each(function() {
+		// 		$(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
+		// 	});
+		// 	countVisibleRows(); // Update the count after filtering
+		// });
+
+
+// Function to count visible rows
+function countVisibleRows() {
+        var visibleRowsCount = $('#tableData tbody tr:visible').length;
+        $('#rowCount').text("Rows: " + visibleRowsCount);
+    }
+
+    // Initial count of visible rows
+    countVisibleRows(); // Start counting visible rows
+
+		
+
+
+		
+		
 		// Download selected rows and columns as Excel
 		$("#downloadExcel").on("click", function() {
 			var wb = XLSX.utils.book_new(); // Create a new workbook
@@ -261,29 +277,29 @@
 											<!-- <thead style="background:#91b9e6;position: sticky;top: 0;"> -->
 											<thead>
 												<tr>
-													<th><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
-													<th><input type="checkbox" class="column-select" data-col-index="2" checked><br />Assign</th>
-													<th><input type="checkbox" class="column-select" data-col-index="3" checked><br />Factory</th>
-													<th><input type="checkbox" class="column-select" data-col-index="4" checked><br />Supplier</th>
-													<th><input type="checkbox" class="column-select" data-col-index="5" checked><br />Category</th>
-													<th><input type="checkbox" class="column-select" data-col-index="6" checked><br />Group</th>
-													<th><input type="checkbox" class="column-select" data-col-index="7" checked><br />S/Group</th>
-													<th><input type="checkbox" class="column-select" data-col-index="8" checked><br />MPR</th>
-													<th><input type="checkbox" class="column-select" data-col-index="9" checked><br />Name</th>
-													<th><input type="checkbox" class="column-select" data-col-index="10" checked><br />S/N</th>
-													<th><input type="checkbox" class="column-select" data-col-index="11" checked><br />Product</th>
-													<th><input type="checkbox" class="column-select" data-col-index="12" checked><br />Description</th>
-													<th><input type="checkbox" class="column-select" data-col-index="13" checked><br />PO Price</th>
-													<th><input type="checkbox" class="column-select" data-col-index="14" checked><br />Qty</th>
-													<th><input type="checkbox" class="column-select" data-col-index="15" checked><br />Purchase Date</th>
-													<th><input type="checkbox" class="column-select" data-col-index="16" checked><br />Warranty</th>
-													<th><input type="checkbox" class="column-select" data-col-index="17" checked><br />End Date</th>
-													<th><input type="checkbox" class="column-select" data-col-index="18" checked><br />Remaining Day</th>
-													<th><input type="checkbox" class="column-select" data-col-index="19" checked><br />Status/Return</th>
-													<th><input type="checkbox" class="column-select" data-col-index="20" checked><br />UserID</th>
-													<th><input type="checkbox" class="column-select" data-col-index="21" checked><br />UserName</th>
-													<th><input type="checkbox" class="column-select" data-col-index="22" checked><br />UserDepartment</th>
-													<th><input type="checkbox" class="column-select" data-col-index="23" checked><br />Given Date</th>
+													<th data-column="0"><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
+													<th data-column="1"><input type="checkbox" class="column-select" data-col-index="2" checked><br />Assign</th>
+													<th data-column="2"><input type="checkbox" class="column-select" data-col-index="3" checked><br />Factory</th>
+													<th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />Supplier</th>
+													<th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Category</th>
+													<th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Group</th>
+													<th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />S/Group</th>
+													<th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />MPR</th>
+													<th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />Name</th>
+													<th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />S/N</th>
+													<th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Product</th>
+													<th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Description</th>
+													<th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />PO Price</th>
+													<th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />Qty</th>
+													<th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Pur.Date</th>
+													<th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Warranty</th>
+													<th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />E.Date</th>
+													<th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />Rem.Day</th>
+													<th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />Status</th>
+													<th data-column="19"><input type="checkbox" class="column-select" data-col-index="20" checked><br />UserID</th>
+													<th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />U.Name</th>
+													<th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />U.Dept</th>
+													<th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />G.Date</th>
 													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="24" checked><br />Edit</th>
 													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="25" checked><br />Transfer</th>
 													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="26" checked><br />Release</th>
@@ -316,7 +332,7 @@
 												foreach ($ul as $row) {
 												?>
 													<tr>
-														<td style="vertical-align:middle;"><input type="checkbox" class="row-select" checked><?php echo $i++; ?></td>
+														<td style="vertical-align:middle;"><label class="checkbox-inline"><input type="checkbox" class="row-select" checked><?php echo $i++; ?></label></td>
 														<?php
 														if ($row['pastatus'] == 1 || $row['pastatus'] == 2) {
 														?>
@@ -470,3 +486,8 @@
 </body>
 
 </html>
+
+
+
+
+
