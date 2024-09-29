@@ -124,20 +124,20 @@
 		// });
 
 
-// Function to count visible rows
-function countVisibleRows() {
-        var visibleRowsCount = $('#tableData tbody tr:visible').length;
-        $('#rowCount').text("Rows: " + visibleRowsCount);
-    }
+		// Function to count visible rows
+		function countVisibleRows() {
+			var visibleRowsCount = $('#tableData tbody tr:visible').length;
+			$('#rowCount').text("Rows: " + visibleRowsCount);
+		}
 
-    // Initial count of visible rows
-    countVisibleRows(); // Start counting visible rows
-
-		
+		// Initial count of visible rows
+		countVisibleRows(); // Start counting visible rows
 
 
-		
-		
+
+
+
+
 		// Download selected rows and columns as Excel
 		$("#downloadExcel").on("click", function() {
 			var wb = XLSX.utils.book_new(); // Create a new workbook
@@ -486,8 +486,3 @@ function countVisibleRows() {
 </body>
 
 </html>
-
-
-
-
-
