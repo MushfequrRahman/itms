@@ -971,7 +971,7 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
-	public function po_list_update($spoid,$sipoid,$userid,$mprid,$po,$simprid,$pqty,$premarks,$pprice,$supplier,$podate )
+	public function po_list_update($spoid, $sipoid, $userid, $mprid, $po, $simprid, $pqty, $premarks, $pprice, $supplier, $podate)
 	{
 		date_default_timezone_set('Asia/Dhaka');
 		$d = date('Y-m-d');
@@ -979,12 +979,12 @@ class Admin extends CI_Model
 		$d1 = str_replace("-", "", $d);
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
-		
+
 		$podate = date("Y-m-d", strtotime($podate));
 		$sql = "update po_insert SET po='$po',pqty='$pqty',premarks='$premarks',pprice='$pprice',supplier='$supplier',pdate='$podate' WHERE sipoid='$sipoid'";
-		
+
 		$sqlr = "update receive_insert SET po='$po' WHERE sipoid='$sipoid'";
-		
+
 		$sql1 = "INSERT INTO po_insert_edit_log VALUES ('$ccid','$spoid','$sipoid','$userid','$mprid','$po','$simprid','$pqty','$premarks','$pprice','$supplier','$podate',CURDATE(),CURTIME())";
 		$query1 = $this->db->query($sql1);
 		$queryr = $this->db->query($sqlr);
@@ -1063,8 +1063,8 @@ class Admin extends CI_Model
 		//		{
 		$sql = "INSERT INTO receive_insert VALUES ('$ccid','$ccid1','$userid','$mprid','$item','$sipoid','$po','$grn','$rqty','$rremarks','$rdate','$invoice','$cdate')";
 
-		$sql2="UPDATE po_insert SET pstatus='1' WHERE sipoid='$sipoid'";
-		$query2=$this->db->query($sql2);
+		$sql2 = "UPDATE po_insert SET pstatus='1' WHERE sipoid='$sipoid'";
+		$query2 = $this->db->query($sql2);
 		//}
 		//else
 		//		{
@@ -1148,22 +1148,110 @@ class Admin extends CI_Model
 		$wd = date("Y-m-d", strtotime($wd));
 
 
+		// $query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
+		// description,remarks,mdate,msdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,
+		// invoice,DATEDIFF(CURDATE(),msdate) AS cday
+		// FROM mpr_insert_id 
+		// JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		// LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		// LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		// LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
+		// LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
+		// JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		// JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		// JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		// JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		// JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		// JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		// WHERE mdate between '$pd' AND '$wd' 
+		// ORDER BY mpr_insert_id .mprid";
+		// $result = $this->db->query($query);
+		// return $result->result_array();
+
+
 		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
-		description,remarks,mdate,msdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,
-		invoice,DATEDIFF(CURDATE(),msdate) AS cday
+		description,remarks,mdate,msdate,SUM(pqty) AS pqty,SUM(rqty) AS rqty,
+		DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
 		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
-		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
-		LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
-		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
+		LEFT JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
+		
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-						JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
-						JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
-						JOIN department ON department.deptid=mpr_insert_id.mdeptid
-						JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
-		WHERE mdate between '$pd' AND '$wd' 
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		WHERE mdate between '$pd' AND '$wd'
+		GROUP BY mpr_insert.simprid 
+		ORDER BY mpr_insert_id .mprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function mpr_wise_remaining($mprid)
+	{
+
+		// $query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
+		// description,remarks,mdate,msdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,
+		// invoice,DATEDIFF(CURDATE(),msdate) AS cday
+		// FROM mpr_insert_id 
+		// JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		// LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		// LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		// LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
+		// LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
+		// JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		// JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		// 				JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		// 				JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		// 				JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		// 				JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		// WHERE mpr_insert_id .mprid='$mprid' 
+		// ORDER BY mpr_insert_id .mprid";
+		// $result = $this->db->query($query);
+		// return $result->result_array();
+
+		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
+		description,remarks,mdate,msdate,SUM(pqty) AS pqty,SUM(rqty) AS rqty,
+		DATEDIFF(CURDATE(),msdate) AS cday
+		FROM mpr_insert_id 
+		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		LEFT JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
+		
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		WHERE mpr_insert_id .mprid='$mprid'
+		GROUP BY mpr_insert.simprid 
+		ORDER BY mpr_insert_id .mprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function mpr_wise_inventory_details($mprid)
+	{
+
+		$query = "SELECT  mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
+		description,remarks,mdate,msdate,po_insert.po,
+		pqty,pprice,pacode,sn,grn,warranty,rqty,receive_insert.rdate,iqty,supplier_insert.supplier,
+		invoice
+		FROM product_inventory 
+		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		WHERE mpr_insert_id .mprid='$mprid' 
 		ORDER BY mpr_insert_id .mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
@@ -1232,7 +1320,7 @@ class Admin extends CI_Model
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
 
-		$sql1a = "SELECT MAX(pcidnum) AS pcidnum FROM product_asset_code WHERE pcode='$pcode' ";
+		$sql1a = "SELECT MAX(pcidnum) AS pcidnum FROM product_asset_code WHERE pafid='$factoryid' AND pcode='$pcode' ";
 		$query1a = $this->db->query($sql1a);
 		$result1a = $query1a->result_array();
 		foreach ($result1a as $row) {

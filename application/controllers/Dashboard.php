@@ -2279,6 +2279,20 @@ class Dashboard extends CI_Controller
 		$data['ul'] = $this->Admin->date_wise_remaining_list($pd, $wd);
 		$this->load->view('admin/date_wise_remaining_list', $data);
 	}
+	public function mpr_wise_remaining()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'MPR Wise Remaining';
+		$mprid = $this->uri->segment(3);
+		// $this->load->view('admin/head', $data);
+		// $this->load->view('admin/toprightnav');
+		// $this->load->view('admin/leftmenu');
+		//$data['pacode'] = $pacode;
+		$data['ul'] = $this->Admin->mpr_wise_remaining($mprid);
+		$data['ul1'] = $this->Admin->mpr_wise_inventory_details($mprid);
+		$this->load->view('admin/mpr_wise_remaining_print_html', $data);
+	}
 	public function product_inventory_insert_form()
 	{
 		$this->load->database();
