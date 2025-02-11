@@ -33,6 +33,24 @@ class Admin extends CI_Model
 		$sql = "UPDATE factory SET factoryid='$facid',factoryname='$factoryname',factory_address='$factory_address' WHERE factoryid='$fid'";
 		$query = $this->db->query($sql);
 	}
+	public function employment_type_insert($etype)
+	{
+		$sql = "SELECT * FROM employment_type WHERE etypename='$etype'";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() == 1) {
+			return false;
+		} else {
+			$sql = "INSERT INTO employment_type VALUES ('','$etype')";
+			$query = $this->db->query($sql);
+			return $query;
+		}
+	}
+	public function employment_type_list()
+	{
+		$query = "SELECT * FROM employment_type ORDER BY etypeid ASC";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
 	public function department_insert($department)
 	{
 		$sql = "SELECT * FROM department WHERE departmentname='$department'";
@@ -743,9 +761,10 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT mprid,mdate,fid,name,departmentname,designation,smprid FROM mpr_insert_id 
+		$query = "SELECT mprid,mdate,fid,etypename,name,departmentname,designation,smprid 
+		FROM mpr_insert_id 
 			
-			
+			LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 			JOIN department ON department.deptid=mpr_insert_id.mdeptid
 			JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 			WHERE mdate between '$pd' AND '$wd' ORDER BY mpr_insert_id.mprid";
@@ -756,10 +775,11 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT mprid,mdate,fid,name,departmentname,designation,pcname,
+		$query = "SELECT mprid,mdate,fid,etypename,name,departmentname,designation,pcname,
 		pgname,psgname,pname,item,brandname,qty,puom,description,price,remarks,uname
 		 FROM mpr_insert 
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
@@ -775,11 +795,12 @@ class Admin extends CI_Model
 	}
 	public function mpr_wise_mpr_list($mprid)
 	{
-		$query = "SELECT mprid,mdate,fid,name,
+		$query = "SELECT mprid,mdate,fid,etypename,name,
 		departmentname,designation,pcname,pgname,psgname,pname,item,brandname,qty,puom,description,price,
 		remarks,uname
 		 FROM mpr_insert 
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
@@ -909,8 +930,9 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
-		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
+		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,etypename,name,departmentname,designation,
+		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,
+		description,price,po,pdate,pqty,
 		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,pstatus
 		 FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
@@ -923,6 +945,7 @@ class Admin extends CI_Model
 		JOIN department ON department.deptid=mpr_insert_id.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		WHERE pdate between '$pd' AND '$wd' ORDER BY mpr_insert_id.mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
@@ -1121,7 +1144,7 @@ class Admin extends CI_Model
 		$wd = date("Y-m-d", strtotime($wd));
 
 
-		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
+		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
 		description,remarks,mdate,msdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,
 		invoice,DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
@@ -1132,10 +1155,11 @@ class Admin extends CI_Model
 		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-						JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
-						JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
-						JOIN department ON department.deptid=mpr_insert_id.mdeptid
-						JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		WHERE rdate between '$pd' AND '$wd' 
 		ORDER BY mpr_insert_id .mprid";
 		$result = $this->db->query($query);
@@ -1169,7 +1193,7 @@ class Admin extends CI_Model
 		// return $result->result_array();
 
 
-		$query = "SELECT mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
+		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
 		description,remarks,mdate,msdate,SUM(pqty) AS pqty,SUM(rqty) AS rqty,
 		DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
@@ -1183,6 +1207,7 @@ class Admin extends CI_Model
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
 		JOIN department ON department.deptid=mpr_insert_id.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		WHERE mdate between '$pd' AND '$wd'
 		GROUP BY mpr_insert.simprid 
 		ORDER BY mpr_insert_id .mprid";

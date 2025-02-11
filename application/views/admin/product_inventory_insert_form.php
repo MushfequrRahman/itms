@@ -84,7 +84,7 @@
 												</div>
 												<div class="form-group">
 													<label>Description</label>
-													<textarea class="form-control" name="description" rows="5" id="description"></textarea>
+													<textarea class="form-control" name="description" rows="5" id="description"><?php echo $description; ?></textarea>
 													<?php echo form_error('description', '<div class="error">', '</div>');  ?>
 												</div>
 												<?php /*?><div class="form-group">

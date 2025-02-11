@@ -73,7 +73,7 @@ foreach ($bl as $row) {
                       <input type="hidden" class="form-control" name="userid" id="userid" value="<?php echo $this->session->userdata('userid'); ?>">
                       <div class="row">
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <label>Unit Name<em>*</em></label>
                           <select class="form-control factoryid" name="factoryid" id="factoryid">
                             <option value="">Select....</option>
@@ -87,14 +87,28 @@ foreach ($bl as $row) {
                           </select>
                           <?php echo form_error('factoryid', '<div class="error">', '</div>');  ?>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                          <label>Employment Type<em>*</em></label>
+                          <select class="form-control etypeid" name="etypeid" id="etypeid">
+                            <option value="">Select....</option>
+                            <?php
+                            foreach ($el as $row) {
+                            ?>
+                              <option value="<?php echo $row['etypeid']; ?>"><?php echo $row['etypename']; ?></option>
+                            <?php
+                            }
+                            ?>
+                          </select>
+                          <?php echo form_error('etypeid', '<div class="error">', '</div>');  ?>
+                        </div>
+                        <div class="col-md-3">
                           <label>MPR Number<em>*</em></label>
                           <input type="text" class="form-control mprid" name="mprid" id="mprid" placeholder="Enter MPR Number">
                           <?php echo form_error('mpr', '<div class="error">', '</div>');  ?>
                         </div>
 
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <label>Department<em>*</em></label>
                           <select class="form-control departmentid" name="departmentid" id="departmentid">
                             <option value="">Select....</option>
@@ -238,6 +252,15 @@ foreach ($bl as $row) {
           var count = 1;
           if ($(this).val() == '') {
             error += '<p>Enter Unit Name ' + count + ' Row</p>';
+            return false;
+          }
+          count = count + 1;
+        });
+
+        $('.etypeid').each(function() {
+          var count = 1;
+          if ($(this).val() == '') {
+            error += '<p>Enter Employment Type at ' + count + ' Row</p>';
             return false;
           }
           count = count + 1;

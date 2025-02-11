@@ -35,6 +35,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 						<li class="treeview">
 							<a href="#">
+								<i class="fa fa-industry" aria-hidden="true"></i><span>Employment Info</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<li><a href="<?php echo base_url(); ?>Dashboard/employment_type_insert_form"><i class="fa fa-circle-o"></i> Add Employment Type Info</a></li>
+								<li><a href="<?php echo base_url(); ?>Dashboard/employment_type_list"><i class="fa fa-circle-o"></i> Employment Type List</a></li>
+							</ul>
+						</li>
+
+						<li class="treeview">
+							<a href="#">
 								<i class="fa fa-industry" aria-hidden="true"></i><span>Department Info</span>
 								<span class="pull-right-container">
 									<i class="fa fa-angle-left pull-right"></i>

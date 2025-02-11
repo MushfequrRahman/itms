@@ -18,8 +18,13 @@
     background: #187ed5;
     font-weight: bold;
   }
+  .table-container {
+            height: 400px; /* Set the height for vertical scrolling */
+            overflow-y: auto;
+        }
 
   .paging-nav,
+  
   #tableData {
 
 
@@ -212,7 +217,7 @@
 </script>
 
 <!-- /.box-header -->
-<div class="box-body table-responsive no-padding">
+<div class="box-body table-responsive no-padding table-container">
 
   <div class="row padall">
     <div class="col-lg-12">
@@ -244,16 +249,17 @@
         <th data-column="0"><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
         <th data-column="1"><input type="checkbox" class="column-select" data-col-index="2" checked><br />MPR NO</th>
         <th data-column="2"><input type="checkbox" class="column-select" data-col-index="3" checked><br />Unit</th>
-        <th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />User</th>
-        <th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Category</th>
-        <th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Product</th>
-        <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />Item/Model</th>
-        <th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />MPR Qty</th>
-        <th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />Description</th>
-        <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Remarks</th>
-        <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />MPR Submission Date</th>
-        <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Pqty</th>
-        <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />Rqty</th>
+        <th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />Employment Type</th>
+        <th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />User</th>
+        <th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Category</th>
+        <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />Product</th>
+        <th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />Item/Model</th>
+        <th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />MPR Qty</th>
+        <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Description</th>
+        <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Remarks</th>
+        <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />MPR Submission Date</th>
+        <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />Pqty</th>
+        <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />Rqty</th>
         <!-- <th>Supplier</th>
         <th>Invoice</th>
         <th>PO Qty</th>
@@ -262,13 +268,13 @@
         <th>Receive Qty</th>
         <th>Received Date</th>
         <th>Inventory Qty</th> -->
-        <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />Status</th>
-        <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Count Days</th>
+        <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Status</th>
+        <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Count Days</th>
       </tr>
     </thead>
     <tfoot>
       <tr>
-        <th colspan="14"></th>
+        <th colspan="16"></th>
 
         <!-- <th data-math="col-sum">col-sum</th> -->
 
@@ -294,6 +300,7 @@
           <!-- <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/product_inventory_insert_form/<?php echo $row['sipoid']; ?>"><?php echo $row['mprid']; ?></a></td> -->
           <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/mpr_wise_remaining/<?php echo $row['mprid']; ?>"><?php echo $row['mprid']; ?></a></td>
           <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
           <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
           <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
@@ -361,5 +368,10 @@
 
 
   </table>
+  <script>
+        $(document).ready(function () {
+            $("#tableData").tablesorter();
+        });
+    </script>
 
 </div>

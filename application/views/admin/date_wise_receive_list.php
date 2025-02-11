@@ -18,12 +18,17 @@
     background: #187ed5;
     font-weight: bold;
   }
-
+.table-container {
+            height: 400px; /* Set the height for vertical scrolling */
+            overflow-y: auto;
+        }
   .paging-nav,
+  
   #tableData {
 
 
     text-align: center;
+	
   }
 
   th,
@@ -87,7 +92,7 @@
 </script>
 
 <!-- /.box-header -->
-<div class="box-body table-responsive no-padding">
+<div class="box-body table-responsive no-padding table-container">
 
   <table id="tableData" class="table table-hover table-bordered">
     <thead style="background:#91b9e6;">
@@ -102,6 +107,7 @@
         <!--<th>Select</th>-->
         <th>MPR NO</th>
         <th>Unit</th>
+        <th>Employment Type</th>
         <th>User</th>
         <!--<th>MPR Prepared By</th>-->
         <th>Category</th>
@@ -155,6 +161,7 @@
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
+        <th>&nbsp;</th>
       </tr>
     </tfoot>
     <tbody>
@@ -169,6 +176,7 @@
           <!-- <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/product_inventory_insert_form/<?php echo $row['sipoid']; ?>"><?php echo $row['mprid']; ?></a></td> -->
           <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
           <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
           <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
@@ -236,5 +244,10 @@
 
 
   </table>
+  <script>
+        $(document).ready(function () {
+            $("#tableData").tablesorter();
+        });
+    </script>
 
 </div>

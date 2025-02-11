@@ -125,6 +125,50 @@ class Dashboard extends CI_Controller
 			redirect('Dashboard/factory_list', 'refresh');
 		}
 	}
+	public function employment_type_insert_form()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Employment Type Insert';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$this->load->view('admin/employment_type_insert_form', $data);
+	}
+	public function employment_type_insert()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		if ($this->input->post('submit')) {
+			$department = $this->form_validation->set_rules('etype', 'Employment Type Name', 'required');
+			if ($this->form_validation->run() == FALSE) {
+				$this->employment_type_insert_form();
+			} else {
+				$etype = $this->input->post('etype');
+				$ins = $this->Admin->employment_type_insert($etype);
+
+				if ($ins == TRUE) {
+					$this->session->set_flashdata('Successfully', 'Successfully Inserted');
+				} else {
+					$this->session->set_flashdata('Successfully', 'Failed To Inserted');
+				}
+				redirect('Dashboard/employment_type_insert_form', 'refresh');
+			}
+		}
+	}
+	public function employment_type_list()
+	{
+
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Employment Type List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$data['ul'] = $this->Admin->employment_type_list();
+		$this->load->view('admin/employment_type_list', $data);
+	}
 	public function department_insert_form()
 	{
 		$this->load->database();
@@ -1472,6 +1516,7 @@ class Dashboard extends CI_Controller
 		//$data['il']=$this->Admin->item_list();
 		$data['ul'] = $this->Admin->product_uom_list();
 		$data['fl'] = $this->Admin->factory_list();
+		$data['el'] = $this->Admin->employment_type_list();
 		$data['dep'] = $this->Admin->department_list();
 		$data['des'] = $this->Admin->designation_list();
 		$data['col'] = $this->Admin->product_list();
@@ -1543,9 +1588,6 @@ class Dashboard extends CI_Controller
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
 
-
-
-
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
@@ -1553,6 +1595,7 @@ class Dashboard extends CI_Controller
 		$userid = $this->input->post('userid');
 		$mprid = $this->input->post('mprid');
 		$factoryid = $this->input->post('factoryid');
+		$etypeid = $this->input->post('etypeid');
 		$mprid = $factoryid . $mprid;
 		$departmentid = $this->input->post('departmentid');
 		$name = $this->input->post('name');
@@ -1570,7 +1613,7 @@ class Dashboard extends CI_Controller
 		$remarks =  str_replace("'", "\'", $remarks);
 		$uname = $this->input->post('uname');
 
-		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$userid','$mprid','$factoryid','$departmentid','$name','$designationid','$mprdate','$mprsdate','$month','$year','0')";
+		$sql1 = "INSERT INTO mpr_insert_id VALUES ('$ccid','$userid','$mprid','$factoryid','$etypeid','$departmentid','$name','$designationid','$mprdate','$mprsdate','$month','$year','0')";
 		$query1 = $this->db->query($sql1);
 
 

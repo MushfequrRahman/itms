@@ -18,7 +18,10 @@
 		background: #187ed5;
 		font-weight: bold;
 	}
-
+.table-container {
+            height: 1000px; /* Set the height for vertical scrolling */
+            overflow-y: auto;
+        }
 	.paging-nav,
 	#tableData {
 
@@ -244,7 +247,7 @@
 										</div>
 									</div>
 									<br /> -->
-									<div class="box-body table-responsive no-padding">
+									<div class="box-body table-responsive no-padding table-container">
 
 										<div class="row padall">
 											<div class="col-lg-12">
@@ -483,6 +486,11 @@
 			</section>
 		</div>
 	</div>
+	<script>
+        $(document).ready(function () {
+            $("#tableData").tablesorter();
+        });
+    </script>
 </body>
 
 </html>

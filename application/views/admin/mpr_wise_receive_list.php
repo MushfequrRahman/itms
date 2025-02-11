@@ -107,7 +107,20 @@
 
           <td style="vertical-align:middle;"><?php echo $i++; ?></td>
           <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
-          <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/product_inventory_insert_form/<?php echo $row['sipoid']; ?>"><?php echo $row['mprid']; ?></a></td>
+          <?php if($row['iqty'] < $row['pqty'])
+		  {
+			  ?>
+			  <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/product_inventory_insert_form/<?php echo $row['sipoid']; ?>"><?php echo $row['mprid']; ?></a></td>
+			<?php  
+		  }
+		  else
+		  {
+			  ?>
+			  <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
+			  <?php
+		  }
+		  ?>
+		  
           <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
           <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>

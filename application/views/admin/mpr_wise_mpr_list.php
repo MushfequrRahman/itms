@@ -122,9 +122,6 @@
 
 									<div class="box-body table-responsive no-padding">
 
-
-
-
 										<div class="table-responsive">
 											<table id="tableData" class="table table-hover table-bordered">
 												<thead style="background:#91b9e6;">
@@ -133,6 +130,7 @@
 														<th>MPR NO</th>
 														<th>MPR Date</th>
 														<th>Unit</th>
+														<th>Employment Type</th>
 														<th>MPR Prepared By</th>
 														<th>Category</th>
 														<th>Group</th>
@@ -146,17 +144,16 @@
 														<th>Total Price</th>
 														<th>Remarks</th>
 														<th>User</th>
-
 													</tr>
 												</thead>
 												<tfoot>
 													<tr>
-														<th colspan="13">Totals</th>
+														<th colspan="14">Totals</th>
 														<th>&nbsp;</th>
 														<th data-math="col-sum">col-sum</th>
 														<th>&nbsp;</th>
 														<th>&nbsp;</th>
-														
+
 
 													</tr>
 												</tfoot>
@@ -171,6 +168,7 @@
 															<?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
 															<td style="vertical-align:middle;"><?php echo $mdate; ?></td>
 															<td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
+															<td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
 															<td style="vertical-align:middle;"><?php echo $row['name'] . '--' . $row['departmentname'] . '--' . $row['designation']; ?></td>
 															<td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
 															<td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>

@@ -115,6 +115,7 @@
           <th>MPR NO</th>
           <th>MPR Date</th>
           <th>Unit</th>
+          <th>Employment Type</th>
           <th>MPR Issued By</th>
           <th>Category</th>
           <th>Group</th>
@@ -141,8 +142,10 @@
           <th colspan="17">Totals</th>
           <th>&nbsp;</th>
           <th data-math="col-sum">col-sum</th>
+          <th data-math="col-sum">col-sum</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
+		   <th>&nbsp;</th>
           <th>&nbsp;</th>
         </tr>
       </tfoot>
@@ -156,6 +159,7 @@
             <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
             <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['name'] . '--' . $row['departmentname'] . '--' . $row['designation']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
