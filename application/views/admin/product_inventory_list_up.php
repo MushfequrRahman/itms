@@ -21,6 +21,16 @@
                         <?php echo form_error('sn', '<div class="error">', '</div>');  ?>
                       </div>
                       <div class="form-group">
+                        <label>IP</label>
+                        <input type="text" class="form-control" name="ip" value="<?php echo $row['ip']; ?>">
+                        <?php echo form_error('ip', '<div class="error">', '</div>');  ?>
+                      </div>
+                      <div class="form-group">
+                        <label>MAC</label>
+                        <input type="text" class="form-control" name="mac" value="<?php echo $row['mac']; ?>">
+                        <?php echo form_error('mac', '<div class="error">', '</div>');  ?>
+                      </div>
+                      <div class="form-group">
                         <label>Description</label>
                         <textarea class="form-control" name="description" rows="5" id="description"><?php echo $row['idescription']; ?></textarea>
                         <?php echo form_error('description', '<div class="error">', '</div>');  ?>

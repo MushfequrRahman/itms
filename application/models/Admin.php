@@ -149,14 +149,14 @@ class Admin extends CI_Model
 	}
 
 
-	public function user_insert($factoryid, $departmentid, $name, $designationid, $oemail, $pmobile, $usertypeid, $userid, $password, $pic_file)
+	public function user_insert($factoryid, $etypeid, $departmentid, $name, $designationid, $oemail, $pmobile, $usertypeid, $userid, $password, $pic_file)
 	{
 		$sql = "SELECT * FROM user WHERE userid='$userid'";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() == 1) {
 			return false;
 		} else {
-			$sql = "INSERT INTO user VALUES ('$factoryid','$departmentid','$name','$designationid','$oemail','$pmobile','$usertypeid','$userid','$userid','$password','$pic_file','1','0000-00-00')";
+			$sql = "INSERT INTO user VALUES ('$factoryid','$etypeid','$departmentid','$name','$designationid','$oemail','$pmobile','$usertypeid','$userid','$userid','$password','$pic_file','1','0000-00-00')";
 			$query = $this->db->query($sql);
 
 			$sql1 = "INSERT INTO ruser VALUES ('$userid')";
@@ -168,6 +168,7 @@ class Admin extends CI_Model
 	{
 		$query = "SELECT * FROM user 
 		LEFT JOIN factory ON factory.factoryid=user.factoryid
+		LEFT JOIN employment_type ON employment_type.etypeid=user.etypeid
 		LEFT JOIN department ON department.deptid=user.departmentid
 		LEFT JOIN designation ON designation.desigid=user.designationid
 		LEFT JOIN userstatus ON userstatus.userstatusid=user.ustatus
@@ -194,14 +195,14 @@ class Admin extends CI_Model
 		$sql = "UPDATE user SET factoryid='$factoryid',departmentid='$departmentid',designationid='$designationid',name='$name',email='$email',mobile='$mobile',user_type='$usertypeid',password='$password',ustatus='$userstatusid',indate='$indate' WHERE userid='$userid'";
 		return $query = $this->db->query($sql);
 	}
-	public function user_transfer($factoryid, $departmentid, $designationid, $name, $oemail, $mobile, $usertypeid, $userstatusid, $userid, $password, $ruserid, $pic_file)
+	public function user_transfer($factoryid, $etypeid, $departmentid, $designationid, $name, $oemail, $mobile, $usertypeid, $userstatusid, $userid, $password, $ruserid, $pic_file)
 	{
 		$sql = "SELECT * FROM user WHERE userid='$userid'";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() == 1) {
 			return false;
 		} else {
-			$sql = "INSERT INTO user VALUES ('$factoryid','$departmentid','$designationid','$name','$oemail','$mobile','$usertypeid','$userid','$ruserid','$password','$pic_file','1','0000-00-00')";
+			$sql = "INSERT INTO user VALUES ('$factoryid','$etypeid','$departmentid','$designationid','$name','$oemail','$mobile','$usertypeid','$userid','$ruserid','$password','$pic_file','1','0000-00-00')";
 			$query = $this->db->query($sql);
 			return $query;
 		}
@@ -564,8 +565,7 @@ class Admin extends CI_Model
 		$query = "SELECT product_details_insert.pacode,product_history_insert.factoryid,supplier,
 		mpr,sn,item,description,pqty,puom,warranty,price,pdate,adate,rdate,
 		ddate,dremarks,item_release_type_insert.irid,releasetype,
-		pcname,
-		pgname,psgname,product_details_insert.userid,user.name,pastatus
+		pcname,pgname,psgname,product_details_insert.userid,user.name,pastatus,ip,mac
 		FROM product_details_insert
 		JOIN product_insert ON product_insert.pcode=product_details_insert.pcode
 		LEFT JOIN product_uom_insert ON product_uom_insert.puomid=product_details_insert.puomid
@@ -651,10 +651,10 @@ class Admin extends CI_Model
 		$result = $query->result_array();
 		return $result;
 	}
-	public function productinventorylup($piv, $sn, $description, $iqty, $warranty, $pdate)
+	public function productinventorylup($piv, $sn, $ip, $mac, $description, $iqty, $warranty, $pdate)
 	{
 		$pdate = date("Y-m-d", strtotime($pdate));
-		$sql = "UPDATE product_inventory SET sn='$sn',idescription='$description',iqty='$iqty',warranty='$warranty',pdate='$pdate' 
+		$sql = "UPDATE product_inventory SET sn='$sn',ip='$ip',mac='$mac',idescription='$description',iqty='$iqty',warranty='$warranty',pdate='$pdate' 
 		WHERE piv='$piv'";
 		return $query = $this->db->query($sql);
 	}
@@ -678,11 +678,36 @@ class Admin extends CI_Model
 		$this->db->query($sql1);
 		return $query;
 	}
+	public function product_multiple_assign_insert($data)
+	{
+		date_default_timezone_set('Asia/Dhaka');
+
+		$data['adate'] = date("Y-m-d", strtotime($data['adate']));
+
+
+		$d = date('Y-m-d');
+		$t = date("H:i:s");
+		$d1 = str_replace("-", "", $d);
+		$t1 = str_replace(":", "", $t);
+		$ccid = $d1 . $t1;
+		$data['ccid'] = $ccid . $data['i'];
+
+
+
+		$sql = "INSERT INTO product_assign_insert VALUES ('$data[ccid]','$data[pacode]','$data[userid]','$data[adate]','0000-00-00','','1')";
+		$query = $this->db->query($sql);
+		// $sql1 = "UPDATE product_details_insert SET adate='$adate',userid='$userid',pastatus='1' 
+		// WHERE pacode='$pacode'";
+		$sql1 = "UPDATE product_inventory SET adate='$data[adate]',userid='$data[userid]',pastatus='1' 
+				WHERE pacode='$data[pacode]'";
+		$this->db->query($sql1);
+		return $query;
+	}
 	public function product_return_insert($pacode, $remarks, $rdate)
 	{
 		$rdate = date("Y-m-d", strtotime($rdate));
 		$sql = "UPDATE product_assign_insert SET rdate='$rdate',rremarks='$remarks',astatus='0' 
-		WHERE pacode='$pacode'";
+		WHERE pacode='$pacode' AND astatus='1'";
 
 		// $sql1 = "UPDATE product_details_insert SET userid='',rdate='$rdate',pastatus='0' 
 		// WHERE pacode='$pacode'";
@@ -693,6 +718,25 @@ class Admin extends CI_Model
 		$this->db->query($sql1);
 		return $query = $this->db->query($sql);
 	}
+	public function product_multiple_return_insert($data)
+	{
+		date_default_timezone_set('Asia/Dhaka');
+
+		$data['rdate'] = date("Y-m-d", strtotime($data['rdate']));
+
+		$sql = "UPDATE product_assign_insert SET rdate='$data[rdate]',rremarks='$data[remarks]',astatus='0' 
+		WHERE pacode='$data[pacode]' AND astatus='1'";
+
+		// $sql1 = "UPDATE product_details_insert SET userid='',rdate='$rdate',pastatus='0' 
+		// WHERE pacode='$pacode'";
+		// $this->db->query($sql1);
+
+		$sql1 = "UPDATE product_inventory SET userid='',rdate='$data[rdate]',pastatus='0' 
+				WHERE pacode='$data[pacode]'";
+		$this->db->query($sql1);
+		return $query = $this->db->query($sql);
+	}
+
 	public function item_release_insert($pacode, $irid, $remarks, $ddate)
 	{
 		date_default_timezone_set('Asia/Dhaka');
@@ -761,7 +805,7 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT mprid,mdate,fid,etypename,name,departmentname,designation,smprid 
+		$query = "SELECT mprid,mdate,msdate,fid,etypename,name,departmentname,designation,smprid 
 		FROM mpr_insert_id 
 			
 			LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
@@ -775,7 +819,7 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT mprid,mdate,fid,etypename,name,departmentname,designation,pcname,
+		$query = "SELECT mprid,mdate,msdate,fid,etypename,name,departmentname,designation,pcname,
 		pgname,psgname,pname,item,brandname,qty,puom,description,price,remarks,uname
 		 FROM mpr_insert 
 		JOIN mpr_insert_id ON mpr_insert.smprid=mpr_insert_id.smprid
@@ -876,11 +920,14 @@ class Admin extends CI_Model
 		// $sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$data[mprid]')";
 		// $query1 = $this->db->query($sql1);
 
-		$sql = "INSERT INTO po_insert VALUES ('$data[ccid]','$data[ccid1]','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
+		$sql = "INSERT INTO po_insert VALUES ('$data[ccid]','$data[ccid1]','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[description]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
 		$query = $this->db->query($sql);
 
-		$sqld = "DELETE FROM  po_insert WHERE pqty='0'";
-		$queryd = $this->db->query($sqld);
+		$sqlp = "INSERT INTO po_insert1 VALUES ('$data[ccid]','$data[ccid1]','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[description]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
+		$queryp = $this->db->query($sqlp);
+
+		// $sqld = "DELETE FROM  po_insert WHERE pqty='0'";
+		// $queryd = $this->db->query($sqld);
 
 		$sql1 = "SELECT simprid FROM po_insert WHERE simprid='$data[item]'";
 		$query1 = $this->db->query($sql1);
@@ -932,7 +979,7 @@ class Admin extends CI_Model
 		$wd = date("Y-m-d", strtotime($wd));
 		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,etypename,name,departmentname,designation,
 		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,
-		description,price,po,pdate,pqty,
+		description,price,po,pdate,pqty,podescription,
 		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,pstatus
 		 FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
@@ -944,7 +991,7 @@ class Admin extends CI_Model
 		
 		JOIN department ON department.deptid=mpr_insert_id.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
-		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		WHERE pdate between '$pd' AND '$wd' ORDER BY mpr_insert_id.mprid";
 		$result = $this->db->query($query);
@@ -989,7 +1036,7 @@ class Admin extends CI_Model
 		
 		JOIN department ON department.deptid=mpr_insert_id.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
-		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 		WHERE sipoid='$sipoid'";
 		$result = $this->db->query($query);
 		return $result->result_array();
@@ -1123,9 +1170,12 @@ class Admin extends CI_Model
 		//		JOIN product_category_insert ON product_category_insert.pccode=mpr_insert.item
 		//		JOIN product_capop_insert ON product_capop_insert.pcoid=mpr_insert.type
 		//		WHERE receive_insert.mprid='$mprid' AND grn!=''";
-		$query = "SELECT mpr_wise_receive_list_view.mprid AS mprid,fid,pccode,item,pcname,model,
-		mpr_wise_receive_list_view.po AS po,qty,puom,price,remarks,uname,mdate,grn,invoice,
-		rqty,rdate,description,mpr_wise_receive_list_view.simprid AS simprid,mpr_wise_receive_list_view.sipoid AS sipoid,pcode,
+		$query = "SELECT mpr_wise_receive_list_view.mprid AS mprid,fid,pccode,
+		item,pcname,model,
+		mpr_wise_receive_list_view.po AS po,
+		qty,puom,price,remarks,uname,mdate,grn,grnrid,invoice,
+		rqty,rdate,description,mpr_wise_receive_list_view.simprid AS simprid,
+		mpr_wise_receive_list_view.sipoid AS sipoid,pcode,
 		pname,pqty,pprice,iqty
  		FROM mpr_wise_receive_list_view 
 		
@@ -1139,13 +1189,12 @@ class Admin extends CI_Model
 
 	public function date_wise_receive_list($pd, $wd)
 	{
-
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
 
-
 		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
-		description,remarks,mdate,msdate,po_insert.po,pqty,pprice,grn,rqty,rdate,iqty,supplier_insert.supplier,
+		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,pprice,grn,rqty,rdate,iqty,
+		supplier_insert.supplier,
 		invoice,DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
@@ -1162,6 +1211,34 @@ class Admin extends CI_Model
 		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		WHERE rdate between '$pd' AND '$wd' 
 		ORDER BY mpr_insert_id .mprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function grn_submission_to_it($pd, $wd, $userid)
+	{
+		$pd = date("Y-m-d", strtotime($pd));
+		$wd = date("Y-m-d", strtotime($wd));
+
+		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
+		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,pprice,
+		grn,rqty,rdate,iqty,
+		supplier_insert.supplier,
+		invoice,DATEDIFF(CURDATE(),msdate) AS cday
+		FROM mpr_insert_id 
+		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
+		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
+		WHERE mpr_insert_id.suserid='$userid' AND rdate between '$pd' AND '$wd'
+		ORDER BY mpr_insert_id.mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
@@ -1194,7 +1271,7 @@ class Admin extends CI_Model
 
 
 		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
-		description,remarks,mdate,msdate,SUM(pqty) AS pqty,SUM(rqty) AS rqty,
+		description,remarks,mdate,msdate,pqty,SUM(rqty) AS rqty,
 		DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
@@ -1263,7 +1340,7 @@ class Admin extends CI_Model
 		$query = "SELECT  mpr_insert_id.mprid,fid,uname,pcname,pname,item,qty,puom,
 		description,remarks,mdate,msdate,po_insert.po,
 		pqty,pprice,pacode,sn,grn,warranty,rqty,receive_insert.rdate,iqty,supplier_insert.supplier,
-		invoice
+		invoice,receive_insert.rdate
 		FROM product_inventory 
 		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
@@ -1319,6 +1396,22 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
+	public function single_product_po_info($sipoid)
+	{
+
+		$query = "SELECT * FROM po_insert
+				  WHERE sipoid='$sipoid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function single_product_receive_info($sipoid)
+	{
+
+		$query = "SELECT * FROM receive_insert
+				  WHERE sipoid='$sipoid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
 	//public function receive_qty_remaining($pcode)
 	//	{
 	//		$querytt="SELECT simprid FROM mpr_wise_receive_list_view WHERE sipoid='$pcode'";
@@ -1335,7 +1428,7 @@ class Admin extends CI_Model
 	//		$result = $this->db->query($query);
 	//		return $result->result_array();
 	//	}
-	public function product_inventory_insert($pcode, $sipoid, $factoryid, $sn, $description, $pdate, $iqty, $warranty)
+	public function product_inventory_insert($pcode, $sipoid, $grnrid, $factoryid, $sn, $ip, $mac, $description, $pdate, $iqty, $warranty)
 	{
 		date_default_timezone_set('Asia/Dhaka');
 		$pdate = date("Y-m-d", strtotime($pdate));
@@ -1357,7 +1450,7 @@ class Admin extends CI_Model
 
 		$sqla = "INSERT INTO product_asset_code VALUES ('$pacode','$factoryid','$pcode','$pcidnum')";
 
-		$sql = "INSERT INTO product_inventory VALUES ('$ccid','$sipoid','$factoryid','$pacode','$sn','$description','$iqty','$warranty','$pdate','','','','0')";
+		$sql = "INSERT INTO product_inventory VALUES ('$ccid','$sipoid','$grnrid','$factoryid','$pacode','$sn','$ip','$mac','$description','$iqty','$warranty','$pdate','','','','0')";
 
 		$sqll = "INSERT INTO product_ihistory_insert VALUES ('$ccid','$pacode','$factoryid','1')";
 
@@ -1368,18 +1461,114 @@ class Admin extends CI_Model
 	}
 	public function product_inventory_list()
 	{
+		// $query = "SELECT  product_inventory.pacode,product_ihistory_insert.factoryid,
+		// supplier_insert.supplier,uname,
+		// mpr_insert_id.mprid,sn,idescription,item,
+		// iqty,puom,warranty,price,pprice,product_category_insert.pccode,
+		// product_inventory.pdate,adate,product_inventory.rdate,po_insert.po,
+		// ddate,dremarks,item_release_type_insert.irid,releasetype,
+		// pcname,pname,pgname,psgname,ip,mac,product_inventory.userid,
+		// user.name,departmentname,pastatus
+		// FROM product_inventory 
+		// JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
+		// JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		// JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
+
+		// JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		// LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		// JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		// JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		// JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		// JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		// JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		// JOIN  product_ihistory_insert ON product_ihistory_insert.pacode=product_inventory.pacode
+		// LEFT JOIN item_release_insert ON item_release_insert.pacode=product_inventory.pacode
+		// LEFT JOIN item_release_type_insert ON item_release_type_insert.irid=item_release_insert.irid
+		// LEFT JOIN user ON user.userid=product_inventory.userid
+		// LEFT JOIN department ON department.deptid=user.departmentid
+		// WHERE product_ihistory_insert.phstatus='1'";
+		// $result = $this->db->query($query);
+		// return $result->result_array();
+
+		$query = "SELECT 
+    product_inventory.pacode,
+    product_ihistory_insert.factoryid,
+    supplier_insert.supplier,
+    uname,
+    mpr_insert_id.mprid,
+    sn,
+    idescription,
+    item,
+    iqty,
+    puom,
+    warranty,
+    price,
+    pprice,
+    product_category_insert.pccode,
+    product_inventory.pdate,
+    adate,
+    product_inventory.rdate,
+    po_insert.po,
+    ddate,
+    dremarks,
+    item_release_type_insert.irid,
+    releasetype,
+    pcname,
+    pname,
+    pgname,
+    psgname,
+    ip,
+    mac,
+    product_inventory.userid,
+    user.name,
+    departmentname,
+    pastatus,
+    
+    -- Count of assigned items
+    (
+        SELECT COUNT(*) 
+        FROM product_assign_insert 
+        WHERE product_assign_insert.pacode = product_inventory.pacode
+    ) AS totalusing
+
+FROM product_inventory 
+JOIN po_insert ON po_insert.sipoid = product_inventory.sipoid
+JOIN mpr_insert ON mpr_insert.simprid = po_insert.simprid
+JOIN mpr_insert_id ON mpr_insert_id.smprid = mpr_insert.smprid
+JOIN item_insert ON item_insert.itemcode = mpr_insert.model
+LEFT JOIN supplier_insert ON supplier_insert.supplierid = po_insert.supplier
+JOIN product_uom_insert ON product_uom_insert.puomid = mpr_insert.uom
+JOIN product_insert ON product_insert.pcode = mpr_insert.mpcode
+JOIN product_category_insert ON product_category_insert.pccode = product_insert.pccode
+JOIN product_group_insert ON product_group_insert.pgid = product_insert.pgid
+JOIN product_subgroup_insert ON product_subgroup_insert.psgid = product_insert.psgid
+JOIN product_ihistory_insert ON product_ihistory_insert.pacode = product_inventory.pacode
+LEFT JOIN item_release_insert ON item_release_insert.pacode = product_inventory.pacode
+LEFT JOIN item_release_type_insert ON item_release_type_insert.irid = item_release_insert.irid
+LEFT JOIN user ON user.userid = product_inventory.userid
+LEFT JOIN department ON department.deptid = user.departmentid
+
+WHERE product_ihistory_insert.phstatus = '1'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function product_inventory_list_for_assign($factoryid)
+	{
 		$query = "SELECT  product_inventory.pacode,product_ihistory_insert.factoryid,
-		supplier_insert.supplier,
+		supplier_insert.supplier,etypename,uname,
 		mpr_insert_id.mprid,sn,description,item,
 		iqty,puom,warranty,price,pprice,
-		po_insert.pdate,adate,rdate,
+		product_inventory.pdate,adate,product_inventory.rdate,po_insert.po,
 		ddate,dremarks,item_release_type_insert.irid,releasetype,
 		pcname,pname,
-		pgname,psgname,product_inventory.userid,user.name,departmentname,pastatus
+		pgname,psgname,product_inventory.userid,user.name,departmentname,
+		pastatus
 		FROM product_inventory 
 		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
 		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
+		
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
@@ -1392,13 +1581,153 @@ class Admin extends CI_Model
 		LEFT JOIN item_release_type_insert ON item_release_type_insert.irid=item_release_insert.irid
 		LEFT JOIN user ON user.userid=product_inventory.userid
 		LEFT JOIN department ON department.deptid=user.departmentid
-		WHERE product_ihistory_insert.phstatus='1'";
+		WHERE  product_ihistory_insert.phstatus='1' 
+		AND product_inventory.pastatus='0' 
+		AND product_inventory.ifid='$factoryid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function product_inventory_list_for_return($userid)
+	{
+		$query = "SELECT  product_inventory.pacode,product_ihistory_insert.factoryid,
+		supplier_insert.supplier,
+		mpr_insert_id.mprid,sn,description,item,
+		iqty,puom,warranty,price,pprice,
+		product_inventory.pdate,adate,product_inventory.rdate,po_insert.po,
+		ddate,dremarks,item_release_type_insert.irid,releasetype,
+		pcname,pname,
+		pgname,psgname,product_inventory.userid,user.name,departmentname,pastatus
+		FROM product_inventory 
+		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
+		
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		JOIN  product_ihistory_insert ON product_ihistory_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_insert ON item_release_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_type_insert ON item_release_type_insert.irid=item_release_insert.irid
+		LEFT JOIN user ON user.userid=product_inventory.userid
+		LEFT JOIN department ON department.deptid=user.departmentid
+		WHERE  product_ihistory_insert.phstatus='1' 
+		AND product_inventory.pastatus='1' 
+		AND product_inventory.userid='$userid'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function user_agreement($userid)
+	{
+		$query = "SELECT  COUNT(product_assign_insert.pacode) AS apacode,product_inventory.pacode,product_ihistory_insert.factoryid,
+		supplier_insert.supplier,uname,
+		mpr_insert_id.mprid,sn,idescription,item,
+		iqty,puom,warranty,price,pprice,
+		product_inventory.pdate,product_inventory.adate,product_inventory.rdate,po_insert.po,
+		ddate,dremarks,item_release_type_insert.irid,releasetype,
+		pcname,pname,
+		pgname,psgname,product_inventory.userid,user.name,departmentname,designation,email,
+		pastatus,idescription,grn,ip,mac
+		FROM product_inventory 
+		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
+		LEFT JOIN receive_insert ON receive_insert.grnrid=product_inventory.grnrid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		JOIN  product_ihistory_insert ON product_ihistory_insert.pacode=product_inventory.pacode
+		JOIN product_assign_insert ON product_assign_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_insert ON item_release_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_type_insert ON item_release_type_insert.irid=item_release_insert.irid
+		LEFT JOIN user ON user.userid=product_inventory.userid
+		LEFT JOIN department ON department.deptid=user.departmentid
+		LEFT JOIN designation ON designation.desigid=user.designationid
+		WHERE product_ihistory_insert.phstatus='1' AND user.userid='$userid' 
+		AND product_insert.pcode='LPT'";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
 	public function product_transfer($pacode)
 	{
 		$query = "SELECT  ifid,pacode FROM product_inventory WHERE pacode='$pacode'";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function product_use_history($pacode)
+	{
+		$query = "SELECT  product_inventory.pacode,
+		supplier_insert.supplier,uname,
+		mpr_insert_id.mprid,sn,idescription,item,
+		iqty,puom,warranty,price,pprice,product_category_insert.pccode,
+		product_inventory.pdate,
+		product_assign_insert.adate,product_assign_insert.rdate,product_assign_insert.astatus,
+		po_insert.po,
+		ddate,dremarks,item_release_type_insert.irid,releasetype,
+		pcname,pname,pgname,psgname,product_assign_insert.userid,
+		user.name,pastatus
+		FROM product_inventory 
+		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
+
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		
+		JOIN  product_assign_insert ON product_assign_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_insert ON item_release_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_type_insert ON item_release_type_insert.irid=item_release_insert.irid
+		LEFT JOIN user ON user.userid=product_assign_insert.userid
+		
+		WHERE product_assign_insert.pacode='$pacode'
+		ORDER BY paiid DESC";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function user_product_using_history($userid)
+	{
+		$query = "SELECT  product_inventory.pacode,
+		supplier_insert.supplier,uname,
+		mpr_insert_id.mprid,sn,ip,mac,idescription,item,
+		iqty,puom,warranty,price,pprice,product_category_insert.pccode,
+		product_inventory.pdate,
+		product_assign_insert.adate,product_assign_insert.rdate,product_assign_insert.astatus,
+		po_insert.po,
+		ddate,dremarks,item_release_type_insert.irid,releasetype,
+		pcname,pname,pgname,psgname,product_assign_insert.userid,
+		user.name,pastatus
+		FROM product_inventory 
+		JOIN po_insert ON po_insert.sipoid=product_inventory.sipoid
+		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
+		JOIN mpr_insert_id ON mpr_insert_id.smprid=mpr_insert.smprid
+
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
+		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
+		
+		JOIN  product_assign_insert ON product_assign_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_insert ON item_release_insert.pacode=product_inventory.pacode
+		LEFT JOIN item_release_type_insert ON item_release_type_insert.irid=item_release_insert.irid
+		LEFT JOIN user ON user.userid=product_assign_insert.userid
+		
+		WHERE product_assign_insert.userid='$userid'
+		ORDER BY paiid DESC";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}

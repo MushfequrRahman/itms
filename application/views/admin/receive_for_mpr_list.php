@@ -90,9 +90,17 @@
     });
   })
 </script>
-<script>
+<!-- <script>
   $(document).ready(function() {
     $("#myModal").modal('show');
+  });
+</script> -->
+<script>
+  $(document).ready(function () {
+    $('#myModal').modal({
+      backdrop: 'static',
+      keyboard: false
+    });
   });
 </script>
 <script type="text/javascript">

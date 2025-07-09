@@ -308,6 +308,7 @@
             <!-- <th>Total Price</th> -->
             <th>Invoice</th>
             <th>GRN</th>
+            <th>GRN Date</th>
             <th>Warranty</th>
             <th>Serial</th>
             <th>Asset Code</th>
@@ -352,6 +353,17 @@
               <!-- <td style="vertical-align:middle;"><?php echo $row['pqty']; ?></td> -->
               <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td>
               <td style="vertical-align:middle;"><?php echo $row['grn']; ?></td>
+              <?php if ($row['rdate'] == '0000-00-00') {
+              ?>
+                <td style="vertical-align:middle;">0000-00-00</td>
+              <?php
+              } else {
+              ?>
+                <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['rdate'])); ?></td>
+              <?php
+              }
+
+              ?>
               <td style="vertical-align:middle;"><?php echo $row['warranty']; ?></td>
               <td style="vertical-align:middle;"><?php echo $row['sn']; ?></td>
               <td style="vertical-align:middle;"><?php echo $row['pacode']; ?></td>

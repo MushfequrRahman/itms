@@ -151,7 +151,7 @@ foreach ($bl as $row) {
                           <input type="text" class="form-control pd" readonly name="mprdate" id="mprdate" value="<?php echo date('d-m-Y'); ?>">
                         </div>
                         <div class="col-md-3">
-                          <label>MPR Submission Date<em>*</em></label>
+                          <label>MPR Submission To IT<em>*</em></label>
                           <input type="text" class="form-control pd" readonly name="mprsdate" id="mprsdate" value="<?php echo date('d-m-Y'); ?>">
                         </div>
                       </div>

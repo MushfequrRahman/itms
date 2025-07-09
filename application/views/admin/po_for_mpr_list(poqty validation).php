@@ -115,12 +115,7 @@
             if ($row['prqty'] < $row['qty']) {
             ?>
               <td style="vertical-align:middle;"><input type="text" class="form-control" name="po[]" placeholder=" PO"></td>
-              <td style="vertical-align:middle;"><input type="text"
-       class="form-control pqty"
-       name="pqty[]"
-       placeholder="Qty"
-       data-prqty="<?php echo $row['prqty']; ?>"
-       data-qty="<?php echo $row['qty']; ?>"></td>
+              <td style="vertical-align:middle;"><input type="text" class="form-control pqty" name="pqty[]" placeholder="Qty"></td>
               <td style="vertical-align:middle;"><input type="text" class="form-control pprice" name="pprice[]" placeholder="Price"></td>
 
               <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="supplier[]" placeholder=" supplier"></td>-->
@@ -230,21 +225,4 @@
 
       });
     });
-  </script>
-  <script>
-  $(document).on('input', '.pqty', function () {
-  let input = $(this);
-  let enteredQty = parseFloat(input.val()) || 0;
-  let prqty = parseFloat(input.data('prqty')) || 0;
-  let mprqty = parseFloat(input.data('qty')) || 0;
-
-  let total = enteredQty + prqty;
-
-  if (total > mprqty) {
-    alert("Total PO Qty (existing + entered) cannot exceed MPR Qty (" + mprqty + ")");
-    input.val('');
-    input.focus();
-  }
-});
-
   </script>

@@ -48,10 +48,20 @@
 													$pcode = $row2['pcode'];
 												}
 												?>
+												<?php
+												foreach ($ul3 as $row3) {
+													$podescription = $row3['podescription'];
+													}
+												?>
+												<?php
+												foreach ($ul4 as $row4) {
+													$cdate = $row4['cdate'];
+													}
+												?>
 
 												<input type="hidden" class="form-control" readonly name="pcode" value="<?php echo $pcode; ?>">
 												<input type="hidden" class="form-control" readonly name="sipoid" value="<?php echo $sipoid; ?>">
-												<?php echo form_error('pcode', '<div class="error">', '</div>');  ?>
+												<input type="hidden" class="form-control" readonly name="grnrid" value="<?php echo $grnrid; ?>">
 											</div>
 
 											<?php
@@ -83,8 +93,18 @@
 													<?php echo form_error('sn', '<div class="error">', '</div>');  ?>
 												</div>
 												<div class="form-group">
+													<label>IP Address</label>
+													<input type="text" class="form-control" name="ip" placeholder="Enter IP Address">
+													
+												</div>
+												<div class="form-group">
+													<label>MAC Address</label>
+													<input type="text" class="form-control" name="mac" placeholder="Enter Mac Address">
+													
+												</div>
+												<div class="form-group">
 													<label>Description</label>
-													<textarea class="form-control" name="description" rows="5" id="description"><?php echo $description; ?></textarea>
+													<textarea class="form-control" name="description" rows="5" id="description"><?php echo $podescription; ?></textarea>
 													<?php echo form_error('description', '<div class="error">', '</div>');  ?>
 												</div>
 												<?php /*?><div class="form-group">
@@ -93,8 +113,8 @@
                     							<?php echo form_error('price', '<div class="error">', '</div>');  ?>
 											</div><?php */ ?>
 												<div class="form-group">
-													<label>Purchase/Invoice Date</label>
-													<input type="text" class="form-control pd" readonly name="pdate" value="<?php echo date('d-m-Y'); ?>">
+													<!-- <label>Purchase/Invoice Date</label> -->
+													<input type="hidden" class="form-control pd" readonly name="pdate" value="<?php echo date("d-m-Y", strtotime($cdate)); ?>">
 													<?php /*?><?php echo form_error('dobdate', '<div class="error">', '</div>');  ?><?php */ ?>
 												</div>
 												<div class="form-group">

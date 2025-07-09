@@ -473,6 +473,7 @@ class Dashboard extends CI_Controller
 		$data['ul1'] = $this->Admin->department_list();
 		$data['ul2'] = $this->Admin->designation_list();
 		$data['ul3'] = $this->Admin->usertype_list();
+		$data['ul4'] = $this->Admin->employment_type_list();
 		$this->load->view('admin/user_insert_form', $data);
 	}
 	public function user_insert()
@@ -481,30 +482,37 @@ class Dashboard extends CI_Controller
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
 		if ($this->input->post('submit')) {
-			$factoryid = $this->input->post('factoryid');
-			$departmentid = $this->input->post('departmentid');
-			$name = $this->input->post('name');
-			$designationid = $this->input->post('designationid');
-			$oemail = $this->input->post('oemail');
-			$pmobile = $this->input->post('pmobile');
-			$usertypeid = $this->input->post('usertypeid');
-			$userid = $this->input->post('userid');
-			$password = $this->input->post('password');
-			$config['upload_path']          = APPPATH . '../assets/uploads/users';
-			$config['allowed_types']        = 'jpg|jpeg|png';
-			$config['max_size']             = 10000;
-			$this->load->library('upload', $config);
-			$this->upload->do_upload('pic_file');
-			$upload_data = $this->upload->data();
-			$pic_file = $upload_data['file_name'];
-			$pic_file =  str_replace(' ', '_', $pic_file);
-			$ins = $this->Admin->user_insert($factoryid, $departmentid, $designationid, $name, $oemail, $pmobile, $usertypeid, $userid, $password, $pic_file);
-			if ($ins == TRUE) {
-				$this->session->set_flashdata('Successfully', 'Successfully Inserted');
+			$userid = $this->form_validation->set_rules('userid', 'User ID', 'required');
+			if ($this->form_validation->run() == FALSE) {
+				$this->user_insert_form();
 			} else {
-				$this->session->set_flashdata('Successfully', 'Failed To Inserted');
+				$factoryid = $this->input->post('factoryid');
+				$etypeid = $this->input->post('etypeid');
+				$departmentid = $this->input->post('departmentid');
+				$name = $this->input->post('name');
+				$designationid = $this->input->post('designationid');
+				$oemail = $this->input->post('oemail');
+				$pmobile = $this->input->post('pmobile');
+				$usertypeid = $this->input->post('usertypeid');
+				$userid = $this->input->post('userid');
+				$userid = preg_replace('/\s+/', '', $userid);
+				$password = $this->input->post('password');
+				$config['upload_path']          = APPPATH . '../assets/uploads/users';
+				$config['allowed_types']        = 'jpg|jpeg|png';
+				$config['max_size']             = 10000;
+				$this->load->library('upload', $config);
+				$this->upload->do_upload('pic_file');
+				$upload_data = $this->upload->data();
+				$pic_file = $upload_data['file_name'];
+				$pic_file =  str_replace(' ', '_', $pic_file);
+				$ins = $this->Admin->user_insert($factoryid, $etypeid, $departmentid, $designationid, $name, $oemail, $pmobile, $usertypeid, $userid, $password, $pic_file);
+				if ($ins == TRUE) {
+					$this->session->set_flashdata('Successfully', 'Successfully Inserted');
+				} else {
+					$this->session->set_flashdata('Successfully', 'Failed To Inserted');
+				}
+				redirect('Dashboard/user_insert_form', 'refresh');
 			}
-			redirect('Dashboard/user_insert_form', 'refresh');
 		}
 	}
 	public function user_list()
@@ -636,6 +644,7 @@ class Dashboard extends CI_Controller
 		$this->load->model('Admin');
 		if ($this->input->post('submit')) {
 			$factoryid = $this->input->post('factoryid');
+			$etypeid = $this->input->post('etypeid');
 			$departmentid = $this->input->post('departmentid');
 			$designationid = $this->input->post('designationid');
 			$name = $this->input->post('name');
@@ -649,7 +658,7 @@ class Dashboard extends CI_Controller
 			$pic_file = $this->input->post('pic_file');
 
 
-			$ins = $this->Admin->user_transfer($factoryid, $departmentid, $designationid, $name, $oemail, $mobile, $usertypeid, $userstatusid, $userid, $password, $ruserid, $pic_file);
+			$ins = $this->Admin->user_transfer($factoryid,$etypeid, $departmentid, $designationid, $name, $oemail, $mobile, $usertypeid, $userstatusid, $userid, $password, $ruserid, $pic_file);
 			if ($ins == TRUE) {
 				$this->session->set_flashdata('Successfully', 'Successfully Updated');
 			} else {
@@ -1297,12 +1306,14 @@ class Dashboard extends CI_Controller
 			$piv = $this->input->post('piv');
 			//$factoryid=$this->input->post('factoryid');
 			$sn = $this->input->post('sn');
+			$ip = $this->input->post('ip');
+			$mac = $this->input->post('mac');
 			$description = $this->input->post('description');
 			$iqty = $this->input->post('iqty');
 			$warranty = $this->input->post('warranty');
 			$pdate = $this->input->post('pdate');
 
-			$ins = $this->Admin->productinventorylup($piv, $sn, $description, $iqty, $warranty, $pdate);
+			$ins = $this->Admin->productinventorylup($piv, $sn,$ip,$mac, $description, $iqty, $warranty, $pdate);
 			if ($ins == TRUE) {
 				$this->session->set_flashdata('Successfully', 'Successfully Updated');
 			} else {
@@ -1379,6 +1390,60 @@ class Dashboard extends CI_Controller
 				}
 				redirect('Dashboard/product_inventory_list', 'refresh');
 			}
+		}
+	}
+	public function product_multiple_assign_insert()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		if ($this->input->post('submit')) {
+
+			$pacode = $this->input->post('pacode');
+			$userid = $this->input->post('userid');
+			$adate = $this->input->post('adate');
+			for ($i = 0; $i < count($pacode); $i++) {
+				$data["i"] = $i;
+				$data["pacode"] = $pacode[$i];
+				$data["userid"] = $userid;
+				$data["adate"] = $adate;
+				$ins = $this->Admin->product_multiple_assign_insert($data);
+			}
+
+			if ($ins == TRUE) {
+				$this->session->set_flashdata('Successfully', 'Successfully Assigned');
+			} else {
+				$this->session->set_flashdata('Un Successfully', 'Failed To Assigned');
+			}
+			redirect('Dashboard/user_list', 'refresh');
+		}
+	}
+	public function product_multiple_return_insert()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+		if ($this->input->post('submit')) {
+
+			$pacode = $this->input->post('pacode');
+			$userid = $this->input->post('userid');
+			$rdate = $this->input->post('rdate');
+			$remarks = $this->input->post('remarks');
+			for ($i = 0; $i < count($pacode); $i++) {
+				$data["i"] = $i;
+				$data["pacode"] = $pacode[$i];
+				$data["remarks"] = $remarks;
+				$data["userid"] = $userid;
+				$data["rdate"] = $rdate;
+				$ins = $this->Admin->product_multiple_return_insert($data);
+			}
+
+			if ($ins == TRUE) {
+				$this->session->set_flashdata('Successfully', 'Successfully Returned');
+			} else {
+				$this->session->set_flashdata('Un Successfully', 'Failed To Returned');
+			}
+			redirect('Dashboard/user_list', 'refresh');
 		}
 	}
 	public function product_return_form()
@@ -1946,14 +2011,20 @@ class Dashboard extends CI_Controller
 			$podate = $this->input->post('podate');
 			$item = $this->input->post('item');
 			$pqty = $this->input->post('pqty');
+			$description = $this->input->post('description');
+			$description =  str_replace("'", "\'", $description);
 			$premarks = $this->input->post('premarks');
+			$premarks =  str_replace("'", "\'", $premarks);
 			$pprice = $this->input->post('pprice');
 			$pstatus = $this->input->post('pstatus');
 
 			$sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$mprid')";
 			$query1 = $this->db->query($sql1);
 
-			for ($i = 0; $i < count($item); $i++) {
+			for ($i = 0; $i < count($po); $i++) {
+				if (empty($pqty[$i]) || $pqty[$i] == 0 || $pqty[$i] == '') {
+					continue; // এই iteration স্কিপ করব
+				}
 				$data["i"] = $i;
 				$data["ccid"] = $ccid;
 				$data["ccid1"] = $ccid . $i;
@@ -1964,6 +2035,7 @@ class Dashboard extends CI_Controller
 				$data["podate"] = $podate[$i];
 				$data["item"] = $item[$i];
 				$data["pqty"] = $pqty[$i];
+				$data["description"] = $description[$i];
 				$data["premarks"] = $premarks[$i];
 				$data["pprice"] = $pprice[$i];
 				$data["pstatus"] = $pstatus[$i];
@@ -2134,47 +2206,47 @@ class Dashboard extends CI_Controller
 		// 	$uname = $this->input->post('uname');
 
 
-			if ($this->input->post('submit')) {
-				$po = $this->form_validation->set_rules('po', 'PO', 'required');
-				$pqty = $this->form_validation->set_rules('pqty', 'Qty', 'required');
-				$pprice = $this->form_validation->set_rules('pprice', 'Price', 'required');
-				if ($this->form_validation->run() == FALSE) {
-					$this->session->set_flashdata('validation_errors', validation_errors());
-					redirect('Dashboard/po_list_up_form/' . $sipoid . '/');
+		if ($this->input->post('submit')) {
+			$po = $this->form_validation->set_rules('po', 'PO', 'required');
+			$pqty = $this->form_validation->set_rules('pqty', 'Qty', 'required');
+			$pprice = $this->form_validation->set_rules('pprice', 'Price', 'required');
+			if ($this->form_validation->run() == FALSE) {
+				$this->session->set_flashdata('validation_errors', validation_errors());
+				redirect('Dashboard/po_list_up_form/' . $sipoid . '/');
+			} else {
+				$userid = $this->input->post('userid');
+				$spoid = $this->input->post('spoid');
+				$sipoid = $this->input->post('sipoid');
+				$mprid = $this->input->post('mprid');
+				$simprid = $this->input->post('simprid');
+				$po = $this->input->post('po');
+				$podate = $this->input->post('podate');
+				$pqty = $this->input->post('pqty');
+				$pprice = $this->input->post('pprice');
+				$premarks = $this->input->post('premarks');
+				$premarks =  str_replace("'", "\'", $premarks);
+				$supplier = $this->input->post('supplier');
+
+				$ins = $this->Admin->po_list_update($spoid, $sipoid, $userid, $mprid, $po, $simprid, $pqty, $premarks, $pprice, $supplier, $podate);
+
+				if ($ins == TRUE) {
+					$this->session->set_flashdata('Successfully', 'Successfully Updated');
 				} else {
-					$userid = $this->input->post('userid');
-					$spoid = $this->input->post('spoid');
-					$sipoid = $this->input->post('sipoid');
-					$mprid = $this->input->post('mprid');
-					$simprid = $this->input->post('simprid');
-					$po = $this->input->post('po');
-					$podate = $this->input->post('podate');
-					$pqty = $this->input->post('pqty');
-					$pprice = $this->input->post('pprice');
-					$premarks = $this->input->post('premarks');
-					$premarks =  str_replace("'", "\'", $premarks);
-					$supplier = $this->input->post('supplier');
-	
-					$ins = $this->Admin->po_list_update($spoid,$sipoid,$userid,$mprid,$po,$simprid,$pqty,$premarks,$pprice,$supplier,$podate );
-	
-					if ($ins == TRUE) {
-						$this->session->set_flashdata('Successfully', 'Successfully Updated');
-					} else {
-						$this->session->set_flashdata('Successfully', 'Failed To Updated');
-					}
-					redirect('Dashboard/po_list_up_form/' . $sipoid . '/');
+					$this->session->set_flashdata('Successfully', 'Failed To Updated');
 				}
+				redirect('Dashboard/po_list_up_form/' . $sipoid . '/');
 			}
+		}
 
 
 
-			
-			// if ($ins == TRUE) {
-			// 	$this->session->set_flashdata('Successfully', 'Successfully Updated');
-			// } else {
-			// 	$this->session->set_flashdata('Successfully', 'Failed To Updated');
-			// }
-			// redirect('Dashboard/date_wise_mpr_form', 'refresh');
+
+		// if ($ins == TRUE) {
+		// 	$this->session->set_flashdata('Successfully', 'Successfully Updated');
+		// } else {
+		// 	$this->session->set_flashdata('Successfully', 'Failed To Updated');
+		// }
+		// redirect('Dashboard/date_wise_mpr_form', 'refresh');
 		//}
 	}
 	public function po_list_log()
@@ -2293,12 +2365,34 @@ class Dashboard extends CI_Controller
 		$this->load->database();
 		$this->load->model('Admin');
 		//$factoryid = $this->input->post('factoryid');
+		$userid = $this->session->userdata('userid');
 		$pd = $this->input->post('pd');
 		$wd = $this->input->post('wd');
 		$data['pd'] = $pd;
 		$data['wd'] = $wd;
+		$data['userid'] = $userid;
 		$data['ul'] = $this->Admin->date_wise_receive_list($pd, $wd);
 		$this->load->view('admin/date_wise_receive_list', $data);
+	}
+	public function grn_submission_to_it()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$pd = $this->uri->segment(3);
+		$wd = $this->uri->segment(4);
+		$userid = $this->uri->segment(5);
+		$data['pd'] = $pd;
+		$data['wd'] = $wd;
+		$data['ul'] = $this->Admin->grn_submission_to_it($pd, $wd, $userid);
+		$this->load->view('admin/grn_submission_to_it', $data);
+	}
+	public function user_agreement()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$userid = $this->uri->segment(3);
+		$data['ul'] = $this->Admin->user_agreement($userid);
+		$this->load->view('admin/user_agreement', $data);
 	}
 	public function date_wise_remaining_form()
 	{
@@ -2342,14 +2436,18 @@ class Dashboard extends CI_Controller
 		$this->load->model('Admin');
 		$data['title'] = 'Product Inventory Insert';
 		$sipoid = $this->uri->segment(3);
+		$grnrid= $this->uri->segment(4);
 		$this->load->view('admin/head', $data);
 		$this->load->view('admin/toprightnav');
 		$this->load->view('admin/leftmenu');
 		$data['ul'] = $this->Admin->product_inventory_view($sipoid);
 		$data['ul2'] = $this->Admin->product_inventory_view1($sipoid);
 		$data['ul1'] = $this->Admin->receive_qty($sipoid);
+		$data['ul3'] = $this->Admin->single_product_po_info($sipoid);
+		$data['ul4'] = $this->Admin->single_product_receive_info($sipoid);
 		$data['fl'] = $this->Admin->factory_list();
 		$data['sipoid'] = $sipoid;
+		$data['grnrid'] = $grnrid;
 		$data['pcode'] = $pcode;
 		$this->load->view('admin/product_inventory_insert_form', $data);
 	}
@@ -2366,13 +2464,16 @@ class Dashboard extends CI_Controller
 			} else {
 				$pcode = $this->input->post('pcode');
 				$sipoid = $this->input->post('sipoid');
+				$grnrid = $this->input->post('grnrid');
 				$factoryid = $this->input->post('factoryid');
 				$sn = $this->input->post('sn');
+				$ip = $this->input->post('ip');
+				$mac = $this->input->post('mac');
 				$description = $this->input->post('description');
 				$pdate = $this->input->post('pdate');
 				$iqty = $this->input->post('iqty');
 				$warranty = $this->input->post('warranty');
-				$ins = $this->Admin->product_inventory_insert($pcode, $sipoid, $factoryid, $sn, $description, $pdate, $iqty, $warranty);
+				$ins = $this->Admin->product_inventory_insert($pcode, $sipoid, $grnrid, $factoryid, $sn,$ip,$mac, $description, $pdate, $iqty, $warranty);
 
 				if ($ins == TRUE) {
 					$this->session->set_flashdata('Successfully', 'Successfully Inserted');
@@ -2395,6 +2496,62 @@ class Dashboard extends CI_Controller
 		//		$data['il']=$this->Admin->internet();
 		$data['ul'] = $this->Admin->product_inventory_list();
 		$this->load->view('admin/product_inventory_list', $data);
+	}
+	public function product_inventory_list_for_assign()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Product Details List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$userid = $this->uri->segment(3);
+		$factoryid = $this->uri->segment(4);
+		$data['userid'] = $userid;
+		//$data['al']=$this->Admin->antivirus();
+		//		$data['il']=$this->Admin->internet();
+		$data['ul'] = $this->Admin->product_inventory_list_for_assign($factoryid);
+		$this->load->view('admin/product_inventory_list_for_assign', $data);
+	}
+	public function product_inventory_list_for_return()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Product Details List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$userid = $this->uri->segment(3);
+		$factoryid = $this->uri->segment(4);
+		$data['userid'] = $userid;
+		//$data['al']=$this->Admin->antivirus();
+		//		$data['il']=$this->Admin->internet();
+		$data['ul'] = $this->Admin->product_inventory_list_for_return($userid);
+		$this->load->view('admin/product_inventory_list_for_return', $data);
+	}
+	public function product_use_history()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Product Using History List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$pacode = $this->uri->segment(3);
+		$data['ul'] = $this->Admin->product_use_history($pacode);
+		$this->load->view('admin/product_use_history', $data);
+	}
+	public function user_product_using_history()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Product Using List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$userid = $this->uri->segment(3);
+		$data['ul'] = $this->Admin->user_product_using_history($userid);
+		$this->load->view('admin/user_product_using_history', $data);
 	}
 
 	public function product_inventory_list_xls()

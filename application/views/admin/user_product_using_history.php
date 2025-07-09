@@ -200,7 +200,7 @@
 							<div class="col-md-12">
 								<div class="box box-danger">
 									<div class="box-header with-border">
-										<h3 class="box-title">Product Details List(Inventory)</h3>
+										<h3 class="box-title">Product Using History</h3>
 										<div class="row">
 											<div class="col-sm-12 col-md-12 col-lg-12">
 												<?php if ($responce = $this->session->flashdata('Successfully')) : ?>
@@ -243,39 +243,40 @@
 											<thead>
 												<tr>
 													<th data-column="0"><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
-													<th data-column="1"><input type="checkbox" class="column-select" data-col-index="2" checked><br />PUR.For</th>
-													<th data-column="2"><input type="checkbox" class="column-select" data-col-index="3" checked><br />A.Code</th>
-													<th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />Factory</th>
-													<th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Supplier</th>
-													<th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Category</th>
-													<th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />Group</th>
-													<th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />S.Group</th>
-													<th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />MPR</th>
-													<th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Product</th>
-													<th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Model</th>
-													<th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Description</th>
-													<th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />S/N</th>
-													<th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />IP</th>
-													<th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />MAC</th>
-													<th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />PO Price</th>
-													<th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />Qty</th>
-													<th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />Pur.Date</th>
-													<th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />Warranty</th>
-													<th data-column="19"><input type="checkbox" class="column-select" data-col-index="20" checked><br />E.Date</th>
-													<th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />Rem.Day</th>
-													<th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />Status</th>
-													<th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />U.ID</th>
-													<th data-column="23"><input type="checkbox" class="column-select" data-col-index="24" checked><br />U.Name</th>
-													<th data-column="24"><input type="checkbox" class="column-select" data-col-index="25" checked><br />U.Dept</th>
-													<th data-column="25"><input type="checkbox" class="column-select" data-col-index="26" checked><br />G.Date</th>
-													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="27" checked><br />Edit</th>
-													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="28" checked><br />Transfer</th>
-													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="29" checked><br />Release</th>
-													<th data-column="26"><input type="checkbox" class="column-select" data-col-index="30" checked><br />T.Using</th>
+													<!-- <th data-column="1"><input type="checkbox" class="column-select" data-col-index="2" checked><br />PUR.For</th> -->
+													<th data-column="2"><input type="checkbox" class="column-select" data-col-index="2" checked><br />U.ID</th>
+													<th data-column="1"><input type="checkbox" class="column-select" data-col-index="3" checked><br />U.Name</th>
+													<th data-column="2"><input type="checkbox" class="column-select" data-col-index="4" checked><br />A.Code</th>
+													<th data-column="3"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Supplier</th>
+													<th data-column="4"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Category</th>
+													<th data-column="5"><input type="checkbox" class="column-select" data-col-index="7" checked><br />Group</th>
+													<th data-column="6"><input type="checkbox" class="column-select" data-col-index="8" checked><br />S.Group</th>
+													<th data-column="7"><input type="checkbox" class="column-select" data-col-index="9" checked><br />MPR</th>
+													<th data-column="8"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Product</th>
+													<th data-column="9"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Model</th>
+													<th data-column="10"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Description</th>
+													<th data-column="11"><input type="checkbox" class="column-select" data-col-index="13" checked><br />S/N</th>
+													<th data-column="12"><input type="checkbox" class="column-select" data-col-index="14" checked><br />IP</th>
+													<th data-column="13"><input type="checkbox" class="column-select" data-col-index="15" checked><br />MAC</th>
+													<th data-column="14"><input type="checkbox" class="column-select" data-col-index="16" checked><br />PO Price</th>
+													<th data-column="15"><input type="checkbox" class="column-select" data-col-index="17" checked><br />Qty</th>
+													<th data-column="16"><input type="checkbox" class="column-select" data-col-index="18" checked><br />Pur.Date</th>
+													<th data-column="17"><input type="checkbox" class="column-select" data-col-index="19" checked><br />Warranty</th>
+													<th data-column="18"><input type="checkbox" class="column-select" data-col-index="20" checked><br />E.Date</th>
+													<th data-column="19"><input type="checkbox" class="column-select" data-col-index="21" checked><br />Rem.Day</th>
+													<!-- <th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />Factory</th> -->
+
+
+
+													<th data-column="20"><input type="checkbox" class="column-select" data-col-index="22" checked><br />G.Date</th>
+													<th data-column="21"><input type="checkbox" class="column-select" data-col-index="23" checked><br />R.Date</th>
+													<th data-column="22"><input type="checkbox" class="column-select" data-col-index="24" checked><br />Status</th>
+
 												</tr>
 											</thead>
 											<tfoot>
 												<tr>
+
 													<th id="rowCount"></th>
 													<th colspan="13">Totals</th>
 													<th id="rowCount"></th>
@@ -288,12 +289,9 @@
 													<th>&nbsp;</th>
 													<th>&nbsp;</th>
 													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
+													
+
+
 												</tr>
 											</tfoot>
 											<tbody>
@@ -303,21 +301,23 @@
 												?>
 													<tr>
 														<td style="vertical-align:middle;"><label class="checkbox-inline"><input type="checkbox" class="row-select" checked><?php echo $i++; ?></label></td>
-														<td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
+														<td style="vertical-align:middle;"><?php echo  $row['userid']; ?></td>
+														<td style="vertical-align:middle;"><?php echo  $row['name']; ?></td>
+														<!-- <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td> -->
 														<?php
 														if ($row['pastatus'] == 1 || $row['pastatus'] == 2) {
 														?>
-															<td style="vertical-align:middle; background:#FFD662;"><?php echo $row['pacode']; ?></td>
+															<td style="vertical-align:middle;"><?php echo $row['pacode']; ?></td>
 														<?php
 														} else {
 														?>
 															<!-- <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_assign_form/<?php echo $bn = $row['pacode']; ?>"><?php echo $row['pacode']; ?></a></td> -->
-															<td style="vertical-align:middle; background:#819830;"><?php echo $row['pacode']; ?></td>
+															<td style="vertical-align:middle;"><?php echo $row['pacode']; ?></td>
 														<?php
 														}
 														?>
 
-														<td style="vertical-align:middle;"><?php echo $row['factoryid']; ?></td>
+														<!-- <td style="vertical-align:middle;"><?php echo $row['factoryid']; ?></td> -->
 														<td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
 														<?php
 														if ($row['pccode'] == '20230820083743') {
@@ -374,89 +374,41 @@
 														<?php
 														}
 														?>
+
+
+
+
+
+
+
+														<td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['adate'])); ?></td>
 														<?php
-														if ($row['pastatus'] == 1) {
+														if ($row['rdate'] == '0000-00-00') {
 														?>
-															<!-- <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_return_form/<?php echo $bn = $row['pacode']; ?>">Using</a></td> -->
-															<td style="vertical-align:middle; background:#FFD662;">Using</a></td>
-														<?php
-														} elseif ($row['pastatus'] == 0) {
+															<td style="vertical-align:middle;"></td>
+														<?php } else {
 														?>
-															<td style="vertical-align:middle; background:#819830;">Free</td>
+															<td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['rdate'])); ?></td>
+														<?php } ?>
+
 														<?php
-														} elseif ($row['pastatus'] == 2) {
+														if ($row['astatus'] == 1) {
+														?>
+
+															<td style="vertical-align:middle;">Using</a></td>
+														<?php
+														} elseif ($row['astatus'] == 0) {
+														?>
+															<td style="vertical-align:middle;">Used</td>
+														<?php
+														} elseif ($row['astatus'] == 2) {
 														?>
 															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
-														}
-														?>
-														<?php
-														if ($row['pastatus'] == 1) {
-														?>
-															<td style="vertical-align:middle; background:#FFD662;"><?php echo  $row['userid']; ?></td>
-															<td style="vertical-align:middle; background:#FFD662;"><?php echo  $row['name']; ?></td>
-															<td style="vertical-align:middle; background:#FFD662;"><?php echo  $row['departmentname']; ?></td>
-														<?php
-														} else {
-														?>
-															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
-															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
-															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
 														<?php
 														}
 														?>
 
 
-
-														<?php
-														if ($row['pastatus'] == 1) {
-														?>
-															<td style="vertical-align:middle; background:#FFD662;"><?php echo date("d-m-Y", strtotime($row['adate'])); ?></td>
-														<?php
-														} else {
-														?>
-															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
-														<?php
-														}
-														?>
-														<?php
-														if ($row['pastatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
-														} else {
-														?>
-															<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_inventory_list_up/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-edit" style="font-size:16px"></i></a></td>
-														<?php
-														}
-														?>
-														<?php
-														if ($row['pastatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
-														} else {
-														?>
-															<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_transfer_form/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-exchange" aria-hidden="true"></i></a></td>
-														<?php
-														}
-														?>
-														<?php
-														if ($row['pastatus'] == 0) {
-														?>
-															<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/item_release_form/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-trash" style="font-size:16px"></i></a></td>
-														<?php
-														} elseif ($row['pastatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
-														} else {
-														?>
-															<td style="vertical-align:middle;">&nbsp;</td>
-														<?php
-														}
-														?>
-														<td style="vertical-align:middle;"><a style="border-radius: 50%;padding: 10px;background: #0074B4;color: white;" href="<?php echo base_url(); ?>Dashboard/product_use_history/<?php echo $bn = $row['pacode']; ?>"><?php echo $row['totalusing']; ?></a></td>
 													</tr>
 												<?php
 												}

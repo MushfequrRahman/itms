@@ -112,8 +112,7 @@
       </div>
     </div>
   </form> -->
-  <button id="generate-excel" class="btn btn-danger btn pull-right">
-    Generate Excel</button>
+  
 
   <br /><br />
   <div class="table-responsive">
@@ -123,13 +122,21 @@
           <th>SL</th>
           <th>MPR NO</th>
           <th>MPR Date</th>
+          <th>MPR Submission Date</th>
           <th>Unit</th>
           <th>Employment Type</th>
           <th>MPR Prepared By</th>
           <th>Department</th>
           <th>Designation</th>
-          <th class="filter-false">Edit/Details</th>
-          <th class="filter-false">ADD</th>
+          <?php if ($this->session->userdata('user_type') == '3') {
+          } else {
+          ?>
+            <th class="filter-false">Edit/Details</th>
+            <th class="filter-false">ADD</th>
+          <?php
+          }
+          ?>
+
         </tr>
       </thead>
       <tbody>
@@ -137,19 +144,25 @@
         $i = 1;
         foreach ($ul as $row) { ?>
           <tr>
-
             <td style="vertical-align:middle;"><?php echo $i++; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
             <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
             <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
+            <?php $msdate = date("d-m-Y", strtotime($row['msdate'])); ?>
+            <td style="vertical-align:middle;"><?php echo $msdate; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['name']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['departmentname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['designation']; ?></td>
-            <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_list_up_form/<?php echo $bn = $row['smprid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
-            <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_list_add_form/<?php echo $bn = $row['smprid']; ?>"><i class="fa fa-plus" style="font-size:18px"></i></a></td>
-
+            <?php if ($this->session->userdata('user_type') == '3') {
+            } else {
+            ?>
+              <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_list_up_form/<?php echo $bn = $row['smprid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
+              <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_list_add_form/<?php echo $bn = $row['smprid']; ?>"><i class="fa fa-plus" style="font-size:18px"></i></a></td>
+            <?php
+            }
+            ?>
           </tr>
         <?php } ?>
       </tbody>
