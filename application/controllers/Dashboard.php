@@ -2386,6 +2386,15 @@ class Dashboard extends CI_Controller
 		$data['ul'] = $this->Admin->grn_submission_to_it($pd, $wd, $userid);
 		$this->load->view('admin/grn_submission_to_it', $data);
 	}
+	public function grn_submission_to_it_mpr_item_wise()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$simprid = $this->uri->segment(3);
+		$userid = $this->uri->segment(4);
+		$data['ul'] = $this->Admin->grn_submission_to_it_mpr_item_wise($simprid , $userid);
+		$this->load->view('admin/grn_submission_to_it', $data);
+	}
 	public function user_agreement()
 	{
 		$this->load->database();

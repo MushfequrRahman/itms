@@ -1192,7 +1192,7 @@ class Admin extends CI_Model
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
 
-		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
+		$query = "SELECT mpr_insert_id.mprid,mpr_insert.simprid,fid,etypename,uname,pcname,pname,item,qty,puom,
 		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,pprice,grn,rqty,rdate,iqty,
 		supplier_insert.supplier,
 		invoice,DATEDIFF(CURDATE(),msdate) AS cday
@@ -1238,6 +1238,34 @@ class Admin extends CI_Model
 		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		WHERE mpr_insert_id.suserid='$userid' AND rdate between '$pd' AND '$wd'
+		ORDER BY mpr_insert_id.mprid";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function grn_submission_to_it_mpr_item_wise($simprid , $userid)
+	{
+		// $pd = date("Y-m-d", strtotime($pd));
+		// $wd = date("Y-m-d", strtotime($wd));
+
+		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
+		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,pprice,
+		grn,rqty,rdate,iqty,
+		supplier_insert.supplier,
+		invoice,DATEDIFF(CURDATE(),msdate) AS cday
+		FROM mpr_insert_id 
+		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		LEFT JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
+		LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
+		LEFT JOIN product_inventory_view ON product_inventory_view.sipoid=po_insert.sipoid
+		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
+		WHERE mpr_insert_id.suserid='$userid' AND mpr_insert.simprid='$simprid'
 		ORDER BY mpr_insert_id.mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
