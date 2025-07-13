@@ -658,7 +658,7 @@ class Dashboard extends CI_Controller
 			$pic_file = $this->input->post('pic_file');
 
 
-			$ins = $this->Admin->user_transfer($factoryid,$etypeid, $departmentid, $designationid, $name, $oemail, $mobile, $usertypeid, $userstatusid, $userid, $password, $ruserid, $pic_file);
+			$ins = $this->Admin->user_transfer($factoryid, $etypeid, $departmentid, $designationid, $name, $oemail, $mobile, $usertypeid, $userstatusid, $userid, $password, $ruserid, $pic_file);
 			if ($ins == TRUE) {
 				$this->session->set_flashdata('Successfully', 'Successfully Updated');
 			} else {
@@ -1313,7 +1313,7 @@ class Dashboard extends CI_Controller
 			$warranty = $this->input->post('warranty');
 			$pdate = $this->input->post('pdate');
 
-			$ins = $this->Admin->productinventorylup($piv, $sn,$ip,$mac, $description, $iqty, $warranty, $pdate);
+			$ins = $this->Admin->productinventorylup($piv, $sn, $ip, $mac, $description, $iqty, $warranty, $pdate);
 			if ($ins == TRUE) {
 				$this->session->set_flashdata('Successfully', 'Successfully Updated');
 			} else {
@@ -2392,7 +2392,7 @@ class Dashboard extends CI_Controller
 		$this->load->model('Admin');
 		$simprid = $this->uri->segment(3);
 		$userid = $this->uri->segment(4);
-		$data['ul'] = $this->Admin->grn_submission_to_it_mpr_item_wise($simprid , $userid);
+		$data['ul'] = $this->Admin->grn_submission_to_it_mpr_item_wise($simprid, $userid);
 		$this->load->view('admin/grn_submission_to_it', $data);
 	}
 	public function user_agreement()
@@ -2445,7 +2445,7 @@ class Dashboard extends CI_Controller
 		$this->load->model('Admin');
 		$data['title'] = 'Product Inventory Insert';
 		$sipoid = $this->uri->segment(3);
-		$grnrid= $this->uri->segment(4);
+		$grnrid = $this->uri->segment(4);
 		$this->load->view('admin/head', $data);
 		$this->load->view('admin/toprightnav');
 		$this->load->view('admin/leftmenu');
@@ -2482,7 +2482,7 @@ class Dashboard extends CI_Controller
 				$pdate = $this->input->post('pdate');
 				$iqty = $this->input->post('iqty');
 				$warranty = $this->input->post('warranty');
-				$ins = $this->Admin->product_inventory_insert($pcode, $sipoid, $grnrid, $factoryid, $sn,$ip,$mac, $description, $pdate, $iqty, $warranty);
+				$ins = $this->Admin->product_inventory_insert($pcode, $sipoid, $grnrid, $factoryid, $sn, $ip, $mac, $description, $pdate, $iqty, $warranty);
 
 				if ($ins == TRUE) {
 					$this->session->set_flashdata('Successfully', 'Successfully Inserted');
@@ -2562,6 +2562,104 @@ class Dashboard extends CI_Controller
 		$data['ul'] = $this->Admin->user_product_using_history($userid);
 		$this->load->view('admin/user_product_using_history', $data);
 	}
+	public function description_wise_list()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$data['title'] = 'Product Details List';
+		$this->load->view('admin/head', $data);
+		$this->load->view('admin/toprightnav');
+		$this->load->view('admin/leftmenu');
+		$psgid = $this->uri->segment(3);
+		$specs = $this->Admin->description_wise_list($psgid);
+		$parsed = [];
+
+		foreach ($specs as $spec) {
+			$description = isset($spec->idescription) ? $spec->idescription : '';
+			$deviceName  = isset($spec->item) ? $spec->item : null;
+			$paCode      = isset($spec->pacode) ? $spec->pacode : null;
+			$ip      = isset($spec->ip) ? $spec->ip : null;
+			$mac      = isset($spec->mac) ? $spec->mac : null;
+			$sn      = isset($spec->sn) ? $spec->sn : null;
+			$factoryid      = isset($spec->factoryid) ? $spec->factoryid : null;
+			$pprice      = isset($spec->pprice) ? $spec->pprice : null;
+			$supplier      = isset($spec->supplier) ? $spec->supplier : null;
+			$mprid      = isset($spec->mprid) ? $spec->mprid : null;
+			$po      = isset($spec->po) ? $spec->po : null;
+			$totalusing      = isset($spec->totalusing) ? $spec->totalusing : null;
+
+			$parsed[] = $this->extract_spec_parts($description, $deviceName, $paCode, $ip, $mac, $sn, $factoryid,$pprice,$supplier,$mprid,$po,$totalusing);
+		}
+
+		$data['specs'] = $parsed;
+
+		$this->load->view('admin/description_wise_list', $data);
+	}
+	private function extract_spec_parts($text, $deviceName = null, $paCode, $ip, $mac,$sn,$factoryid,$pprice,$supplier,$mprid,$po,$totalusing)
+	{
+		$data = ['original' => $text];
+
+		// Device name (before > or ,)
+		$data['device_name'] = !empty($deviceName) ? $deviceName : 'Unknown';
+		$data['pacode'] = !empty($paCode) ? $paCode : 'Unknown';
+		$data['ip'] = !empty($ip) ? $ip : 'Unknown';
+		$data['mac'] = !empty($mac) ? $mac : 'Unknown';
+		$data['sn'] = !empty($sn) ? $sn : 'Unknown';
+		$data['factoryid'] = !empty($factoryid) ? $factoryid : 'Unknown';
+		$data['pprice'] = !empty($pprice) ? $pprice : 'Unknown';
+		$data['supplier'] = !empty($supplier) ? $supplier : 'Unknown';
+		$data['mprid'] = !empty($mprid) ? $mprid : 'Unknown';
+		$data['po'] = !empty($po) ? $po : 'Unknown';
+		$data['totalusing'] = !empty($totalusing) ? $totalusing : '0';
+
+		// Processor
+		// Processor
+		if (preg_match('/(Intel\s+)?Core\s*i\s*[3579]|Corei[3579]|Core\s*I\s*[3579]|i[3579]-\d{4,5}|Ryzen\s+\d\s+\d{4,5}[A-Z]*/i', $text, $match)) {
+			$data['processor'] = strtoupper(str_replace(['Corei', 'Core I', 'Core i'], 'Core i', $match[0]));
+		} else {
+			$data['processor'] = 'Not found';
+		}
+
+
+		// Generation
+		if (preg_match('/\b(\d{1,2})(st|nd|rd|th)?\s+Gen/i', $text, $match)) {
+			$data['generation'] = $match[0];
+		} elseif (preg_match('/i[3579]-(\d{2})\d{3}/i', $text, $match)) {
+			$data['generation'] = $match[1] . 'th Gen';
+		} else {
+			$data['generation'] = 'Unknown';
+		}
+
+		// RAM
+		if (preg_match('/(\d{1,2})\s?GB\s?(DDR[34])?/i', $text, $match)) {
+			$data['ram'] = trim($match[0]);
+		} else {
+			$data['ram'] = 'Not found';
+		}
+
+		// SSD
+		if (preg_match('/(\d{2,4})\s?(GB|TB)?\s*SSD/i', $text, $match)) {
+			$data['ssd'] = trim($match[0]);
+		} elseif (preg_match('/\/\s*(\d{2,4})(GB|TB)?\s*SSD/i', $text, $match)) {
+			$data['ssd'] = trim($match[0]);
+		} else {
+			$data['ssd'] = 'Not found';
+		}
+
+		// HDD
+		if (preg_match('/(\d{1,4})\s?(GB|TB)\s*HDD/i', $text, $match)) {
+			$data['hdd'] = trim($match[0]);
+		} elseif ($data['ssd'] == 'Not found' && preg_match('/(\d{1,4})\s?(GB|TB)/i', $text, $match)) {
+			$data['hdd'] = trim($match[0]) . ' (guessed)';
+		} else {
+			$data['hdd'] = 'Not found';
+		}
+
+		return $data;
+	}
+
+
+
 
 	public function product_inventory_list_xls()
 	{

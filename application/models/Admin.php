@@ -1242,7 +1242,7 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
-	public function grn_submission_to_it_mpr_item_wise($simprid , $userid)
+	public function grn_submission_to_it_mpr_item_wise($simprid, $userid)
 	{
 		// $pd = date("Y-m-d", strtotime($pd));
 		// $wd = date("Y-m-d", strtotime($wd));
@@ -1544,7 +1544,7 @@ class Admin extends CI_Model
     pcname,
     pname,
     pgname,
-    psgname,
+    psgname,product_insert.psgid,
     ip,
     mac,
     product_inventory.userid,
@@ -1758,5 +1758,69 @@ WHERE product_ihistory_insert.phstatus = '1'";
 		ORDER BY paiid DESC";
 		$result = $this->db->query($query);
 		return $result->result_array();
+	}
+	public function description_wise_list($psgid)
+	{
+		$query = "SELECT 
+    product_inventory.pacode,
+    product_ihistory_insert.factoryid,
+    supplier_insert.supplier,
+    uname,
+    mpr_insert_id.mprid,
+    sn,
+    idescription,
+    item,
+    iqty,
+    puom,
+    warranty,
+    price,
+    pprice,
+    product_category_insert.pccode,
+    product_inventory.pdate,
+    adate,
+    product_inventory.rdate,
+    po_insert.po,
+    ddate,
+    dremarks,
+    item_release_type_insert.irid,
+    releasetype,
+    pcname,
+    pname,
+    pgname,
+    psgname,product_insert.psgid,
+    ip,
+    mac,
+    product_inventory.userid,
+    user.name,
+    departmentname,
+    pastatus,
+    
+    -- Count of assigned items
+    (
+        SELECT COUNT(*) 
+        FROM product_assign_insert 
+        WHERE product_assign_insert.pacode = product_inventory.pacode
+    ) AS totalusing
+
+FROM product_inventory 
+JOIN po_insert ON po_insert.sipoid = product_inventory.sipoid
+JOIN mpr_insert ON mpr_insert.simprid = po_insert.simprid
+JOIN mpr_insert_id ON mpr_insert_id.smprid = mpr_insert.smprid
+JOIN item_insert ON item_insert.itemcode = mpr_insert.model
+LEFT JOIN supplier_insert ON supplier_insert.supplierid = po_insert.supplier
+JOIN product_uom_insert ON product_uom_insert.puomid = mpr_insert.uom
+JOIN product_insert ON product_insert.pcode = mpr_insert.mpcode
+JOIN product_category_insert ON product_category_insert.pccode = product_insert.pccode
+JOIN product_group_insert ON product_group_insert.pgid = product_insert.pgid
+JOIN product_subgroup_insert ON product_subgroup_insert.psgid = product_insert.psgid
+JOIN product_ihistory_insert ON product_ihistory_insert.pacode = product_inventory.pacode
+LEFT JOIN item_release_insert ON item_release_insert.pacode = product_inventory.pacode
+LEFT JOIN item_release_type_insert ON item_release_type_insert.irid = item_release_insert.irid
+LEFT JOIN user ON user.userid = product_inventory.userid
+LEFT JOIN department ON department.deptid = user.departmentid
+
+WHERE product_ihistory_insert.phstatus = '1' AND product_insert.psgid ='$psgid'";
+		$result = $this->db->query($query);
+		return $result->result();
 	}
 }
