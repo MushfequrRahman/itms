@@ -45,11 +45,11 @@
                     <div class="row">
                       <div class="col-md-5">
                         <label>Start Date<em>*</em></label>
-                        <input type="text" class="form-control pd" readonly id="pd" value="<?php echo date('d-m-Y'); ?>">
+                        <input type="text" class="form-control pd" id="pd" value="<?php echo date('d-m-Y'); ?>">
                       </div>
                       <div class="col-md-5">
                         <label>End Date<em>*</em></label>
-                        <input type="text" class="form-control wd" readonly id="wd" value="<?php echo date('d-m-Y'); ?>">
+                        <input type="text" class="form-control wd" id="wd" value="<?php echo date('d-m-Y'); ?>">
                       </div>
                       <div class="col-md-2">
                         <label>&nbsp;</label>

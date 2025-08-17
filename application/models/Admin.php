@@ -1192,8 +1192,10 @@ class Admin extends CI_Model
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
 
-		$query = "SELECT mpr_insert_id.mprid,mpr_insert.simprid,fid,etypename,uname,pcname,pname,item,qty,puom,
-		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,pprice,grn,rqty,rdate,iqty,
+		$query = "SELECT mpr_insert_id.mprid,mpr_insert.simprid,fid,etypename,uname,
+		pcname,pname,item,qty,puom,
+		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,
+		pprice,grn,rqty,rdate,iqty,
 		supplier_insert.supplier,
 		invoice,DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 

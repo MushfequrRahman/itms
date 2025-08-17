@@ -345,7 +345,7 @@
           <th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />Received Date</th>
           <th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />Inventory Qty</th>
           <!-- <th>Po Status</th> -->
-          <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />Status</th>
+          <!-- <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />Status</th> -->
           <!--<th>PO Qty</th>
                   <th>PO Qty Price</th>
                   
@@ -364,7 +364,7 @@
           <th>&nbsp;</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <th>&nbsp;</th>
+          <!-- <th>&nbsp;</th> -->
           <!-- <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
@@ -437,7 +437,7 @@
               echo "Remaining";
             }
             ?></td> -->
-            <td style="vertical-align:middle;">
+            <!-- <td style="vertical-align:middle;">
               <?php
               if (($row['rqty'] < $row['pqty'])) {
                 echo "pending";
@@ -446,7 +446,7 @@
               } else {
                 echo "Received";
               }
-              ?></td>
+              ?></td> -->
           </tr>
         <?php } ?>
       </tbody>
