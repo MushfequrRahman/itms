@@ -1021,8 +1021,9 @@ class Admin extends CI_Model
 	}
 	public function single_po($sipoid)
 	{
-		$pd = date("Y-m-d", strtotime($pd));
-		$wd = date("Y-m-d", strtotime($wd));
+		// $pd = date("Y-m-d", strtotime($pd));
+		// $wd = date("Y-m-d", strtotime($wd));
+		
 		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
 		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
 		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,po_insert.spoid,po_insert.simprid,supplierid
