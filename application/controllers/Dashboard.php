@@ -25,6 +25,8 @@ class Dashboard extends CI_Controller
 		$usertype = $this->session->userdata('user_type');
 		$factoryid = $this->session->userdata('factoryid');
 
+		
+
 		$query =  $this->db->query("SELECT fid,SUM(price*qty) AS price,
 		COUNT(DISTINCT(mpr_insert_id.smprid)) AS tsmprid,
 		qty FROM mpr_insert_id
@@ -41,6 +43,29 @@ class Dashboard extends CI_Controller
 		}
 
 		$data['chart_data'] = json_encode($data);
+
+		
+		$query1 =  $this->db->query("SELECT fid,SUM(pprice*pqty) AS pprice,
+		COUNT(DISTINCT(po_insert.po)) AS pto,
+		pqty FROM mpr_insert_id
+		JOIN po_insert ON po_insert.mprid=mpr_insert_id.mprid
+		WHERE MONTH(pdate)=MONTH(NOW()) AND YEAR(pdate)=YEAR(NOW())
+		GROUP BY fid");
+		$record1 = $query1->result();
+		$data1 = array();
+		foreach ($record1 as $row1) {
+
+			$data1['label'][] = $row1->fid . '(' . $row1->pto . ')';
+
+			$data1['data1'][] = (int) $row1->pprice;
+		}
+
+		$data['chart_data1'] = json_encode($data1);
+
+		$data['mprl'] = $this->Admin->monthly_mpr_list();
+		$data['pl'] = $this->Admin->monthly_po_list();
+		$data['col'] = $this->Admin->monthly_capexopex_list();
+		$data['el'] = $this->Admin->monthly_employmenttype_list();
 		$this->load->view('admin/toprightnav', $data);
 		$this->load->view('admin/leftmenu');
 		$this->load->view('admin/dashboard', $data);

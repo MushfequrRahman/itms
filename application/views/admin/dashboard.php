@@ -82,9 +82,102 @@
 										<?php $this->session->userdata('user_type'); ?>
 										<h3 class="box-title"></h3>
 										<div class="row">
-											<div class="col-md-12">
+											<div class="col-lg-3 col-xs-6">
+												<!-- small box -->
+												<div class="small-box bg-aqua">
+													<div class="inner">
+														<?php
+														foreach ($mprl as $row) { ?>
+															<h4><?php echo number_format($row['price'], 2, '.', ','); ?></h4>
+														<?php
+														}
+														?>
+
+														<p>MPR</p>
+													</div>
+													<div class="icon">
+														<i class="ion ion-bag"></i>
+													</div>
+													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
+												</div>
+											</div>
+											<div class="col-lg-3 col-xs-6">
+												<!-- small box -->
+												<div class="small-box bg-yellow">
+													<div class="inner">
+														<?php
+														foreach ($col as $row) {
+															if ($row['pcname'] == 'Capex') {
+																$capex = $row['price'];
+															} else {
+																$opex = $row['price'];
+															} ?>
+
+														<?php
+														}
+														?>
+														<h4><?php echo number_format($capex, 2, '.', ','); ?>/<?php echo number_format($opex, 2, '.', ','); ?></h4>
+														<p>Capex/Opex(MPR)</p>
+													</div>
+													<div class="icon">
+														<i class="ion ion-person-add"></i>
+													</div>
+													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
+												</div>
+											</div>
+											<div class="col-lg-3 col-xs-6">
+												<!-- small box -->
+												<div class="small-box bg-red">
+													<div class="inner">
+														<?php
+														foreach ($el as $row) {
+															if ($row['etypename'] == 'Head Office') {
+																$h = $row['price'];
+															} else {
+																$f = $row['price'];
+															} ?>
+
+														<?php
+														}
+														?>
+														<h4><?php echo number_format($h, 2, '.', ','); ?>/<?php echo number_format($f, 2, '.', ','); ?></h4>
+
+														<p>Head Office/Factory(MPR)</p>
+													</div>
+													<div class="icon">
+														<i class="ion ion-pie-graph"></i>
+													</div>
+													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
+												</div>
+											</div>
+											<div class="col-lg-3 col-xs-6">
+												<!-- small box -->
+												<div class="small-box bg-green">
+													<div class="inner">
+														<?php
+														foreach ($pl as $row) { ?>
+															<h4><?php echo number_format($row['pot'], 2, '.', ','); ?></h4>
+														<?php
+														}
+														?>
+
+														<p>PO</p>
+													</div>
+													<div class="icon">
+														<i class="ion ion-stats-bars"></i>
+													</div>
+													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
+												</div>
+											</div>
+
+											<div class="col-md-6">
 												<div class="chart-container" style="position: relative;">
 													<canvas id="my_Chart"></canvas>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="chart-container" style="position: relative;">
+													<canvas id="my_Chart1"></canvas>
 												</div>
 											</div>
 										</div>
@@ -147,6 +240,56 @@
 			options: myoption // Chart Options [This is optional paramenter use to add some extra things in the chart].
 		});
 	</script>
+
+
+	<!-- PO Chart -->
+<script>
+    var cData1 = JSON.parse(`<?php echo $chart_data1; ?>`);
+    var myData1 = {
+        labels: cData1.label,
+        datasets: [{
+            label: "Monthly Unit Wise PO",
+            fill: false,
+            backgroundColor: [
+                '#008000', '#AFE1AF', '#023020', '#50C878', '#4F7942',
+                '#228B22', '#7CFC00', '#008000', '#355E3B', '#00A36C',
+                '#2AAA8A', '#4CBB17', '#90EE90', '#32CD32'
+            ],
+            borderColor: 'black',
+            data: cData1.data1, // <-- এখানে data1
+        }]
+    };
+
+    var myoption1 = {
+        tooltips: { enabled: true },
+        hover: { animationDuration: 1 },
+        animation: {
+            duration: 1,
+            onComplete: function() {
+                var chartInstance = this.chart,
+                    ctx = chartInstance.ctx;
+                ctx.textAlign = 'center';
+                ctx.fillStyle = "rgba(0, 0, 0, 1)";
+                ctx.textBaseline = 'bottom';
+                this.data.datasets.forEach(function(dataset, i) {
+                    var meta = chartInstance.controller.getDatasetMeta(i);
+                    meta.data.forEach(function(bar, index) {
+                        var data = dataset.data[index];
+                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                    });
+                });
+            }
+        }
+    };
+
+    var ctx1 = document.getElementById('my_Chart1').getContext('2d');
+    var myChart1 = new Chart(ctx1, {
+        type: 'bar',
+        data: myData1,
+        options: myoption1
+    });
+</script>
+
 </body>
 
 </html>

@@ -3,6 +3,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin extends CI_Model
 {
+	public function monthly_mpr_list()
+	{
+		$query = "SELECT SUM(price) AS price FROM mpr_insert_id
+		JOIN mpr_insert ON mpr_insert_id.smprid=mpr_insert.smprid
+		WHERE MONTH(mdate)=MONTH(NOW()) AND YEAR(mdate)=YEAR(NOW())";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function monthly_po_list()
+	{
+		$query = "SELECT SUM(pprice * pqty) AS pot FROM po_insert
+		WHERE MONTH(pdate) = MONTH(NOW())
+  		AND YEAR(pdate) = YEAR(NOW());";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function monthly_capexopex_list()
+	{
+		$query = "SELECT pcname,SUM(price) AS price FROM mpr_insert_id
+		JOIN mpr_insert ON mpr_insert_id.smprid=mpr_insert.smprid
+		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		WHERE MONTH(mdate)=MONTH(NOW()) AND YEAR(mdate)=YEAR(NOW())
+		GROUP BY product_category_insert.pccode;";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
+	public function monthly_employmenttype_list()
+	{
+		$query = "SELECT etypename,SUM(price) AS price FROM mpr_insert_id
+		JOIN mpr_insert ON mpr_insert_id.smprid=mpr_insert.smprid
+		JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
+		
+		WHERE MONTH(mdate)=MONTH(NOW()) AND YEAR(mdate)=YEAR(NOW())
+		GROUP BY employment_type.etypeid;";
+		$result = $this->db->query($query);
+		return $result->result_array();
+	}
 	public function fac_insert($facid, $facname, $fac_address)
 	{
 		$sql = "SELECT * FROM factory WHERE factoryid='$facid'";
@@ -977,7 +1015,8 @@ class Admin extends CI_Model
 	{
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
-		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,etypename,name,departmentname,designation,
+		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,etypename,name,
+		departmentname,designation,
 		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,
 		description,price,po,pdate,pqty,podescription,
 		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,pstatus
@@ -1023,7 +1062,7 @@ class Admin extends CI_Model
 	{
 		// $pd = date("Y-m-d", strtotime($pd));
 		// $wd = date("Y-m-d", strtotime($wd));
-		
+
 		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
 		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
 		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,po_insert.spoid,po_insert.simprid,supplierid
