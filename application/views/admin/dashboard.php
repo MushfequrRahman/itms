@@ -234,6 +234,8 @@
 															$total_laptop += $r['total_laptop'];
 														}
 														?>
+													</tbody>
+													<tfoot style="background-color: #999999;">
 														<!-- Total Row -->
 														<tr style="font-weight:bold;">
 															<td>Total</td>
@@ -244,9 +246,8 @@
 															<td><?php echo $total_using_laptop; ?></td>
 															<td><?php echo $total_laptop; ?></td>
 														</tr>
-													</tbody>
+													</tfoot>
 												</table>
-
 											</div>
 										</div>
 									</div>
