@@ -25,7 +25,7 @@ class Dashboard extends CI_Controller
 		$usertype = $this->session->userdata('user_type');
 		$factoryid = $this->session->userdata('factoryid');
 
-		
+
 
 		$query =  $this->db->query("SELECT fid,SUM(price*qty) AS price,
 		COUNT(DISTINCT(mpr_insert_id.smprid)) AS tsmprid,
@@ -44,7 +44,7 @@ class Dashboard extends CI_Controller
 
 		$data['chart_data'] = json_encode($data);
 
-		
+
 		$query1 =  $this->db->query("SELECT fid,SUM(pprice*pqty) AS pprice,
 		COUNT(DISTINCT(po_insert.po)) AS pto,
 		pqty FROM mpr_insert_id
@@ -61,6 +61,52 @@ class Dashboard extends CI_Controller
 		}
 
 		$data['chart_data1'] = json_encode($data1);
+
+		$query2 =  $this->db->query("SELECT 
+    product_inventory.ifid,
+
+    -- Desktop Free Count
+    SUM(CASE WHEN product_asset_code.pcode = 'DKTP' AND product_inventory.pastatus = 0 THEN 1 ELSE 0 END) AS desktop_free,
+
+    -- Desktop Using Count
+    SUM(CASE WHEN product_asset_code.pcode = 'DKTP' AND product_inventory.pastatus = 1 THEN 1 ELSE 0 END) AS desktop_using,
+
+    -- Laptop Free Count
+    SUM(CASE WHEN product_asset_code.pcode = 'LPT' AND product_inventory.pastatus = 0 THEN 1 ELSE 0 END) AS laptop_free,
+
+    -- Laptop Using Count
+    SUM(CASE WHEN product_asset_code.pcode = 'LPT' AND product_inventory.pastatus = 1 THEN 1 ELSE 0 END) AS laptop_using,
+
+    -- Total Desktop
+    SUM(CASE WHEN product_asset_code.pcode = 'DKTP' THEN 1 ELSE 0 END) AS total_desktop,
+
+    -- Total Laptop
+    SUM(CASE WHEN product_asset_code.pcode = 'LPT' THEN 1 ELSE 0 END) AS total_laptop
+
+	FROM product_inventory
+	JOIN product_asset_code 
+    ON product_asset_code.pacode = product_inventory.pacode
+	WHERE product_asset_code.pcode IN ('LPT','DKTP')
+	GROUP BY product_inventory.ifid
+	ORDER BY product_inventory.ifid;
+");
+
+		$data['computer'] = $query2->result_array();
+		$record2 = $query2->result();
+		$data2 = array();
+		foreach ($record2 as $row2) {
+
+			$data2['label'][] = $row2->ifid;
+
+			$data2['desktop_free'][] = (int) $row2->desktop_free;
+			$data2['desktop_using'][] = (int) $row2->desktop_using;
+			$data2['laptop_free'][] = (int) $row2->laptop_free;
+			$data2['laptop_using'][] = (int) $row2->laptop_using;
+			$data2['total_desktop'][] = (int) $row2->total_desktop;
+			$data2['total_laptop'][] = (int) $row2->total_laptop;
+		}
+
+		$data['chart_data2'] = json_encode($data2);
 
 		$data['mprl'] = $this->Admin->monthly_mpr_list();
 		$data['pl'] = $this->Admin->monthly_po_list();
@@ -2613,14 +2659,14 @@ class Dashboard extends CI_Controller
 			$po      = isset($spec->po) ? $spec->po : null;
 			$totalusing      = isset($spec->totalusing) ? $spec->totalusing : null;
 
-			$parsed[] = $this->extract_spec_parts($description, $deviceName, $paCode, $ip, $mac, $sn, $factoryid,$pprice,$supplier,$mprid,$po,$totalusing);
+			$parsed[] = $this->extract_spec_parts($description, $deviceName, $paCode, $ip, $mac, $sn, $factoryid, $pprice, $supplier, $mprid, $po, $totalusing);
 		}
 
 		$data['specs'] = $parsed;
 
 		$this->load->view('admin/description_wise_list', $data);
 	}
-	private function extract_spec_parts($text, $deviceName = null, $paCode, $ip, $mac,$sn,$factoryid,$pprice,$supplier,$mprid,$po,$totalusing)
+	private function extract_spec_parts($text, $deviceName = null, $paCode, $ip, $mac, $sn, $factoryid, $pprice, $supplier, $mprid, $po, $totalusing)
 	{
 		$data = ['original' => $text];
 
