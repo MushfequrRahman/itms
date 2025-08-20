@@ -96,7 +96,7 @@
 														<p>MPR</p>
 													</div>
 													<div class="icon">
-														<i class="ion ion-bag"></i>
+														<i class="ion-android-create"></i>
 													</div>
 													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
 												</div>
@@ -120,7 +120,7 @@
 														<p>Capex/Opex(MPR)</p>
 													</div>
 													<div class="icon">
-														<i class="ion ion-person-add"></i>
+														<i class="ion-hammer"></i>
 													</div>
 													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
 												</div>
@@ -145,7 +145,7 @@
 														<p>Head Office/Factory(MPR)</p>
 													</div>
 													<div class="icon">
-														<i class="ion ion-pie-graph"></i>
+														<i class="ion-android-contacts"></i>
 													</div>
 													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
 												</div>
@@ -164,7 +164,7 @@
 														<p>PO</p>
 													</div>
 													<div class="icon">
-														<i class="ion ion-stats-bars"></i>
+														<i class="ion-android-drafts"></i>
 													</div>
 													<!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
 												</div>
