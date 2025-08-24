@@ -288,7 +288,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="float-left">
-            <?php if ($this->session->userdata('user_type') == '3') {
+            <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
             } else {
             ?>
               <a target="_blank" href="<?php echo base_url(); ?>Dashboard/grn_submission_to_it/<?php echo $pd; ?>/<?php echo $wd; ?>/<?php echo $userid; ?>">GRN Submission To IT</a>
@@ -382,7 +382,7 @@
             <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
             <!-- <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/product_inventory_insert_form/<?php echo $row['sipoid']; ?>"><?php echo $row['mprid']; ?></a></td> -->
             <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
-            
+
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>

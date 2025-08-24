@@ -128,7 +128,7 @@
           <th>MPR Prepared By</th>
           <th>Department</th>
           <th>Designation</th>
-          <?php if ($this->session->userdata('user_type') == '3') {
+          <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
           } else {
           ?>
             <th class="filter-false">Edit/Details</th>
@@ -155,7 +155,7 @@
             <td style="vertical-align:middle;"><?php echo $row['name']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['departmentname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['designation']; ?></td>
-            <?php if ($this->session->userdata('user_type') == '3') {
+            <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
             } else {
             ?>
               <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/mpr_list_up_form/<?php echo $bn = $row['smprid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>

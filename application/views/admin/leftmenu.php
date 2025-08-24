@@ -366,6 +366,69 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					</ul>
 				</li>
 			<?php } ?>
+
+			<?php if ($this->session->userdata('userid') && $this->session->userdata('user_type') == '4') { ?>
+
+				<li class="treeview">
+					<a href="#">
+						<i class="fa fa-info" aria-hidden="true"></i><span>Product</span>
+						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+					<ul class="treeview-menu">
+
+						<li class="treeview">
+							<a href="#">
+								<i class="fa fa-id-card" aria-hidden="true"></i> <span>MPR Info</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+
+								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_mpr_form"><i class="fa fa-circle-o"></i>Date Wise MPR</a></li>
+								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_mpr_list_form"><i class="fa fa-circle-o"></i>Date Wise MPR List</a></li>
+
+							</ul>
+						</li>
+						<li class="treeview">
+							<a href="#">
+								<i class="fa fa-id-card" aria-hidden="true"></i> <span>PO Info</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+
+								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_po_list_form"><i class="fa fa-circle-o"></i>Date Wise PO List</a></li>
+							</ul>
+						</li>
+						<li class="treeview">
+							<a href="#">
+								<i class="fa fa-id-card" aria-hidden="true"></i> <span>Receive Info</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_receive_form"><i class="fa fa-circle-o"></i>Date Wise Receive List</a></li>
+							</ul>
+						</li>
+						<li class="treeview">
+							<a href="#">
+								<i class="fa fa-id-card" aria-hidden="true"></i> <span>Product Inventory</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<li><a href="<?php echo base_url(); ?>Dashboard/product_inventory_list"><i class="fa fa-circle-o"></i>Product Inventory List</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			<?php } ?>
 			<?php //endif;
 			?>
 

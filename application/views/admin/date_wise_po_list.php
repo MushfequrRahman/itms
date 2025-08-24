@@ -377,7 +377,7 @@
           <th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />PO Description</th>
           <th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />PO Remarks</th>
           <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />Supplier</th>
-          <?php if ($this->session->userdata('user_type') == '3') {
+          <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
           } else {
           ?>
             <th data-column="23"><input type="checkbox" class="column-select" data-col-index="24" checked><br />Edit</th>
@@ -397,7 +397,7 @@
           <th>&nbsp;</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <?php if ($this->session->userdata('user_type') == '3') {
+          <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
           } else {
           ?>
             <th>&nbsp;</th>
@@ -439,7 +439,7 @@
             <td style="vertical-align:middle;"><?php echo $row['podescription']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['premarks']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
-            <?php if ($this->session->userdata('user_type') == '3') {
+            <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
             } else {
             ?>
               <?php

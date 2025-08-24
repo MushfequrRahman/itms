@@ -268,9 +268,15 @@
 													<th data-column="23"><input type="checkbox" class="column-select" data-col-index="24" checked><br />U.Name</th>
 													<th data-column="24"><input type="checkbox" class="column-select" data-col-index="25" checked><br />U.Dept</th>
 													<th data-column="25"><input type="checkbox" class="column-select" data-col-index="26" checked><br />G.Date</th>
-													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="27" checked><br />Edit</th>
-													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="28" checked><br />Transfer</th>
-													<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="29" checked><br />Release</th>
+													<?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
+													} else {
+													?>
+														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="27" checked><br />Edit</th>
+														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="28" checked><br />Transfer</th>
+														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="29" checked><br />Release</th>
+													<?php
+													}
+													?>
 													<th data-column="26"><input type="checkbox" class="column-select" data-col-index="30" checked><br />T.Using</th>
 												</tr>
 											</thead>
@@ -290,9 +296,15 @@
 													<th>&nbsp;</th>
 													<th>&nbsp;</th>
 													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
+													<?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
+													} else {
+													?>
+														<th>&nbsp;</th>
+														<th>&nbsp;</th>
+														<th>&nbsp;</th>
+													<?php
+													}
+													?>
 													<th>&nbsp;</th>
 												</tr>
 											</tfoot>
@@ -419,40 +431,46 @@
 														<?php
 														}
 														?>
-														<?php
-														if ($row['pastatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
+														<?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
 														} else {
 														?>
-															<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_inventory_list_up/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-edit" style="font-size:16px"></i></a></td>
-														<?php
-														}
-														?>
-														<?php
-														if ($row['pastatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
-														} else {
-														?>
-															<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_transfer_form/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-exchange" aria-hidden="true"></i></a></td>
-														<?php
-														}
-														?>
-														<?php
-														if ($row['pastatus'] == 0) {
-														?>
-															<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/item_release_form/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-trash" style="font-size:16px"></i></a></td>
-														<?php
-														} elseif ($row['pastatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
-														} else {
-														?>
-															<td style="vertical-align:middle;">&nbsp;</td>
+															<?php
+															if ($row['pastatus'] == 2) {
+															?>
+																<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
+															<?php
+															} else {
+															?>
+																<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_inventory_list_up/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-edit" style="font-size:16px"></i></a></td>
+															<?php
+															}
+															?>
+															<?php
+															if ($row['pastatus'] == 2) {
+															?>
+																<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
+															<?php
+															} else {
+															?>
+																<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_transfer_form/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-exchange" aria-hidden="true"></i></a></td>
+															<?php
+															}
+															?>
+															<?php
+															if ($row['pastatus'] == 0) {
+															?>
+																<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/item_release_form/<?php echo $bn = $row['pacode']; ?>"><i class="fa fa-trash" style="font-size:16px"></i></a></td>
+															<?php
+															} elseif ($row['pastatus'] == 2) {
+															?>
+																<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
+															<?php
+															} else {
+															?>
+																<td style="vertical-align:middle;">&nbsp;</td>
+															<?php
+															}
+															?>
 														<?php
 														}
 														?>
