@@ -161,6 +161,7 @@ foreach ($bl as $row) {
                           <table class="table table-bordered" id="item_table1">
                             <thead>
                               <tr>
+                                <th style="text-align:center;">SL</th>
                                 <th style="text-align:center;">Product<em>*</em></th>
                                 <th style="text-align:center;">Item/Model<em>*</em></th>
                                 <th style="text-align:center;">Brand<em>*</em></th>
@@ -180,8 +181,8 @@ foreach ($bl as $row) {
                       <div class="box-footer text-center">
                         <!-- <input type="submit" class="btn btn-primary" name="submit" value="CREATE" /> -->
                         <label>&nbsp;</label>
-                          <!-- <input type="submit" class="btn btn-primary " name="submit" id="btn" value="CREATE" /> -->
-                          <div id="response"></div>
+                        <!-- <input type="submit" class="btn btn-primary " name="submit" id="btn" value="CREATE" /> -->
+                        <div id="response"></div>
                       </div>
                     </form>
                   </div>
@@ -204,6 +205,7 @@ foreach ($bl as $row) {
         count++;
         var html = '';
         html += '<tr>';
+        html += '<td class="sl" style="text-align:center;">' + count + '</td>';
         html += '<td><select name="product[]" class="form-control product" data-item="' + count + '"><option value="">Product</option><?php echo $product; ?></select></td>';
         //html += '<td><input type="hidden" name="model[]" class="form-control model" id="model' + count + '" /></td>';
         html += '<td><select name="item[]" class="form-control item" id="item' + count + '"><option value="">Item</option></select></td>';
@@ -215,13 +217,22 @@ foreach ($bl as $row) {
         html += '<td><input type="text" name="mo[]" class="form-control mo" id="mo' + count + '" /></td>';
         html += '<td><textarea class="form-control" rows="1" name="remarks[]" id="remarks"></textarea></td>';
         html += '<td><input type="text" name="uname[]" class="form-control uname" id="uname' + count + '" /></td>';
-        
+
         html += '<td style="vertical-align:middle;"><button type="button" name="remove" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove"></span></button></td>';
         $('#item_table1').append(html);
+
+        // ✅ Update SL for all rows
+        $('#item_table1 tbody tr').each(function(index) {
+          $(this).find('.sl').text(index + 1);
+        });
       });
 
       $(document).on('click', '.remove', function() {
         $(this).closest('tr').remove();
+        // ✅ Reorder SL numbers
+        $('#item_table1 tbody tr').each(function(index) {
+          $(this).find('.sl').text(index + 1);
+        });
       });
 
       $(document).on('change', '.product', function() {
@@ -248,116 +259,141 @@ foreach ($bl as $row) {
       $('#insert_form').on('submit', function(event) {
         event.preventDefault();
         var error = '';
-        $('.factoryid').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Unit Name ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
+        // $('.factoryid').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Unit Name ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.etypeid').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Employment Type at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.departmentid').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Department at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.name').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Name at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.designationid').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Designation at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.product').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Product at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.item').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Item at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.brand').each(function() {
+        //   var count = 1;
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Brand at ' + count + ' Row</p>';
+        //     return false;
+        //   }
+        //   count = count + 1;
+        // });
+
+        // $('.qty').each(function() {
+        //   var count = 1;
+
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Qty at ' + count + ' row</p>';
+        //     return false;
+        //   }
+
+        //   count = count + 1;
+
+        // });
+
+        // $('.uom').each(function() {
+
+        //   var count = 1;
+
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Uom at ' + count + ' Row</p> ';
+        //     return false;
+        //   }
+
+        //   count = count + 1;
+
+        // });
+
+        // $('.price').each(function() {
+
+        //   var count = 1;
+
+        //   if ($(this).val() == '') {
+        //     error += '<p>Enter Price at ' + count + ' Row</p> ';
+        //     return false;
+        //   }
+
+        //   count = count + 1;
+
+        // });
+
+        // Basic field checks
+        if ($('#factoryid').val() == '') error += '<p>Enter Unit Name</p>';
+        if ($('#etypeid').val() == '') error += '<p>Enter Employment Type</p>';
+        if ($('#departmentid').val() == '') error += '<p>Enter Department</p>';
+        if ($('.name').val() == '') error += '<p>Enter Name</p>';
+        if ($('#designationid').val() == '') error += '<p>Enter Designation</p>';
+
+        // Dynamic table validation (row-wise)
+        $('#item_table1 tbody tr').each(function(index) {
+          var rowNum = index + 1; // Row count starts from 1
+          var product = $(this).find('.product').val();
+          var item = $(this).find('.item').val();
+          var brand = $(this).find('.brand').val();
+          var qty = $(this).find('.qty').val();
+          var uom = $(this).find('.uom').val();
+          var price = $(this).find('.price').val();
+
+          if (product == '') error += '<p>Enter Product at row ' + rowNum + '</p>';
+          if (item == '') error += '<p>Enter Item at row ' + rowNum + '</p>';
+          if (brand == '') error += '<p>Enter Brand at row ' + rowNum + '</p>';
+          if (qty == '') error += '<p>Enter Qty at row ' + rowNum + '</p>';
+          if (uom == '') error += '<p>Enter Unit at row ' + rowNum + '</p>';
+          if (price == '') error += '<p>Enter Price at row ' + rowNum + '</p>';
         });
 
-        $('.etypeid').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Employment Type at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.departmentid').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Department at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.name').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Name at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.designationid').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Designation at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.product').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Product at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.item').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Item at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.brand').each(function() {
-          var count = 1;
-          if ($(this).val() == '') {
-            error += '<p>Enter Brand at ' + count + ' Row</p>';
-            return false;
-          }
-          count = count + 1;
-        });
-
-        $('.qty').each(function() {
-          var count = 1;
-
-          if ($(this).val() == '') {
-            error += '<p>Enter Qty at ' + count + ' row</p>';
-            return false;
-          }
-
-          count = count + 1;
-
-        });
-
-        $('.uom').each(function() {
-
-          var count = 1;
-
-          if ($(this).val() == '') {
-            error += '<p>Enter Uom at ' + count + ' Row</p> ';
-            return false;
-          }
-
-          count = count + 1;
-
-        });
-
-        $('.price').each(function() {
-
-          var count = 1;
-
-          if ($(this).val() == '') {
-            error += '<p>Enter Price at ' + count + ' Row</p> ';
-            return false;
-          }
-
-          count = count + 1;
-
-        });
-        
         // $('.uname').each(function() {
 
         //   var count = 1;
@@ -375,7 +411,7 @@ foreach ($bl as $row) {
         //alert(form_data);
         //form_data = form_data.replaceAll(/["']/g, "");
         //form_data = form_data.replaceAll(/'/g,"\\'");
-        
+
 
         if (error == '') {
           $('input[type="submit"]').attr('disabled', true);
@@ -392,6 +428,10 @@ foreach ($bl as $row) {
                 window.setTimeout(function() {
                   location.reload()
                 }, 3000)
+              } else if (data == 'duplicate_mprid') {
+                // 🚨 এই অংশ নতুন
+                //alert('⚠️ এই MPR ID আগে থেকেই ব্যবহার হয়েছে!');
+                $('#error').html('<div class="alert alert-danger">Duplicate MPR ID! Please use another one.</div>');
               }
             }
           });
@@ -489,7 +529,7 @@ foreach ($bl as $row) {
     });
   </script>
 
-<script>
+  <script>
     $(document).ready(function() {
 
       $("#factoryid").change(function(event) {

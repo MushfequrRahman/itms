@@ -313,7 +313,7 @@
 
 
 	<!-- PO Chart -->
-	<script>
+	<!-- <script>
 		var cData1 = JSON.parse(`<?php echo $chart_data1; ?>`);
 		var myData1 = {
 			labels: cData1.label,
@@ -362,7 +362,123 @@
 			data: myData1,
 			options: myoption1
 		});
+	</script> -->
+
+	<script>
+		var cData1 = JSON.parse(`<?php echo $chart_data1; ?>`);
+
+		// X-axis label = fid + (PO count)
+		var labels = cData1.label.map(function(unit, i) {
+			var poCount = cData1.po_count[i] || 0;
+			return unit + " (" + poCount + ")";
+		});
+
+		var myData1 = {
+			labels: labels,
+			datasets: [{
+					label: "Current Month PO Value",
+					backgroundColor: '#4CAF50',
+					borderColor: '#2E8B57',
+					borderWidth: 1,
+					data: cData1.po_value
+				},
+				{
+					label: "Old MPR → Current Month PO Value",
+					backgroundColor: '#FFA500',
+					borderColor: '#CC8400',
+					borderWidth: 1,
+					data: cData1.old_po_value
+				}
+			]
+		};
+
+		var myoption1 = {
+			plugins: {
+				legend: {
+					position: 'bottom'
+				},
+				title: {
+					display: true,
+					text: 'PO Value by Unit (Including Old MPR)'
+				},
+				tooltip: {
+					enabled: true,
+					callbacks: {
+						label: function(context) {
+							var i = context.dataIndex;
+							var dataset = context.datasetIndex;
+							var unit = cData1.label[i];
+							var value = context.parsed.y;
+							if (dataset === 0) {
+								return [
+									'Unit: ' + unit,
+									'Current PO Value: ৳' + value.toLocaleString(),
+									'Current PO Count: ' + cData1.po_count[i],
+									'MPR Count: ' + cData1.mpr_count[i],
+									'MPR Value: ৳' + cData1.mpr_value[i].toLocaleString()
+								];
+							} else {
+								return [
+									'Unit: ' + unit,
+									'Old MPR → PO Value: ৳' + value.toLocaleString(),
+									'Old PO Count: ' + cData1.old_po_count[i],
+									'Old MPR Count: ' + cData1.old_mpr_count[i]
+								];
+							}
+						}
+					}
+				}
+			},
+			responsive: true,
+			scales: {
+				y: {
+					beginAtZero: true,
+					title: {
+						display: true,
+						text: 'Total Value (৳)'
+					}
+				},
+				x: {
+					title: {
+						display: true,
+						text: 'Unit (Total PO Count)'
+					}
+				}
+			},
+			animation: {
+				duration: 1,
+				onComplete: function() {
+					var chart = this.chart,
+						ctx = chart.ctx;
+					ctx.textAlign = 'center';
+					ctx.fillStyle = "rgba(0,0,0,1)";
+					ctx.textBaseline = 'bottom';
+					this.data.datasets.forEach(function(dataset, i) {
+						var meta = chart.getDatasetMeta(i);
+						meta.data.forEach(function(bar, index) {
+							var value = dataset.data[index];
+							var poCount = i === 0 ? cData1.po_count[index] : cData1.old_po_count[index];
+							ctx.fillText("৳" + value + " (" + poCount + ")", bar.x, bar.y - 5);
+						});
+					});
+				}
+			}
+		};
+
+		var ctx1 = document.getElementById('my_Chart1').getContext('2d');
+		var myChart1 = new Chart(ctx1, {
+			type: 'bar',
+			data: myData1,
+			options: myoption1
+		});
 	</script>
+
+
+
+
+
+
+
 
 
 	<script>

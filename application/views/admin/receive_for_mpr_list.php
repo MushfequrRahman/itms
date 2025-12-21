@@ -47,41 +47,41 @@
   }
 
   .modal-title {
-    /* display: none;
-  } */
+    /* display: none; */
+  }
 
 
-    .slider {
-      width: 100%;
-      margin: 100px auto;
-    }
+  .slider {
+    width: 100%;
+    margin: 100px auto;
+  }
 
-    .slick-slide {
-      margin: 0px 20px;
-    }
+  .slick-slide {
+    margin: 0px 20px;
+  }
 
-    .slick-slide img {
-      width: 100%;
-    }
+  .slick-slide img {
+    width: 100%;
+  }
 
-    .slick-prev:before,
-    .slick-next:before {
-      color: black;
-    }
+  .slick-prev:before,
+  .slick-next:before {
+    color: black;
+  }
 
 
-    .slick-slide {
-      transition: all ease-in-out .3s;
-      opacity: .2;
-    }
+  .slick-slide {
+    transition: all ease-in-out .3s;
+    opacity: .2;
+  }
 
-    .slick-active {
-      opacity: .5;
-    }
+  .slick-active {
+    opacity: .5;
+  }
 
-    .slick-current {
-      opacity: 1;
-    }
+  .slick-current {
+    opacity: 1;
+  }
 </style>
 <script type="text/javascript">
   $(function() {
@@ -96,7 +96,7 @@
   });
 </script> -->
 <script>
-  $(document).ready(function () {
+  $(document).ready(function() {
     $('#myModal').modal({
       backdrop: 'static',
       keyboard: false
@@ -156,7 +156,7 @@
                     <!-- <th>Category</th> -->
                     <th>Product</th>
                     <th>Model</th>
-                    
+
                     <th style="display:none;">Item Code</th>
                     <th style="display:none;">PO Code</th>
                     <!-- <th>MPR Qty</th> -->
@@ -183,13 +183,13 @@
                     <!--<th>Status</th>-->
                   </tr>
                 </thead>
-                
+
 
                 <?php
                 $i = 1;
                 foreach ($ul as $row) { ?>
                   <tbody>
-                  <div id="error"></div>
+                    <div id="error"></div>
                     <tr id="trid<?php echo $i; ?>">
 
                       <td style="vertical-align:middle;"><?php echo $i++; ?></td>
@@ -200,7 +200,7 @@
                       <!-- <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td> -->
                       <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
                       <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
-                      
+
                       <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="item<?php echo $i; ?>" name="item" value="<?php echo $row['simprid']; ?>" /></td>
                       <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="sipoid<?php echo $i; ?>" name="sipoid" value="<?php echo $row['sipoid']; ?>" /></td>
                       <!-- <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td> -->
@@ -243,7 +243,7 @@
                         <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="po[]" value="<?php echo $row['po']; ?>"></td>
                         <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="grn[]" placeholder="GRN PO"></td>
                         <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="rqty[]" placeholder="Qty">
-                          
+
                         </td>
                         <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="pprice[]" placeholder="Price"></td>-->
 
@@ -280,9 +280,9 @@
 
 <script>
   $(document).ready(function() {
-	  for(let i = 0; i < 50; i++) {
-		   //var test = $("input[id='id_" + i + "']").val();
-    $("#btn" + i + "").click(function(event) {
+    for (let i = 0; i < 50; i++) {
+      //var test = $("input[id='id_" + i + "']").val();
+      $("#btn" + i + "").click(function(event) {
         event.preventDefault();
         //var pd= $("#pd").val();
         //			var wd= $("#wd").val();
@@ -290,56 +290,63 @@
         var mprid = $("#mprid").val();
         var fid = $("#fid").val();
         var item = $("#item" + i + "").val();
-		
+
         var sipoid = $("#sipoid" + i + "").val();
         var po = $("#po" + i + "").val();
         var grn = $("#grn" + i + "").val();
-		//alert(grn);
+        //alert(grn);
         var rqty = parseFloat($("#rqty" + i + "").val());
         var reqty = parseFloat($("#reqty" + i + "").val());
-        var rremarks= $("#rremarks" + i + "").val();
-        var rdate= $("#rdate" + i + "").val();
-		var invoice= $("#invoice" + i + "").val();
-		var cdate= $("#cdate" + i + "").val();
+        var rremarks = $("#rremarks" + i + "").val();
+        var rdate = $("#rdate" + i + "").val();
+        var invoice = $("#invoice" + i + "").val();
+        var cdate = $("#cdate" + i + "").val();
         var error = "";
         if (rqty > reqty) {
           error += "Receive Qty Must be Less Then Remaining Qty<br/>";
         }
-        if (grn=='') {
+        if (grn == '') {
           error += "Enter GRN<br/>";
         }
         //alert(reqty);
 
 
-        if (error == '') 
-        {
-            $.ajax({
-                type: 'post',
-                url: '<?php echo base_url(); ?>Dashboard/receive_create',
-                dataType: "text",
-                data: 
-                  {
-                    userid:userid,mprid:mprid,fid:fid,item:item,sipoid:sipoid,po:po,grn: grn,rqty:rqty,rremarks:rremarks,rdate:rdate,invoice:invoice,cdate:cdate
-                  },
-                success: function(data) 
-                  {
-                    //$('#ajax-content-container').html(data);
-					var ii=i-1;
-                    $("#trid" + ii + "").delay(1000).hide("slow");
-                    $("#error").delay(1000).hide("slow");
-                  },
+        if (error == '') {
+          $.ajax({
+            type: 'post',
+            url: '<?php echo base_url(); ?>Dashboard/receive_create',
+            dataType: "text",
+            data: {
+              userid: userid,
+              mprid: mprid,
+              fid: fid,
+              item: item,
+              sipoid: sipoid,
+              po: po,
+              grn: grn,
+              rqty: rqty,
+              rremarks: rremarks,
+              rdate: rdate,
+              invoice: invoice,
+              cdate: cdate
+            },
+            success: function(data) {
+              //$('#ajax-content-container').html(data);
+              var ii = i - 1;
+              $("#trid" + ii + "").delay(1000).hide("slow");
+              $("#error").delay(1000).hide("slow");
+            },
             //}
 
             // error: function(){
             // alert('error!');
-          //}
-            });
-        }
-        else {
+            //}
+          });
+        } else {
           $('#error').html('<div class="alert alert-danger">' + error + '</div>');
         }
-    });
-  }
+      });
+    }
   });
 </script>
 
@@ -958,4 +965,4 @@
     });
   });
 </script>
-<?php */?>
+<?php */ ?>

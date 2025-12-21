@@ -119,7 +119,7 @@
 												</div>
 												<div class="form-group">
 													<label>Qty</label>
-													<input type="text" class="form-control" name="iqty" Placeholder="Enter Qty">
+													<input type="text" class="form-control" name="iqty" value="1">
 													<?php echo form_error('iqty', '<div class="error">', '</div>');  ?>
 												</div>
 												<?php /*?><div class="form-group">

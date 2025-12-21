@@ -18,13 +18,15 @@
     background: #187ed5;
     font-weight: bold;
   }
+
   .table-container {
-            height: 400px; /* Set the height for vertical scrolling */
-            overflow-y: auto;
-        }
+    height: 400px;
+    /* Set the height for vertical scrolling */
+    overflow-y: auto;
+  }
 
   .paging-nav,
-  
+
   #tableData {
 
 
@@ -258,8 +260,10 @@
         <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Description</th>
         <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Remarks</th>
         <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />MPR Submission Date</th>
-        <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />Pqty</th>
-        <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />Rqty</th>
+        <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />PO Qty</th>
+        <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />Received Qty</th>
+        <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Remaining Qty</th>
+        <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Remaining Qty Price</th>
         <!-- <th>Supplier</th>
         <th>Invoice</th>
         <th>PO Qty</th>
@@ -268,21 +272,22 @@
         <th>Receive Qty</th>
         <th>Received Date</th>
         <th>Inventory Qty</th> -->
-        <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Status</th>
-        <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Count Days</th>
+        <th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />Status</th>
+        <th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />Count Days</th>
       </tr>
     </thead>
     <tfoot>
       <tr>
-        <th colspan="16"></th>
+        <th id="rowCount"></th>
+        <th colspan="14"></th>
 
-        <!-- <th data-math="col-sum">col-sum</th> -->
+        <th data-math="col-sum">col-sum</th>
 
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
         <!-- <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
+        <th>&nbsp;</th> -->
+        <!-- <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th> -->
@@ -325,6 +330,8 @@
 
           <td style="vertical-align:middle;"><?php echo $row['pqty']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['rqty']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $remqty=$row['pqty']-$row['rqty']; ?></td>
+          <td style="vertical-align:middle;"><?php echo $remqty * $row['pprice']; ?></td>
           <!-- <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
@@ -354,10 +361,15 @@
           <td style="vertical-align:middle;">
             <?php
             if (($row['rqty'] < $row['pqty'])) {
+              
               echo "Remaining";
-            } elseif ($row['pqty'] == '') {
+            } 
+            elseif ($row['pqty'] == '') {
+              
               echo "Pending";
-            } else {
+            } 
+            else {
+              
               echo "Received";
             }
             ?></td>
@@ -369,9 +381,9 @@
 
   </table>
   <script>
-        $(document).ready(function () {
-            $("#tableData").tablesorter();
-        });
-    </script>
+    $(document).ready(function() {
+      $("#tableData").tablesorter();
+    });
+  </script>
 
 </div>

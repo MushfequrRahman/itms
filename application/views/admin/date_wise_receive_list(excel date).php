@@ -114,13 +114,13 @@
     z-index: 3 !important;
   }
 </style>
-<!-- <script type="text/javascript">
+<script type="text/javascript">
   $(function() {
     jQuery(".pd").datepicker({
       dateFormat: 'dd-mm-yy'
     });
   })
-</script> -->
+</script>
 <!-- <script>
   $(function() {
     $("table").tablesorter({
@@ -163,112 +163,134 @@
   });
 </script> -->
 
-<script type="text/javascript">
-$(function() {
-    // Datepicker
-    $(".pd").datepicker({ dateFormat: 'dd-mm-yy' });
-
-    // Custom parser for DD-MM-YYYY
-    $.tablesorter.addParser({
-        id: "customDate",
-        is: function() { return false; },
-        format: function(s) {
-            if (!s) return 0;
-            var parts = s.split("-");
-            return new Date(parts[2], parts[1]-1, parts[0]).getTime();
-        },
-        type: "numeric"
-    });
-
-    // Initialize tablesorter
-    $("table").tablesorter({
-        theme: 'blue',
-        headers: {
-            12: { sorter: "customDate" }, // MPR Date
-            13: { sorter: "customDate" }, // MPR Submission Date
-            21: { sorter: "customDate" }  // Received Date
-        },
-        widgets: ['math', 'zebra', 'filter'],
-        widgetOptions: {
-            math_data: 'math',
-            math_ignore: [0, 1],
-            math_none: 'N/A'
-        }
+<!-- <script>
+  $(function() {
+    // Tablesorter initialization
+    $("#tableData").tablesorter({
+      theme: 'blue',
+      widgets: ['math', 'zebra', 'filter'],
+      widgetOptions: {
+        math_data: 'math',
+        math_ignore: [0, 1],
+        math_none: 'N/A',
+        math_mask: '#,##0.00',
+        math_event: 'recalculate',
+        math_priority: ['row', 'above', 'below', 'col'],
+        math_rowFilter: ''
+      }
     }).on("filterEnd sortEnd", function() {
-        countVisibleRows();
+      updateVisibleRowsCount();
     });
 
-    function countVisibleRows() {
+    function updateVisibleRowsCount() {
+      var count = $('#tableData tbody tr:visible').length;
+      $('#rowCount').text("Rows: " + count);
+    }
+
+    updateVisibleRowsCount();
+
+    // Excel Download
+    $("#downloadExcel").on("click", function() {
+      var wb = XLSX.utils.book_new();
+      var ws_data = [];
+
+      // Date columns (0-based index)
+      var dateColumns = [11, 12, 20];
+
+      // Header
+      var headers = [];
+      $('#tableData thead th').each(function(index) {
+        var $checkbox = $(this).find('.column-select');
+        if ($checkbox.length === 0 || $checkbox.is(':checked')) {
+          headers.push($(this).text().trim());
+        }
+      });
+      ws_data.push(headers);
+
+      // Body
+      $('#tableData tbody tr:visible').each(function() {
+        if ($(this).find('.row-select').is(':checked')) {
+          var row = [];
+          $(this).find('td').each(function(index) {
+            var $colCheckbox = $(this).closest('table').find('thead th').eq(index).find('.column-select');
+            if ($colCheckbox.length === 0 || $colCheckbox.is(':checked')) {
+              var cellText = $(this).text().trim();
+              if (dateColumns.includes(index) && cellText !== '') {
+                var parts = cellText.split("-");
+                var jsDate = new Date(parts[2], parts[1]-1, parts[0]);
+                row.push({v: jsDate, t: 'd', z: 'dd-mm-yyyy'});
+              } else {
+                row.push(cellText);
+              }
+            }
+          });
+          ws_data.push(row);
+        }
+      });
+
+      var ws = XLSX.utils.aoa_to_sheet(ws_data);
+      XLSX.utils.book_append_sheet(wb, ws, "Selected Rows");
+      XLSX.writeFile(wb, 'date_wise_receive_list.xlsx');
+    });
+  });
+</script> -->
+
+<script>
+    $(function() {
+      $("#tableData").tablesorter({
+        theme: 'blue',
+        widgets: ['math', 'zebra', 'filter']
+      });
+
+      function countVisibleRows() {
         var visibleRowsCount = $('#tableData tbody tr:visible').length;
         $('#rowCount').text("Rows: " + visibleRowsCount);
-    }
-    countVisibleRows();
+      }
+      countVisibleRows();
 
-    // Excel download
-    $("#downloadExcel").on("click", function() {
+      $("#downloadExcel").on("click", function() {
         var wb = XLSX.utils.book_new();
         var ws_data = [];
 
-        // Headers
+        // Header
         var headers = [];
-        $('#tableData thead th').each(function() {
-            var $checkbox = $(this).find('.column-select');
-            if ($checkbox.length === 0 || $checkbox.is(':checked')) {
-                headers.push($(this).text().trim());
-            }
+        $('#tableData thead th').each(function(index) {
+          var $checkbox = $(this).find('.column-select');
+          if ($checkbox.length === 0 || $checkbox.is(':checked')) {
+            headers.push($(this).text().trim());
+          }
         });
         ws_data.push(headers);
 
-        // Function to parse DD-MM-YYYY to JS Date
-        function parseExcelDate(str) {
-            if (!str) return null;
-            var parts = str.split("-");
-            return new Date(parts[2], parts[1]-1, parts[0]);
-        }
-
-        // Rows
+        // Body
         $('#tableData tbody tr:visible').each(function() {
-            var $checkbox = $(this).find('.row-select');
-            if ($checkbox.is(':checked')) {
-                var row = [];
-                $(this).find('td').each(function(index) {
-                    var $colCheckbox = $(this).closest('table').find('thead th').eq(index).find('.column-select');
-                    if ($colCheckbox.length === 0 || $colCheckbox.is(':checked')) {
-                        var text = $(this).text().trim();
-
-                        // Date columns: 12th (index 11), 13th (index 12), 21st (index 20)
-                        if(index === 12 || index === 13 || index === 21) {
-                            row.push(parseExcelDate(text));
-                        } else {
-                            row.push(text);
-                        }
-                    }
-                });
-                ws_data.push(row);
-            }
+          if ($(this).find('.row-select').is(':checked')) {
+            var row = [];
+            $(this).find('td').each(function(index) {
+              var $colCheckbox = $(this).closest('table').find('thead th').eq(index).find('.column-select');
+              if ($colCheckbox.length === 0 || $colCheckbox.is(':checked')) {
+                var cellText = $(this).text().trim();
+                // Detect date automatically (dd-mm-yyyy)
+                var dateRegex = /^(\d{2})-(\d{2})-(\d{4})$/;
+                var match = cellText.match(dateRegex);
+                if (match) {
+                  var jsDate = new Date(match[3], match[2]-1, match[1]);
+                  row.push({v: jsDate, t: 'd', z: 'dd-mm-yyyy'});
+                } else {
+                  row.push(cellText);
+                }
+              }
+            });
+            ws_data.push(row);
+          }
         });
 
         var ws = XLSX.utils.aoa_to_sheet(ws_data);
-
-        // Set date format for Excel columns
-        var dateCols = [12, 13, 21]; // 0-based index
-        dateCols.forEach(function(col) {
-            for(var r=2; r<=ws_data.length; r++){ // start from row 2 (1-based Excel)
-                var cell_ref = XLSX.utils.encode_cell({r:r-1, c:col}); // zero-based
-                var cell = ws[cell_ref];
-                if(cell && cell.v instanceof Date){
-                    cell.t = 'd'; // date type
-                    cell.z = 'dd-mm-yyyy'; // display format
-                }
-            }
-        });
-
         XLSX.utils.book_append_sheet(wb, ws, "Selected Rows");
         XLSX.writeFile(wb, 'date_wise_receive_list.xlsx');
+      });
     });
-});
-</script>
-
+  </script>
 
 <!-- /.box-header -->
 <div class="box-body">
@@ -307,34 +329,33 @@ $(function() {
           <th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />User</th>
           <!--<th>MPR Prepared By</th>-->
           <th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Category</th>
-          <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />GROUP</th>
-          <th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />Product</th>
-          <th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />Item/Model</th>
+          <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />Product</th>
+          <th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />Item/Model</th>
 
           <!--<th>Item Code</th>-->
-          <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />MPR Qty</th>
-          <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Description</th>
-          <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Remarks</th>
-          <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />MPR Date</th>
-          <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />MPR Submission Date</th>
+          <th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />MPR Qty</th>
+          <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Description</th>
+          <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Remarks</th>
+          <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />MPR Date</th>
+          <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />MPR Submission Date</th>
           <!--<th>Description</th>-->
           <!--<th>MPR Price</th>-->
           <!--<th>Remarks</th>-->
           <!--<th>User</th>
                   <th>Date</th>-->
-          <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />PO</th>
-          <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Supplier</th>
-          <th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />Invoice</th>
-          <th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />PO Qty</th>
+          <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />PO</th>
+          <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Supplier</th>
+          <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Invoice</th>
+          <th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />PO Qty</th>
           
           <!-- <th>Remarks</th>
                   <th>Date</th> -->
           <!--<th>PO NO</th>-->
-          <th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />GRN</th>
-          <th data-column="19"><input type="checkbox" class="column-select" data-col-index="20" checked><br />Receive Qty</th>
-          <th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />Total Price</th>
-          <th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />Received Date</th>
-          <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />Inventory Qty</th>
+          <th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />GRN</th>
+          <th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />Receive Qty</th>
+          <th data-column="19"><input type="checkbox" class="column-select" data-col-index="20" checked><br />Total Price</th>
+          <th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />Received Date</th>
+          <th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />Inventory Qty</th>
           <!-- <th>Po Status</th> -->
           <!-- <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />Status</th> -->
           <!--<th>PO Qty</th>
@@ -349,7 +370,7 @@ $(function() {
       <tfoot>
         <tr>
           <th id="rowCount"></th>
-          <th colspan="19">Totals</th>
+          <th colspan="18">Totals</th>
           <th data-math="col-sum">col-sum</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
@@ -379,7 +400,6 @@ $(function() {
             <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
             <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
 

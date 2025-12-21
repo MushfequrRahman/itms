@@ -2198,176 +2198,71 @@ class Dashboard extends CI_Controller
 		$data['ul'] = $this->Admin->product_uom_list();
 		$this->load->view('admin/po_create_form', $data);
 	}
-	// public function po_create()
-	// {
-	// 	date_default_timezone_set('Asia/Dhaka');
-	// 	//$podate = $this->input->post('podate');
-	// 	//$podate = date("Y-m-d", strtotime($podate));
-	// 	$d = date('Y-m-d');
-	// 	$t = date("H:i:s");
-	// 	$d1 = str_replace("-", "", $d);
-	// 	$t1 = str_replace(":", "", $t);
-	// 	$ccid = $d1 . $t1;
-
-
-	// 	$this->load->database();
-	// 	$this->load->library('form_validation');
-	// 	$this->load->model('Admin');
-	// 	if ($this->input->post('submit')) {
-	// 		$simprid = $this->input->post('simprid');
-	// 		$userid = $this->input->post('userid');
-	// 		$mprid = $this->input->post('mprid');
-	// 		$fid = $this->input->post('fid');
-	// 		$qty = $this->input->post('qty');
-	// 		$po = $this->input->post('po');
-	// 		//$po = $fid.$po;
-	// 		$supplier = $this->input->post('supplier');
-	// 		$podate = $this->input->post('podate');
-	// 		$item = $this->input->post('item');
-	// 		$prqty = $this->input->post('prqty');
-	// 		$pqty = $this->input->post('pqty');
-	// 		$description = $this->input->post('description');
-	// 		$description =  str_replace("'", "\'", $description);
-	// 		$premarks = $this->input->post('premarks');
-	// 		$premarks =  str_replace("'", "\'", $premarks);
-	// 		$pprice = $this->input->post('pprice');
-	// 		$pstatus = $this->input->post('pstatus');
-
-
-	// 		$sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$mprid[0]')";
-	// 		$query1 = $this->db->query($sql1);
-
-	// 		for ($i = 0; $i < count($simprid); $i++) {
-
-	// 			$data["i"] = $i;
-	// 			$data["ccid"] = $ccid;
-	// 			$data["ccid1"] = $ccid . $i;
-	// 			$data["userid"] = $userid;
-	// 			$data["mprid"] = $mprid[$i];
-	// 			$data["po"] = $po[$i];
-	// 			$data["supplier"] = $supplier[$i];
-	// 			$data["podate"] = $podate[$i];
-	// 			$data["item"] = $item[$i];
-	// 			$data["pqty"] = $pqty[$i];
-	// 			$data["description"] = $description[$i];
-	// 			$data["premarks"] = $premarks[$i];
-	// 			$data["pprice"] = $pprice[$i];
-	// 			$data["pstatus"] = $pstatus[$i];
-	// 			$ins = $this->Admin->po_create($data);
-
-	// 		}
-
-	// 		if ($ins == TRUE) {
-	// 			$this->session->set_flashdata('Successfully', 'Successfully Inserted');
-	// 		} else {
-	// 			$this->session->set_flashdata('Successfully', 'Failed To Inserted');
-	// 		}
-	// 		redirect('Dashboard/po_from_mpr_form', 'refresh');
-	// 	}
-	// }
-
 	public function po_create()
 	{
 		date_default_timezone_set('Asia/Dhaka');
-
+		//$podate = $this->input->post('podate');
+		//$podate = date("Y-m-d", strtotime($podate));
 		$d = date('Y-m-d');
 		$t = date("H:i:s");
 		$d1 = str_replace("-", "", $d);
 		$t1 = str_replace(":", "", $t);
 		$ccid = $d1 . $t1;
 
+
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model('Admin');
-
 		if ($this->input->post('submit')) {
-
-			$simprid     = $this->input->post('simprid');
-			$userid      = $this->input->post('userid');
-			$mprid       = $this->input->post('mprid');
-			$po          = $this->input->post('po');
-			$supplier    = $this->input->post('supplier');
-			$podate      = $this->input->post('podate');
-			$item        = $this->input->post('item');
-			$prqty       = $this->input->post('prqty');
-			$pqty        = $this->input->post('pqty');
+			$userid = $this->input->post('userid');
+			$mprid = $this->input->post('mprid');
+			$fid = $this->input->post('fid');
+			$po = $this->input->post('po');
+			//$po = $fid.$po;
+			$supplier = $this->input->post('supplier');
+			$podate = $this->input->post('podate');
+			$item = $this->input->post('item');
+			$pqty = $this->input->post('pqty');
 			$description = $this->input->post('description');
-			$premarks    = $this->input->post('premarks');
-			$pprice      = $this->input->post('pprice');
-			$pstatus     = $this->input->post('pstatus');
+			$description =  str_replace("'", "\'", $description);
+			$premarks = $this->input->post('premarks');
+			$premarks =  str_replace("'", "\'", $premarks);
+			$pprice = $this->input->post('pprice');
+			$pstatus = $this->input->post('pstatus');
 
-			// Insert po_insert_id (only first mprid)
-			$sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$mprid[0]')";
+			$sql1 = "INSERT INTO po_insert_id VALUES ('$ccid','$mprid')";
 			$query1 = $this->db->query($sql1);
 
-			$allSuccess = true;
-
-			for ($i = 0; $i < count($simprid); $i++) {
-
-				// MPR Qty check
-				$mprRow = $this->db->select('qty')
-					->where('simprid', $simprid[$i])
-					->get('mpr_insert')
-					->row();
-
-				$mprQty = (float)$mprRow->qty;
-
-				// Already existing PO Qty
-				$poSum = $this->db->select('SUM(pqty) as total_po')
-					->where('simprid', $simprid[$i])
-					->get('po_insert')
-					->row();
-
-				$existingPoQty = (float)$poSum->total_po;
-				$newPoQty = (float)$pqty[$i];
-
-				if (($existingPoQty + $newPoQty) > $mprQty) {
-					// $this->session->set_flashdata('Successfully', "Row " . ($i + 1) . ": Total PO Qty cannot exceed MPR Qty ($mprQty)");
-					$this->session->set_flashdata('Successfully', "Total PO Qty cannot exceed MPR Qty");
-					$allSuccess = false;
-					break;
+			for ($i = 0; $i < count($po); $i++) {
+				if (empty($pqty[$i]) || $pqty[$i] == 0 || $pqty[$i] == '') {
+					continue; // এই iteration স্কিপ করব
 				}
-
-				// Prepare data for model
-				$data = [
-					'i'            => $i,
-					'ccid'         => $ccid,
-					'ccid1'        => $ccid . $i,
-					'userid'       => $userid,
-					'mprid'        => $mprid[$i],
-					'po'           => $po[$i],
-					'supplier'     => $supplier[$i],
-					'podate'       => $podate[$i],
-					'item'         => $item[$i],
-					'pqty'         => $newPoQty,
-					'description'  => $description[$i],
-					'premarks'     => $premarks[$i],
-					'pprice'       => $pprice[$i],
-					'pstatus'      => $pstatus[$i]
-				];
-
-				// Call model function
-				$insert = $this->Admin->po_create($data);
-				if (!$insert) {
-					$allSuccess = false;
-					break;
-				}
+				$data["i"] = $i;
+				$data["ccid"] = $ccid;
+				$data["ccid1"] = $ccid . $i;
+				$data["userid"] = $userid;
+				$data["mprid"] = $mprid;
+				$data["po"] = $po[$i];
+				$data["supplier"] = $supplier[$i];
+				$data["podate"] = $podate[$i];
+				$data["item"] = $item[$i];
+				$data["pqty"] = $pqty[$i];
+				$data["description"] = $description[$i];
+				$data["premarks"] = $premarks[$i];
+				$data["pprice"] = $pprice[$i];
+				$data["pstatus"] = $pstatus[$i];
+				$ins = $this->Admin->po_create($data);
+				//var_dump($data);
 			}
 
-			// Flash messages
-			if ($allSuccess) {
+			if ($ins == TRUE) {
 				$this->session->set_flashdata('Successfully', 'Successfully Inserted');
-			} else if (!$allSuccess && !empty($this->session->flashdata('Successfully'))) {
-				// Already set by validation error
 			} else {
-				$this->session->set_flashdata('Successfully', 'Failed To Insert');
+				$this->session->set_flashdata('Successfully', 'Failed To Inserted');
 			}
-
 			redirect('Dashboard/po_from_mpr_form', 'refresh');
 		}
 	}
-
-
 	public function date_wise_po_list_form()
 	{
 		$this->load->database();
@@ -2600,94 +2495,33 @@ class Dashboard extends CI_Controller
 		$data['ul'] = $this->Admin->receive_for_mpr_list($mprid);
 		$this->load->view('admin/receive_for_mpr_list', $data);
 	}
-	// public function receive_create()
-	// {
-	// 	$this->load->database();
-	// 	$this->load->library('form_validation');
-	// 	$this->load->model('Admin');
-	// 	//if ($this->input->post('submit')) {
-	// 	$userid = $this->input->post('userid');
-	// 	$mprid = $this->input->post('mprid');
-	// 	$fid = $this->input->post('fid');
-	// 	$item = $this->input->post('item');
-	// 	$sipoid = $this->input->post('sipoid');
-	// 	$po = $this->input->post('po');
-	// 	$grn = $this->input->post('grn');
-	// 	//$grn = $fid . $grn;
-	// 	$rqty = $this->input->post('rqty');
-	// 	$rdate = $this->input->post('rdate');
-	// 	$invoice = $this->input->post('invoice');
-	// 	$cdate = $this->input->post('cdate');
-	// 	$rremarks = $this->input->post('rremarks');
-	// 	$ins = $this->Admin->receive_create($userid, $mprid, $item, $sipoid, $po, $grn, $rqty, $rdate, $invoice, $cdate, $rremarks);
-	// 	if ($ins) {
-	// 		echo  "ok";
-	// 	} else {
-	// 		echo  "error";
-	// 	}
-	// 	//}
-	// }
-
 	public function receive_create()
 	{
 		$this->load->database();
+		$this->load->library('form_validation');
 		$this->load->model('Admin');
-
-		$userid   = $this->input->post('userid');
-		$mprid    = $this->input->post('mprid');
-		$fid      = $this->input->post('fid');
-		$item     = $this->input->post('item');
-		$sipoid   = $this->input->post('sipoid');
-		$po       = $this->input->post('po');
-		$grn      = $this->input->post('grn');
-		$new_rqty = $this->input->post('rqty'); // user input qty
-		$rdate    = $this->input->post('rdate');
-		$invoice  = $this->input->post('invoice');
-		$cdate    = $this->input->post('cdate');
+		//if ($this->input->post('submit')) {
+		$userid = $this->input->post('userid');
+		$mprid = $this->input->post('mprid');
+		$fid = $this->input->post('fid');
+		$item = $this->input->post('item');
+		$sipoid = $this->input->post('sipoid');
+		$po = $this->input->post('po');
+		$grn = $this->input->post('grn');
+		//$grn = $fid . $grn;
+		$rqty = $this->input->post('rqty');
+		$rdate = $this->input->post('rdate');
+		$invoice = $this->input->post('invoice');
+		$cdate = $this->input->post('cdate');
 		$rremarks = $this->input->post('rremarks');
-
-		/** 🔹 PO Quantity */
-		$pqty = $this->db
-			->select('pqty')
-			->from('po_insert')
-			->where('sipoid', $sipoid)
-			->get()
-			->row('pqty');
-
-		/** 🔹 Already Received Quantity */
-		$received_qty = $this->db
-			->select('SUM(rqty) as rqty')
-			->from('receive_insert')
-			->where('sipoid', $sipoid)
-			->get()
-			->row('rqty');
-
-		$received_qty = $received_qty ?? 0;
-
-		/** 🔹 Validation */
-		if (($received_qty + $new_rqty) > $pqty) {
-			echo "Receive qty cannot be greater than PO qty";
-			return;
+		$ins = $this->Admin->receive_create($userid, $mprid, $item, $sipoid, $po, $grn, $rqty, $rdate, $invoice, $cdate, $rremarks);
+		if ($ins) {
+			echo  "ok";
+		} else {
+			echo  "error";
 		}
-
-		/** 🔹 Insert */
-		$ins = $this->Admin->receive_create(
-			$userid,
-			$mprid,
-			$item,
-			$sipoid,
-			$po,
-			$grn,
-			$new_rqty,
-			$rdate,
-			$invoice,
-			$cdate,
-			$rremarks
-		);
-
-		echo $ins ? "ok" : "error";
+		//}
 	}
-
 	public function mpr_wise_receive_list_form()
 	{
 		$this->load->database();
@@ -2860,29 +2694,6 @@ class Dashboard extends CI_Controller
 				$pdate = $this->input->post('pdate');
 				$iqty = $this->input->post('iqty');
 				$warranty = $this->input->post('warranty');
-
-				$this->db->select_sum('rqty');
-				$this->db->where('sipoid', $sipoid);
-				$queryr = $this->db->get('receive_insert');
-
-				$total_rqty = $queryr->row()->rqty ?? 0;
-
-
-				$this->db->select_sum('iqty');
-				$this->db->where('sipoid', $sipoid);
-				$queryr = $this->db->get('product_inventory');
-
-				$total_iqty = $queryr->row()->iqty ?? 0;
-
-				$new_total_iqty = $total_iqty + (float)$iqty;
-
-				if ($new_total_iqty > $total_rqty) {
-					$this->session->set_flashdata('Successfully', 'Failed To Inserted');
-					redirect('Dashboard/mpr_wise_receive_list_form', 'refresh');
-					return;
-				}
-
-
 				$ins = $this->Admin->product_inventory_insert($pcode, $sipoid, $grnrid, $factoryid, $sn, $ip, $mac, $description, $pdate, $iqty, $warranty);
 
 				if ($ins == TRUE) {

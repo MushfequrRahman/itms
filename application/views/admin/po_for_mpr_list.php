@@ -34,6 +34,23 @@
 
   /* td{font-weight: 600; font-variant:small-caps;} */
 </style>
+<script>
+  $('#insert_form').on('submit', function(e) {
+    // ✅ শুধুমাত্র checked row-এর input enable রাখো
+    $('#tableData tbody tr').each(function() {
+      var checkbox = $(this).find('.checkbox');
+      if (checkbox.is(':checked')) {
+        $(this).find('input, select, textarea')
+          .prop('disabled', false);
+      } else {
+        $(this).find('input, select, textarea')
+          .not('.checkbox')
+          .prop('disabled', true);
+      }
+    });
+  });
+</script>
+
 <script type="text/javascript">
   $(function() {
     jQuery(".pd").datepicker({
@@ -50,25 +67,18 @@
       <thead style="background:#91b9e6;">
         <tr>
           <input type="hidden" class="form-control" name="userid" id="userid" value="<?php echo $this->session->userdata('userid'); ?>">
-          <?php /*?><td colspan="2" style="vertical-align:middle;"><input type="text" class="form-control" name="po" placeholder="PO No"></td>
-              <td colspan="2" style="vertical-align:middle;"><input type="text" class="form-control" name="supplier" placeholder="Supplier"></td>
-              <td colspan="2" style="vertical-align:middle;"><input type="text" class="form-control pd" readonly name="podate" value="<?php echo date('d-m-Y'); ?>"></td><?php */ ?>
         </tr>
         <tr>
           <th>SL</th>
-          <!--<th>Select</th>-->
+          <th>Select</th>
           <th>MPR NO</th>
           <th>Unit</th>
-          <!--<th>MPR Prepared By</th>-->
           <th>Item</th>
           <th>Model</th>
           <th>Category</th>
           <th style="display:none;">Item Code</th>
           <th>Qty</th>
-          <!-- <th>Description</th> -->
           <th>MPR Unit Price</th>
-          <!-- <th>Remarks</th> -->
-          <!-- <th>User</th> -->
           <th>Date</th>
           <th>PO Qty</th>
           <th>PO Unit Price</th>
@@ -76,12 +86,10 @@
           <th>PO NO</th>
           <th>Qty</th>
           <th>PO Unit Price</th>
-
           <th>Supplier</th>
           <th>PO Date</th>
           <th>Description</th>
           <th>Remarks</th>
-          <!--<th>Status</th>-->
         </tr>
       </thead>
       <tbody>
@@ -90,81 +98,52 @@
         $i = 1;
         foreach ($ul as $row) { ?>
           <tr>
-
             <td style="vertical-align:middle;"><?php echo $i++; ?></td>
-            <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
-            <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="mprid" value="<?php echo $row['mprid']; ?>"></td>
+            <td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td>
+            <td style="vertical-align:middle;"><input type="text" readonly class="form-control keep-enabled" name="mprid[]" value="<?php echo $row['mprid']; ?>"></td>
             <td style="vertical-align:middle;"><input type="text" readonly class="form-control" name="fid" value="<?php echo $row['fid']; ?>"></td>
-            <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
-            <td style="vertical-align:middle; display:none;"><input type="text" readonly="readonly" class="form-control" name="item[]" value="<?php echo $row['simprid']; ?>" /></td>
-            <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
-            <!-- <td style="vertical-align:middle;"><?php echo $row['description']; ?></td> -->
+            <td style="vertical-align:middle; display:none;">
+              <input type="text" readonly="readonly" class="form-control keep-enabled" name="item[]" value="<?php echo $row['simprid']; ?>" />
+            </td>
+            <!-- <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td> -->
+            <td style="vertical-align:middle;"><input type="text" readonly class="form-control keep-enabled" name="qty[]" value="<?php echo $row['qty']; ?>"></td>
             <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
-            <!-- <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td> -->
-            <!-- <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td> -->
-
             <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
             <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['prqty'] . " " . $row['puom']; ?></td>
+            <!-- <td style="vertical-align:middle;"><?php echo $row['prqty'] . " " . $row['puom']; ?></td> -->
+            <td style="vertical-align:middle;"><input type="text" readonly class="form-control keep-enabled" name="prqty[]" value="<?php echo $row['prqty']; ?>"></td>
             <td style="vertical-align:middle;"><?php echo $row['pprice']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['tpprice']; ?></td>
-            <?php
-            if ($row['prqty'] < $row['qty']) {
-            ?>
-              <td style="vertical-align:middle;"><input type="text" class="form-control" name="po[]" placeholder=" PO"></td>
-              <td style="vertical-align:middle;"><input type="text"
-       class="form-control pqty"
-       name="pqty[]"
-       placeholder="Qty"
-       data-prqty="<?php echo $row['prqty']; ?>"
-       data-qty="<?php echo $row['qty']; ?>"></td>
-              <td style="vertical-align:middle;"><input type="text" class="form-control pprice" name="pprice[]" placeholder="Price"></td>
-
-              <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="supplier[]" placeholder=" supplier"></td>-->
-              <td style="vertical-align:middle;">
-                <select class="form-control" name="supplier[]" id="supplier">
-                  <option value="">Select....</option>
-                  <?php
-                  foreach ($sl as $row1) {
-                  ?>
-                    <option value="<?php echo $row1['supplierid']; ?>"><?php echo $row1['supplier']; ?></option>
-                  <?php
-                  }
-                  ?>
-                </select>
-                <?php echo form_error('supplierid', '<div class="error">', '</div>');  ?>
-              </td>
-              <td style="vertical-align:middle;"><input type="text" class="form-control pd" readonly name="podate[]" value="<?php echo date('d-m-Y'); ?>"></td>
-              <td><textarea class="form-control" rows="1" name="description[]" id="description"><?php echo $row['description']; ?></textarea></td>
-              <td><textarea class="form-control" rows="1" name="premarks[]" id="premarks"></textarea></td>
-              <?php /*?><td><select class="form-control" name="pstatus[]" id="pstatus">
-                        <option value="1">Done</option>
-                        <option value="2">Remaining</option>
-                        <option value="3">Pending</option>
-                    </select>
-                    </td><?php */ ?>
-            <?php
-            } else {
-
-            ?>
-              <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="po[]" placeholder=" PO"></td>
-              <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="pqty[]" placeholder="Qty"></td>
-              <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="pprice[]" placeholder="Price"></td>
-
-              <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="supplier[]" placeholder=" supplier"></td>
-              <td style="vertical-align:middle;"><input type="text" class="form-control pd" disabled name="podate[]" value="<?php echo date('d-m-Y'); ?>"></td>
-              <td><textarea class="form-control" readonly rows="1" name="description[]" id="description"><?php echo $row['description']; ?></textarea></td>
-              <td><textarea class="form-control" readonly rows="1" name="premarks[]" id="premarks"></textarea></td>
-            <?php
-            }
-            ?>
+            <td style="vertical-align:middle;"><input type="text" class="form-control" name="po[]" placeholder=" PO"></td>
+            <td style="vertical-align:middle;"><input type="text"
+                class="form-control pqty"
+                name="pqty[]"
+                placeholder="Qty"
+                data-prqty="<?php echo $row['prqty']; ?>"
+                data-qty="<?php echo $row['qty']; ?>"></td>
+            <td style="vertical-align:middle;"><input type="text" class="form-control pprice" name="pprice[]" placeholder="Price"></td>
+            <td style="vertical-align:middle;">
+              <select class="form-control" name="supplier[]" id="supplier">
+                <option value="">Select....</option>
+                <?php
+                foreach ($sl as $row1) {
+                ?>
+                  <option value="<?php echo $row1['supplierid']; ?>"><?php echo $row1['supplier']; ?></option>
+                <?php
+                }
+                ?>
+              </select>
+              <?php echo form_error('supplierid', '<div class="error">', '</div>');  ?>
+            </td>
+            <td style="vertical-align:middle;"><input type="text" class="form-control pd keep-enabled" readonly name="podate[]" value="<?php echo date('d-m-Y'); ?>"></td>
+            <td><textarea class="form-control" rows="1" name="description[]" id="description"><?php echo $row['description']; ?></textarea></td>
+            <td><textarea class="form-control" rows="1" name="premarks[]" id="premarks"></textarea></td>
           </tr>
       </tbody>
     <?php } ?>
-
     </table>
     <div class="sbtn" style="text-align:center;">
       <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
@@ -172,79 +151,216 @@
   </form>
 </div>
 
-<script>
-  $(document).ready(function () {
-    $('#insert_form').on('submit', function (e) {
-      // প্রতিটি row চেক করবো
-      $('#tableData tbody tr').each(function () {
-        var qty = $(this).find('input[name="pqty[]"]').val();
 
-        // যদি qty ফাঁকা বা 0 হয়, তাহলে row-টা DOM থেকে মুছে ফেলবো
-        if (!qty || qty == 0) {
-          $(this).remove();
+
+<script>
+  $(document).ready(function() {
+    $(document).on('keydown', ".pqty", function(event) {
+
+
+      if (event.shiftKey == true) {
+        event.preventDefault();
+      }
+
+      if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+      } else {
+        event.preventDefault();
+      }
+
+      if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+        event.preventDefault();
+
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $(document).on('keydown', ".pprice", function(event) {
+
+
+      if (event.shiftKey == true) {
+        event.preventDefault();
+      }
+
+      if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+      } else {
+        event.preventDefault();
+      }
+
+      if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+        event.preventDefault();
+
+    });
+  });
+</script>
+<script>
+  $(document).on('input', '.pqty', function() {
+    let input = $(this);
+    let enteredQty = parseFloat(input.val()) || 0;
+    let prqty = parseFloat(input.data('prqty')) || 0;
+    let mprqty = parseFloat(input.data('qty')) || 0;
+
+    let total = enteredQty + prqty;
+
+    if (total > mprqty) {
+      alert("Total PO Qty (existing + entered) cannot exceed MPR Qty (" + mprqty + ")");
+      input.val('');
+      input.focus();
+    }
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    // শুরুতে সব row disable করো
+    $('#tableData tbody tr').each(function() {
+      let checkbox = $(this).find('.checkbox');
+      toggleRowInputs(checkbox);
+    });
+
+    // checkbox change হলে call করো
+    $(document).on('change', '.checkbox', function() {
+      toggleRowInputs($(this));
+    });
+
+    function toggleRowInputs(checkbox) {
+      let row = checkbox.closest('tr');
+
+      if (checkbox.is(':checked')) {
+        // enable করো সব input/select/textarea কিন্তু checkbox বাদে
+        row.find('input, select, textarea')
+          .not('.checkbox, [readonly], .keep-enabled')
+          .prop('disabled', false);
+      } else {
+        // disable করো সবকিছু checkbox বাদে, কিন্তু keep-enabled বাদে
+        row.find('input, select, textarea')
+          .not('.checkbox, .keep-enabled')
+          .prop('disabled', true);
+      }
+    }
+
+
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $('#tableData tbody tr').each(function() {
+      var qty = parseFloat($(this).find('td:nth-child(9)').text()); // যেটা তুমি qty column হিসেবে দেখাবে
+      var poQty = parseFloat($(this).find('td:nth-child(12)').text()); // po qty column
+
+      if (qty == poQty) {
+        $(this).find('.checkbox').prop('disabled', true);
+        $(this).find('input, select, textarea').not('.checkbox, .keep-enabled').prop('disabled', true);
+      }
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $('#insert_form').on('submit', function(e) {
+      var checkedAny = false;
+      var errorMessages = [];
+      var hasError = false;
+
+      $('#tableData tbody tr').each(function(index) {
+        var rowNum = index + 1;
+        var checkbox = $(this).find('.checkbox');
+
+        // আগের error reset
+        $(this).find('input, select').removeClass('input-error');
+        $(this).removeClass('invalid-row');
+
+        if (checkbox.is(':checked')) {
+          checkedAny = true;
+
+          var po = $(this).find('input[name="po[]"]').val().trim();
+          var qty = $(this).find('input[name="pqty[]"]').val().trim();
+          var pprice = $(this).find('input[name="pprice[]"]').val().trim();
+          var supplier = $(this).find('select[name="supplier[]"]').val();
+
+          if (!po) {
+            errorMessages.push("Row " + rowNum + ": PO No required");
+            $(this).find('input[name="po[]"]').addClass('input-error');
+            hasError = true;
+          }
+          if (!qty) {
+            errorMessages.push("Row " + rowNum + ": Qty required");
+            $(this).find('input[name="pqty[]"]').addClass('input-error');
+            hasError = true;
+          }
+          if (!pprice) {
+            errorMessages.push("Row " + rowNum + ": Unit Price required");
+            $(this).find('input[name="pprice[]"]').addClass('input-error');
+            hasError = true;
+          }
+          if (!supplier) {
+            errorMessages.push("Row " + rowNum + ": Supplier required");
+            $(this).find('select[name="supplier[]"]').addClass('input-error');
+            hasError = true;
+          }
+
+          if (hasError) $(this).addClass('invalid-row');
         }
       });
+
+      if (!checkedAny) {
+        alert("Please select at least one row.");
+        e.preventDefault();
+        return false;
+      }
+
+      if (errorMessages.length > 0) {
+        alert(errorMessages.join("\n"));
+        e.preventDefault();
+        return false;
+      }
+
+      // ✅ Validation pass হলে form naturally submit হবে
     });
   });
 </script>
 
-
-<script>
-    $(document).ready(function() {
-      $(document).on('keydown', ".pqty", function(event) {
-
-
-        if (event.shiftKey == true) {
-          event.preventDefault();
-        }
-
-        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
-
-        } else {
-          event.preventDefault();
-        }
-
-        if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
-          event.preventDefault();
-
-      });
-    });
-  </script>
-  <script>
-    $(document).ready(function() {
-      $(document).on('keydown', ".pprice", function(event) {
-
-
-        if (event.shiftKey == true) {
-          event.preventDefault();
-        }
-
-        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
-
-        } else {
-          event.preventDefault();
-        }
-
-        if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
-          event.preventDefault();
-
-      });
-    });
-  </script>
-  <script>
-  $(document).on('input', '.pqty', function () {
-  let input = $(this);
-  let enteredQty = parseFloat(input.val()) || 0;
-  let prqty = parseFloat(input.data('prqty')) || 0;
-  let mprqty = parseFloat(input.data('qty')) || 0;
-
-  let total = enteredQty + prqty;
-
-  if (total > mprqty) {
-    alert("Total PO Qty (existing + entered) cannot exceed MPR Qty (" + mprqty + ")");
-    input.val('');
-    input.focus();
+<style>
+  .input-error {
+    border: 1px solid red !important;
+    background-color: #ffe6e6;
   }
-});
 
-  </script>
+  .invalid-row {
+    background-color: #fff2f2;
+  }
+</style>
+<script>
+  $(document).ready(function() {
+    $('#tableData tbody tr').each(function() {
+      var row = $(this);
+      var checkbox = row.find('.checkbox');
+      var pqtyInput = row.find('.pqty');
+
+      // Data attribute থেকে মান নিচ্ছি
+      var totalPoQty = parseFloat(pqtyInput.data('prqty')) || 0; // আগের PO Qty
+      var mprQty = parseFloat(pqtyInput.data('qty')) || 0; // MPR Qty
+
+      // যদি MPR Qty == Total PO Qty হয়, তাহলে disable
+      if (totalPoQty >= mprQty && mprQty > 0) {
+        checkbox.prop('disabled', true);
+        row.addClass('disabled-row');
+
+        // input/select disable করবো (checkbox ও readonly বাদে)
+        row.find('input, select, textarea')
+          .not('.checkbox, .keep-enabled, [readonly]')
+          .prop('disabled', true);
+      }
+    });
+  });
+</script>
+
+<style>
+  .disabled-row {
+    background-color: #f5f5f5;
+    color: #777;
+    opacity: 0.6;
+  }
+</style>

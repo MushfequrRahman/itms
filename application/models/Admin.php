@@ -961,6 +961,8 @@ class Admin extends CI_Model
 		$sql = "INSERT INTO po_insert VALUES ('$data[ccid]','$data[ccid1]','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[description]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
 		$query = $this->db->query($sql);
 
+
+
 		$sqlp = "INSERT INTO po_insert1 VALUES ('$data[ccid]','$data[ccid1]','$data[userid]','$data[mprid]','$data[po]','$data[item]','$data[pqty]','$data[description]','$data[premarks]','$data[pprice]','$data[supplier]','$data[podate]','$data[pstatus]')";
 		$queryp = $this->db->query($sqlp);
 
@@ -1236,7 +1238,7 @@ class Admin extends CI_Model
 		pcname,pname,item,qty,puom,
 		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,
 		pprice,grn,rqty,rdate,iqty,
-		supplier_insert.supplier,
+		supplier_insert.supplier,pgname,
 		invoice,DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
@@ -1248,6 +1250,8 @@ class Admin extends CI_Model
 		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		
+		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
 		JOIN department ON department.deptid=mpr_insert_id.mdeptid
 		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
 		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
@@ -1340,23 +1344,89 @@ class Admin extends CI_Model
 		// return $result->result_array();
 
 
-		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
-		description,remarks,mdate,msdate,pqty,SUM(rqty) AS rqty,
-		DATEDIFF(CURDATE(),msdate) AS cday
-		FROM mpr_insert_id 
-		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
-		LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
-		LEFT JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
-		
-		JOIN item_insert ON item_insert.itemcode=mpr_insert.model
-		JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
-		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
-		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
-		JOIN department ON department.deptid=mpr_insert_id.mdeptid
-		JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
-		LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
+		// $query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
+		// description,remarks,mdate,msdate,pqty,SUM(rqty) AS rqty,pprice,
+		// DATEDIFF(CURDATE(),msdate) AS cday
+		// FROM mpr_insert_id 
+		// JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
+		// LEFT JOIN po_insert ON po_insert.simprid=mpr_insert.simprid
+		// LEFT JOIN receive_insert ON receive_insert.simprid=mpr_insert.simprid
+
+		// JOIN item_insert ON item_insert.itemcode=mpr_insert.model
+		// JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
+		// JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
+		// JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
+		// JOIN department ON department.deptid=mpr_insert_id.mdeptid
+		// JOIN designation ON designation.desigid=mpr_insert_id.mdesigid
+		// LEFT JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
+		// WHERE mdate between '$pd' AND '$wd'
+		// GROUP BY mpr_insert.simprid 
+		// ORDER BY mpr_insert_id .mprid";
+
+		$query = "SELECT 
+    mpr_insert_id.mprid,
+    fid,
+    etypename,
+    uname,
+    pcname,
+    pname,
+    item,
+    qty,
+    puom,
+    description,
+    remarks,
+    mdate,
+    msdate,
+    po.po_qty AS pqty,
+    rc.rcv_qty AS rqty,
+    po.pprice,
+    DATEDIFF(CURDATE(), msdate) AS cday
+FROM mpr_insert_id
+
+JOIN mpr_insert 
+    ON mpr_insert.smprid = mpr_insert_id.smprid
+
+LEFT JOIN (
+    SELECT 
+        simprid,
+        SUM(pqty) AS po_qty,
+        MAX(pprice) AS pprice   -- pprice from po_insert (kept original name)
+    FROM po_insert
+    GROUP BY simprid
+) AS po 
+    ON po.simprid = mpr_insert.simprid
+
+LEFT JOIN (
+    SELECT 
+        simprid, 
+        SUM(rqty) AS rcv_qty
+    FROM receive_insert
+    GROUP BY simprid
+) AS rc
+    ON rc.simprid = mpr_insert.simprid
+
+JOIN item_insert 
+    ON item_insert.itemcode = mpr_insert.model
+
+JOIN product_uom_insert 
+    ON product_uom_insert.puomid = mpr_insert.uom
+
+JOIN product_insert 
+    ON product_insert.pcode = mpr_insert.mpcode
+
+JOIN product_category_insert 
+    ON product_category_insert.pccode = product_insert.pccode
+
+JOIN department 
+    ON department.deptid = mpr_insert_id.mdeptid
+
+JOIN designation 
+    ON designation.desigid = mpr_insert_id.mdesigid
+
+LEFT JOIN employment_type 
+    ON employment_type.etypeid = mpr_insert_id.etypeid
 		WHERE mdate between '$pd' AND '$wd'
-		GROUP BY mpr_insert.simprid 
+		
 		ORDER BY mpr_insert_id .mprid";
 		$result = $this->db->query($query);
 		return $result->result_array();
