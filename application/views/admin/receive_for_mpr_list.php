@@ -166,9 +166,11 @@
                     <!-- <th>User</th> -->
                     <!-- <th>Date</th> -->
                     <th>PO Qty</th>
+                    <th>Supplier</th>
                     <th style="width: 5%;">Remaining Qty</th>
                     <!--<th>PO Unit Price</th>-->
                     <th style="width: 12%;">PO NO</th>
+                    <th style="width: 12%;">PO Date</th>
                     <th style="width: 10%;">GRN NO</th>
                     <th style="width: 5%;">Receive Qty</th>
 
@@ -193,70 +195,52 @@
                     <tr id="trid<?php echo $i; ?>">
 
                       <td style="vertical-align:middle;"><?php echo $i++; ?></td>
-                      <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
+
                       <td style="vertical-align:middle;width: 10%;"><input type="text" readonly class="form-control" id="mprid" name="mprid" value="<?php echo $row['mprid']; ?>"></td>
-                      <!-- <td style="vertical-align:middle;"><input type="text" readonly class="form-control" id="fid" name="fid" value="<?php echo $row['fid']; ?>"></td> -->
-                      <?php /*?><td style="vertical-align:middle;"><?php echo $row['name'].'--'.$row['departmentname'].'--'.$row['designation'];?></td><?php */ ?>
-                      <!-- <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td> -->
+
                       <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
+
                       <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
 
                       <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="item<?php echo $i; ?>" name="item" value="<?php echo $row['simprid']; ?>" /></td>
-                      <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="sipoid<?php echo $i; ?>" name="sipoid" value="<?php echo $row['sipoid']; ?>" /></td>
-                      <!-- <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td> -->
-                      <!-- <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
-                      <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
-                      <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td>
-                      <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
 
-                      <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
-                      <td style="vertical-align:middle;"><?php echo $mdate; ?></td> -->
-                      <?php /*?><td style="vertical-align:middle;"><?php echo $row['qty']-$row['pqty']." ".$row['puom'];?></td><?php */ ?>
+                      <td style="vertical-align:middle;display:none;"><input type="text" readonly="readonly" class="form-control" id="sipoid<?php echo $i; ?>" name="sipoid" value="<?php echo $row['sipoid']; ?>" /></td>
+
+
+
                       <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
-                      <!-- <td style="vertical-align:middle;" id="reqty<?php echo $i; ?>"><?php echo $row['pqty'] - $row['rqty']; ?></td>
-                       -->
+                      <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
+
                       <td style="vertical-align:middle; width:5%;"><input type="text" readonly="readonly" class="form-control" id="reqty<?php echo $i; ?>" name="reqty" value="<?php echo $row['pqty'] - $row['rqty']; ?>"></td>
-                      <?php /*?><td style="vertical-align:middle;"><?php echo $row['pprice'];?></td><?php */ ?>
+
                       <?php
                       if (($row['rqty'] < $row['pqty'])) {
                       ?>
                         <td style="vertical-align:middle; width:12%;"><input type="text" readonly="readonly" class="form-control" id="po<?php echo $i; ?>" name="po" value="<?php echo $row['po']; ?>"></td>
+                        <td style="vertical-align:middle;"><input type="text" class="form-control pd" id="pdate<?php echo $i; ?>" disabled name="pdate" value="<?php echo date('d-m-Y', strtotime($row['pdate'])); ?>"></td>
                         <td style="vertical-align:middle; width: 10%;"><input type="text" class="form-control" id="grn<?php echo $i; ?>" name="grn" placeholder="GRN PO"></td>
                         <td style="vertical-align:middle; width: 5%;"><input type="text" class="form-control" id="rqty<?php echo $i; ?>" name="rqty" placeholder="Qty"></td>
-                        <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="pprice[]" placeholder="Price"></td>-->
 
-                        <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="supplier[]" placeholder=" supplier"></td>-->
                         <td style="vertical-align:middle;"><input type="text" class="form-control pd" id="rdate<?php echo $i; ?>" readonly name="rdate" value="<?php echo date('d-m-Y'); ?>"></td>
                         <td style="vertical-align:middle;"><input type="text" class="form-control" id="invoice<?php echo $i; ?>" name="invoice" placeholder="Invoice"></td>
                         <td style="vertical-align:middle;"><input type="text" class="form-control pd" id="cdate<?php echo $i; ?>" readonly name="cdate" value="<?php echo date('d-m-Y'); ?>"></td>
                         <td><textarea class="form-control" rows="1" name="rremarks" id="rremarks<?php echo $i; ?>"></textarea></td>
                         <td style="vertical-align:middle;"><input type="submit" class="btn btn-primary" name="submit" id="btn<?php echo $i; ?>" value="Submit" /></td>
-                        <?php /*?><td><select class="form-control" name="pstatus[]" id="pstatus">
-                        <option value="1">Done</option>
-                        <option value="2">Remaining</option>
-                        <option value="3">Pending</option>
-                    </select>
-                    </td><?php */ ?>
+
                       <?php
                       } else {
                       ?>
                         <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="po[]" value="<?php echo $row['po']; ?>"></td>
+                        <td style="vertical-align:middle;"><input type="text" class="form-control pd" disabled name="pdate" value="<?php echo date('d-m-Y', strtotime($row['pdate'])); ?>"></td>
                         <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="grn[]" placeholder="GRN PO"></td>
                         <td style="vertical-align:middle;"><input type="text" class="form-control" readonly name="rqty[]" placeholder="Qty">
 
                         </td>
-                        <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="pprice[]" placeholder="Price"></td>-->
 
-                        <!--<td style="vertical-align:middle;"><input type="text" class="form-control" name="supplier[]" placeholder=" supplier"></td>-->
                         <td style="vertical-align:middle;"><input type="text" class="form-control pd" readonly name="rdate[]" value="<?php echo date('d-m-Y'); ?>"></td>
                         <td><textarea class="form-control" readonly rows="1" name="rremarks[]" id="rremarks"></textarea></td>
 
-                        <?php /*?><td><select class="form-control" name="pstatus[]" id="pstatus">
-                        <option value="1">Done</option>
-                        <option value="2">Remaining</option>
-                        <option value="3">Pending</option>
-                    </select>
-                    </td><?php */ ?>
+
                       <?php
                       }
                       ?>
@@ -266,10 +250,7 @@
                 <?php } ?>
 
               </table>
-              <!-- <div class="sbtn" style="text-align:center;">
-                  <input type="submit" class="btn btn-primary" name="submit" id="btn" value="Submit" />
-                </div> -->
-              <!-- </form> -->
+
             </div>
           </section>
         </div>
@@ -301,6 +282,25 @@
         var rdate = $("#rdate" + i + "").val();
         var invoice = $("#invoice" + i + "").val();
         var cdate = $("#cdate" + i + "").val();
+
+
+        var pdate = $("#pdate" + i).val();
+        var rdate = $("#rdate" + i).val();
+        var cdate = $("#cdate" + i).val();
+
+        function convertDate(date) {
+          let parts = date.split("-");
+          return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        if (convertDate(rdate) < convertDate(pdate)) {
+          error += "Receive Date must be greater than PO Date<br/>";
+        }
+
+        if (convertDate(cdate) < convertDate(pdate)) {
+          error += "Challan Date must be greater than PO Date<br/>";
+        }
+
         var error = "";
         if (rqty > reqty) {
           error += "Receive Qty Must be Less Then Remaining Qty<br/>";
@@ -349,6 +349,56 @@
     }
   });
 </script>
+<script>
+  $(document).on('keyup change', '.rqty', function() {
+
+    let index = $(this).data('index');
+
+    let rqty = parseFloat($(this).val()) || 0;
+    let reqty = parseFloat($('#reqty' + index).val()) || 0;
+
+    if (rqty > reqty) {
+      alert('Receive Qty must NOT be greater than Remaining Qty');
+
+      $(this).val(''); // ইনপুট ক্লিয়ার
+      $(this).focus(); // আবার ফোকাস
+    }
+  });
+</script>
+<script>
+  $(document).on('change', '.pd', function() {
+
+    let id = $(this).attr('id');
+    let index = id.replace(/\D/g, '');
+
+    let pdate = $("#pdate" + index).val();
+    let rdate = $("#rdate" + index).val();
+    let cdate = $("#cdate" + index).val();
+
+    function convertDate(date) {
+      let parts = date.split("-");
+      return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+
+    if (rdate && pdate) {
+      if (convertDate(rdate) < convertDate(pdate)) {
+        alert("Receive Date must be greater than PO Date");
+        $("#rdate" + index).val('');
+        return false;
+      }
+    }
+
+    if (cdate && pdate) {
+      if (convertDate(cdate) < convertDate(pdate)) {
+        alert("Challan Date must be greater than PO Date");
+        $("#cdate" + index).val('');
+        return false;
+      }
+    }
+
+  });
+</script>
+
 
 <?php /*?><script>
   $(document).ready(function() {

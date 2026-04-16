@@ -62,304 +62,192 @@
 		width: 12px;
 		height: 12px;
 	}
-</style>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script> -->
-<script>
-	$(function() {
-		$("table").tablesorter({
-			theme: 'blue',
-			widgets: ['math', 'zebra', 'filter'],
-			widgetOptions: {
-				math_data: 'math', // data-math attribute
-				math_ignore: [0, 1],
-				math_none: 'N/A', // no matching math elements found (text added to cell)
-				math_complete: function($cell, wo, result, value, arry) {
-					var txt = '<span class="align-decimal">' +
-						(value === wo.math_none ? '' : ' ') +
-						result + '</span>';
-					if ($cell.attr('data-math') === 'all-sum') {
-						// when the "all-sum" is processed, add a count to the end
-						return txt + ' (Sum of ' + arry.length + ' cells)';
-					}
-					return txt;
-				},
-				math_completed: function(c) {
-					// c = table.config
-					// called after all math calculations have completed
-					console.log('math calculations complete', c.$table.find('[data-math="all-sum"]:first').text());
-				},
-				// see "Mask Examples" section
-				math_mask: '#,##0.00',
-				math_prefix: '', // custom string added before the math_mask value (usually HTML)
-				math_suffix: '', // custom string added after the math_mask value
-				// event triggered on the table which makes the math widget update all data-math cells (default shown)
-				math_event: 'recalculate',
-				// math calculation priorities (default shown)... rows are first, then column above/below,
-				// then entire column, and lastly "all" which is not included because it should always be last
-				math_priority: ['row', 'above', 'below', 'col'],
-				// set row filter to limit which table rows are included in the calculation (v2.25.0)
-				// e.g. math_rowFilter : ':visible:not(.filtered)' (default behavior when math_rowFilter isn't set)
-				// or math_rowFilter : ':visible'; default is an empty string
-				math_rowFilter: ''
-			}
-		}).on("filterEnd sortEnd", function() {
-			countVisibleRows();
-		});
 
-
-		// // Function to count visible rows
-		// function countVisibleRows() {
-		// 	var visibleRowsCount = $('#tableData tbody tr:visible').length;
-		// 	$('#rowCount').text("No. Rows:" + visibleRowsCount);
-		// }
-
-		// // Initial count of visible rows
-		// countVisibleRows();
-
-		// // Filter rows with search input
-		// //$('<input type="text" class="tablesorter-filter" placeholder="Search...">').insertBefore('#tableData');
-
-		// $('.tablesorter-filter').on('keyup', function() {
-		// 	var searchTerm = $(this).val().toLowerCase();
-		// 	$('#tableData tbody tr').each(function() {
-		// 		$(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
-		// 	});
-		// 	countVisibleRows(); // Update the count after filtering
-		// });
-
-
-		// Function to count visible rows
-		function countVisibleRows() {
-			var visibleRowsCount = $('#tableData tbody tr:visible').length;
-			$('#rowCount').text("Rows: " + visibleRowsCount);
+	@media print {
+		.no-print {
+			display: none !important;
 		}
 
-		// Initial count of visible rows
-		countVisibleRows(); // Start counting visible rows
+		@media print {
+			@page {
+				size: A4;
+				margin: 10mm;
+			}
+		}
+	}
+</style>
 
 
 
-
-
-
-		// Download selected rows and columns as Excel
-		$("#downloadExcel").on("click", function() {
-			var wb = XLSX.utils.book_new(); // Create a new workbook
-			var ws_data = [];
-
-			// Prepare header row based on selected columns
-			var headers = [];
-			$('#tableData thead th').each(function() {
-				var $checkbox = $(this).find('.column-select');
-				if ($checkbox.length === 0 || $checkbox.is(':checked')) {
-					headers.push($(this).text());
-				}
-			});
-			ws_data.push(headers); // Push headers as the first row
-
-			// Add the selected rows
-			$('#tableData tbody tr:visible').each(function() {
-				var $checkbox = $(this).find('.row-select');
-				if ($checkbox.is(':checked')) {
-					var row = [];
-					$(this).find('td').each(function(index) {
-						var $colCheckbox = $(this).closest('table').find('thead th').eq(index).find('.column-select');
-						if ($colCheckbox.length === 0 || $colCheckbox.is(':checked')) {
-							row.push($(this).text());
-						}
-					});
-					ws_data.push(row);
-				}
-			});
-
-			// Create a worksheet from the data
-			var ws = XLSX.utils.aoa_to_sheet(ws_data);
-			XLSX.utils.book_append_sheet(wb, ws, "Selected Rows");
-
-			// Export the Excel file
-			XLSX.writeFile(wb, 'product_inventory.xlsx');
-		});
-	});
-</script>
-<script type='text/javascript'>
-	//<![CDATA[
-	$(document).ready(function() {
-		$('.filter').multifilter()
-	})
-	//]]>
-</script>
 
 <body class="hold-transition skin-blue sidebar-mini">
+
 	<div class="wrapper">
 		<div class="content-wrapper">
 			<section class="content">
+
 				<div class="row">
 					<div class="col-md-12">
-						<!-- <p id="rowCount"></p> -->
-						<div class="row">
-							<div class="col-md-12">
-								<div class="box box-danger">
-									<div class="box-header with-border">
-										<h3 class="box-title">Product Using History</h3>
-										<div class="row">
-											<div class="col-sm-12 col-md-12 col-lg-12">
-												<?php if ($responce = $this->session->flashdata('Successfully')) : ?>
-													<div class="text-center">
-														<div class="alert alert-success text-center"><?php echo $responce; ?></div>
-													</div>
-												<?php endif; ?>
-											</div>
-										</div>
-									</div>
 
-									<!-- <div class="box-body table-responsive no-padding table-container"> -->
-									<!-- <div class="table-responsive no-padding table-container"> -->
-									<div class="row padall">
-										<div class="col-lg-12">
-											<div class="row">
-												<div class="col-md-6">
-													<!-- <div class="float-left">
-														<form action="<?php echo base_url() ?>Dashboard/product_inventory_list_xls" class="excel-upl" id="excel-upl" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-															<input type="radio" checked="checked" name="export_type" value="xlsx"> .xlsx
-															<input type="radio" name="export_type" value="xls"> .xls
-															<input type="radio" name="export_type" value="csv"> .csv
-															<button type="submit" name="import" class="btn btn-primary btn-xs">Export</button>
-														</form>
-													</div> -->
-												</div>
-												<div class="col-md-6">
-													<div class="float-right" style="text-align: right;">
-														<button id="downloadExcel" class="btn btn-success btn-xs">Download As Excel</button>
-														<!-- </div> -->
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- <div class="scrollable-table-wrapper"> -->
-									<div class="table-responsive no-padding table-container">
-										<table id="tableData" class="table table-hover tablesorter">
-											<!-- <thead style="background:#91b9e6;position: sticky;top: 0;"> -->
-											<thead>
-												<tr>
-													<th data-column="0"><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
-													<!-- <th data-column="1"><input type="checkbox" class="column-select" data-col-index="2" checked><br />PUR.For</th> -->
-													<th data-column="1"><input type="checkbox" class="column-select" data-col-index="2" checked><br />A.Code</th>
-													<!-- <th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />Factory</th> -->
+						<div class="box box-danger">
+
+							<div class="box-header with-border">
+								<h3 class="box-title">Product Using History</h3>
 
 
-													<th data-column="2"><input type="checkbox" class="column-select" data-col-index="3" checked><br />U.ID</th>
-													<th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />U.Name</th>
-													<th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />G.Date</th>
-													<th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />R.Date</th>
-													<th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />Status</th>
+							</div>
 
-												</tr>
-											</thead>
-											<tfoot>
-												<tr>
+							<div class="box-body">
 
-													<!-- <th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th> -->
-													<!-- <th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th>
-													<th>&nbsp;</th> -->
-												</tr>
-											</tfoot>
-											<tbody>
-												<?php
-												$i = 1;
-												foreach ($ul as $row) {
-												?>
-													<tr>
-														<td style="vertical-align:middle;"><label class="checkbox-inline"><input type="checkbox" class="row-select" checked><?php echo $i++; ?></label></td>
-														<!-- <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td> -->
-														<?php
-														if ($row['pastatus'] == 1 || $row['pastatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['pacode']; ?></td>
-														<?php
-														} else {
-														?>
-															<!-- <td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/product_assign_form/<?php echo $bn = $row['pacode']; ?>"><?php echo $row['pacode']; ?></a></td> -->
-															<td style="vertical-align:middle;"><?php echo $row['pacode']; ?></td>
-														<?php
-														}
-														?>
+								<?php
+date_default_timezone_set('Asia/Dhaka');
 
-														<!-- <td style="vertical-align:middle;"><?php echo $row['factoryid']; ?></td> -->
+$device = $ul[0]; // ✅ ONLY ONE DEVICE
+?>
 
+<div class="agreement-wrapper" id="agreement1" style="border:1px solid #ccc; padding:15px;">
 
+    <!-- Print Button -->
+    <div class="no-print" style="text-align:right;">
+        <button onclick="printSingleLPT('agreement1')">Print</button>
+    </div>
 
+    <!-- Header -->
+    <div style="text-align:center;">
+        <img style="width:80px;height:35px;" src="<?php echo base_url().'assets/images/babylon.png'; ?>">
+        <h3>BABYLON GROUP</h3>
+        <p>Mirpur, Dhaka</p>
+        <h4>Device Health Info</h4>
+    </div>
 
-														
-														<td style="vertical-align:middle;"><?php echo  $row['userid']; ?></td>
-														<td style="vertical-align:middle;"><?php echo  $row['name']; ?></td>
+    <!-- ✅ DEVICE INFO (ONCE ONLY) -->
+    <table width="100%" cellpadding="5" cellspacing="0">
+        <tr><td>MPR</td><td><?php echo $device['mprid']; ?></td></tr>
+        <tr><td>PO</td><td><?php echo $device['po']; ?></td></tr>
+        <tr><td>Purchase Date</td><td><?php echo date("d-m-Y", strtotime($device['pdate'])); ?></td></tr>
+        <tr><td>Asset Code</td><td><?php echo $device['pacode']; ?></td></tr>
+        <tr><td>Product</td><td><?php echo $device['pname']; ?></td></tr>
+        <tr><td>Model</td><td><?php echo $device['item']; ?></td></tr>
+        <tr><td>Specification</td><td><?php echo $device['idescription']; ?></td></tr>
+        <tr><td>IP/MAC</td><td><?php echo $device['ip'].' / '.$device['mac']; ?></td></tr>
+        <tr><td>Serial</td><td><?php echo $device['sn']; ?></td></tr>
 
+        <?php
+        $enddate = strtotime("+" . $device['warranty'] . " days", strtotime($device['pdate']));
+        $remain = round(($enddate - time()) / (60 * 60 * 24));
+        $remain = ($remain >= 0) ? $remain . " Days Remaining" : "Expire";
+        ?>
 
-														<td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['adate'])); ?></td>
-														<?php
-														if ($row['rdate'] == '0000-00-00') {
-														?>
-															<td style="vertical-align:middle;"></td>
-														<?php } else {
-														?>
-															<td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['rdate'])); ?></td>
-														<?php } ?>
+        <tr><td>Warranty</td><td><?php echo $remain; ?></td></tr>
+        <tr><td>Assign Date</td><td><?php echo date("d-m-Y", strtotime($device['adate'])); ?></td></tr>
+    </table>
 
-														<?php
-														if ($row['astatus'] == 1) {
-														?>
+    <!-- ✅ USAGE HISTORY -->
+    <h4 style="text-align:center;">Device Use Info</h4>
 
-															<td style="vertical-align:middle;">Using</a></td>
-														<?php
-														} elseif ($row['astatus'] == 0) {
-														?>
-															<td style="vertical-align:middle;">Used</td>
-														<?php
-														} elseif ($row['astatus'] == 2) {
-														?>
-															<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-														<?php
-														}
-														?>
+    <table width="100%" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>SL</th>
+                <th>Asset Code</th>
+                <th>User ID</th>
+                <th>User Name</th>
+                <th>Given Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
 
+        <tbody>
+            <?php $i = 1; foreach ($ul as $row): ?>
+            <tr>
+                <td><?php echo $i++; ?></td>
+                <td><?php echo $row['pacode']; ?></td>
+                <td><?php echo $row['userid']; ?></td>
+                <td><?php echo $row['name']; ?></td>
+                <td><?php echo date("d-m-Y", strtotime($row['adate'])); ?></td>
 
-													</tr>
-												<?php
-												}
-												?>
-											</tbody>
-										</table>
-										<!-- </div> -->
-									</div>
+                <td>
+                    <?php echo ($row['rdate'] != '0000-00-00') 
+                        ? date("d-m-Y", strtotime($row['rdate'])) 
+                        : ''; ?>
+                </td>
 
-									<!--<script type="text/javascript">
-									$(document).ready(function() {
-									$('#tableData').paging({limit:50});
-									});
-								</script>-->
-								</div>
+                <td>
+                    <?php
+                    if ($row['astatus'] == 1) echo "Using";
+                    elseif ($row['astatus'] == 0) echo "Used";
+                    else echo $row['releasetype'];
+                    ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div style="text-align:center; margin-top:20px;">
+        <p>Date: <?php echo date('d-m-Y'); ?></p>
+        <p>This is system generated document</p>
+    </div>
+
+</div>
+
 							</div>
 						</div>
+
 					</div>
+				</div>
+
 			</section>
 		</div>
 	</div>
-	<script>
-		$(document).ready(function() {
-			$("#tableData").tablesorter();
-		});
-	</script>
+
 </body>
+<script>
+	function printSingleLPT(divId) {
+
+		var content = document.getElementById(divId).innerHTML;
+
+		var myWindow = window.open('', '', 'width=900,height=700');
+
+		myWindow.document.write(`
+        <html>
+        <head>
+            <title>Print</title>
+            <style>
+                body {
+                    font-family: Arial;
+                    padding: 20px;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                td, th {
+                    border: 1px solid #000;
+                    padding: 5px;
+                    text-align: center;
+                    font-size: 11px;
+                }
+                h3, h4, p {
+                    text-align: center;
+                }
+                .no-print {
+                    display: none;
+                }
+            </style>
+        </head>
+        <body>
+            ${content}
+        </body>
+        </html>
+    `);
+
+		myWindow.document.close();
+		myWindow.focus();
+		myWindow.print();
+	}
+</script>
 
 </html>

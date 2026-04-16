@@ -18,7 +18,12 @@
 <script>
   $(function() {
     jQuery(".pd").datepicker({
-      dateFormat: 'dd-mm-yy'
+      dateFormat: 'dd-mm-yy',
+      autoclose: true,
+      todayHighlight: true,
+      changeMonth: true, // ✅ Month dropdown
+      changeYear: true, // ✅ Year dropdown
+      yearRange: '1950:2035'
     });
   })
 </script>
@@ -148,11 +153,11 @@ foreach ($bl as $row) {
                         </div>
                         <div class="col-md-3">
                           <label>MPR Create Date<em>*</em></label>
-                          <input type="text" class="form-control pd" readonly name="mprdate" id="mprdate" value="<?php echo date('d-m-Y'); ?>">
+                          <input type="text" class="form-control pd" name="mprdate" id="mprdate" value="<?php echo date('d-m-Y'); ?>">
                         </div>
                         <div class="col-md-3">
                           <label>MPR Submission To IT<em>*</em></label>
-                          <input type="text" class="form-control pd" readonly name="mprsdate" id="mprsdate" value="<?php echo date('d-m-Y'); ?>">
+                          <input type="text" class="form-control pd" name="mprsdate" id="mprsdate" value="<?php echo date('d-m-Y'); ?>">
                         </div>
                       </div>
                       <br />

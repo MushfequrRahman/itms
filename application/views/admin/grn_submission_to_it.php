@@ -189,8 +189,10 @@
             <th>PO Date</th>
             <th>Supplier</th>
             <th>GRN</th>
+            <th>Invoice</th>
+            <th>Challan Date</th>
             <th>Received Date</th>
-            <!-- <th>Invoice</th> -->
+            
             <!-- <th>PO Qty</th> -->
             <th>Total Price</th>
 
@@ -220,10 +222,12 @@
                 ?>
               </td>
               <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
-              <!-- <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td> -->
+             
               <!-- <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td> -->
 
               <td style="vertical-align:middle;"><?php echo $row['grn']; ?></td>
+               <td style="vertical-align:middle;"><?php echo $row['invoice']; ?></td>
+               <td style="vertical-align:middle;"><?php echo date("d-m-Y", strtotime($row['cdate'])); ?></td>
               <td style="vertical-align:middle;">
                 <?php
                 if ($row['rdate'] != '') {

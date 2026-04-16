@@ -360,28 +360,29 @@
           <th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />Unit</th>
           <th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Employment Type</th>
           <th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />MPR Issued By</th>
-          <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />Category</th>
-          <th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />Group</th>
-          <th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />Sub Group</th>
-          <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Product</th>
-          <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Item/Model</th>
-          <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />MPR Qty</th>
-          <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />MPR Description</th>
-          <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />MPR Unit Price</th>
-          <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Total Price</th>
-          <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />PO NO</th>
-          <th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />PO Date</th>
-          <th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />PO Qty</th>
-          <th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />PO Unit Price</th>
-          <th data-column="19"><input type="checkbox" class="column-select" data-col-index="20" checked><br />Total PO Price</th>
-          <th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />PO Description</th>
-          <th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />PO Remarks</th>
-          <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />Supplier</th>
+          <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />User</th>
+          <th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />Category</th>
+          <th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />Group</th>
+          <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Sub Group</th>
+          <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Product</th>
+          <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Item/Model</th>
+          <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />MPR Qty</th>
+          <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />MPR Description</th>
+          <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />MPR Unit Price</th>
+          <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Total Price</th>
+          <th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />PO NO</th>
+          <th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />PO Date</th>
+          <th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />PO Qty</th>
+          <th data-column="19"><input type="checkbox" class="column-select" data-col-index="20" checked><br />PO Unit Price</th>
+          <th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />Total PO Price</th>
+          <th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />PO Description</th>
+          <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />PO Remarks</th>
+          <th data-column="23"><input type="checkbox" class="column-select" data-col-index="24" checked><br />Supplier</th>
           <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
           } else {
           ?>
-            <th data-column="23"><input type="checkbox" class="column-select" data-col-index="24" checked><br />Edit</th>
-            <th data-column="24"><input type="checkbox" class="column-select" data-col-index="25" checked><br />PO Log</th>
+            <th data-column="24"><input type="checkbox" class="column-select" data-col-index="25" checked><br />Edit</th>
+            <th data-column="25"><input type="checkbox" class="column-select" data-col-index="26" checked><br />PO Log</th>
           <?php
           }
           ?>
@@ -390,7 +391,7 @@
       <tfoot>
         <tr>
           <th id="rowCount"></th>
-          <th colspan="16">Totals</th>
+          <th colspan="17">Totals</th>
           <th>&nbsp;</th>
           <th data-math="col-sum">col-sum</th>
           <th data-math="col-sum">col-sum</th>
@@ -420,6 +421,7 @@
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['name'] . '--' . $row['departmentname'] . '--' . $row['designation']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['psgname']; ?></td>

@@ -196,10 +196,10 @@ class Dashboard extends CI_Controller
     SUM(CASE WHEN product_asset_code.pcode = 'LPT' AND product_inventory.pastatus = 1 THEN 1 ELSE 0 END) AS laptop_using,
 
     -- Total Desktop
-    SUM(CASE WHEN product_asset_code.pcode = 'DKTP' THEN 1 ELSE 0 END) AS total_desktop,
+    SUM(CASE WHEN product_asset_code.pcode = 'DKTP' AND product_inventory.pastatus NOT IN('2' ) THEN 1 ELSE 0 END) AS total_desktop,
 
     -- Total Laptop
-    SUM(CASE WHEN product_asset_code.pcode = 'LPT' THEN 1 ELSE 0 END) AS total_laptop
+    SUM(CASE WHEN product_asset_code.pcode = 'LPT' AND product_inventory.pastatus NOT IN('2' ) THEN 1 ELSE 0 END) AS total_laptop
 
 	FROM product_inventory
 	JOIN product_asset_code 

@@ -5,7 +5,7 @@ class Admin extends CI_Model
 {
 	public function monthly_mpr_list()
 	{
-		$query = "SELECT SUM(price) AS price FROM mpr_insert_id
+		$query = "SELECT SUM(price*qty) AS price FROM mpr_insert_id
 		JOIN mpr_insert ON mpr_insert_id.smprid=mpr_insert.smprid
 		WHERE MONTH(mdate)=MONTH(NOW()) AND YEAR(mdate)=YEAR(NOW())";
 		$result = $this->db->query($query);
@@ -21,7 +21,7 @@ class Admin extends CI_Model
 	}
 	public function monthly_capexopex_list()
 	{
-		$query = "SELECT pcname,SUM(price) AS price FROM mpr_insert_id
+		$query = "SELECT pcname,SUM(price*qty) AS price FROM mpr_insert_id
 		JOIN mpr_insert ON mpr_insert_id.smprid=mpr_insert.smprid
 		JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 		JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
@@ -32,7 +32,7 @@ class Admin extends CI_Model
 	}
 	public function monthly_employmenttype_list()
 	{
-		$query = "SELECT etypename,SUM(price) AS price FROM mpr_insert_id
+		$query = "SELECT etypename,SUM(price*qty) AS price FROM mpr_insert_id
 		JOIN mpr_insert ON mpr_insert_id.smprid=mpr_insert.smprid
 		JOIN employment_type ON employment_type.etypeid=mpr_insert_id.etypeid
 		
@@ -1018,7 +1018,7 @@ class Admin extends CI_Model
 		$pd = date("Y-m-d", strtotime($pd));
 		$wd = date("Y-m-d", strtotime($wd));
 		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,etypename,name,
-		departmentname,designation,
+		departmentname,designation,uname,
 		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,
 		description,price,po,pdate,pqty,podescription,
 		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,pstatus
@@ -1130,16 +1130,16 @@ class Admin extends CI_Model
 		$query = "SELECT mpr_insert_id.mprid,mpr_insert_id.fid,item,fid,po_insert.po,
 		product_category_insert.pcname,pname,
 				po_insert.simprid,po_insert.spoid,
-				po_insert.sipoid,
+				po_insert.sipoid,supplier_insert.supplier,
 				mpr_insert.qty,product_uom_insert.puom,description,price,remarks,uname,mdate,
-				pqty,pprice,SUM(rqty) AS rqty
+				pdate,pqty,pprice,SUM(rqty) AS rqty
 				FROM po_insert 
 				JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 				JOIN mpr_insert_id ON mpr_insert_id.mprid=po_insert_id.mprid
 				JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
 				JOIN item_insert ON item_insert.itemcode=mpr_insert.model
 				LEFT JOIN receive_insert ON receive_insert.sipoid=po_insert.sipoid
-				
+				JOIN supplier_insert ON supplier_insert.supplierid=po_insert.supplier
 				JOIN product_uom_insert ON product_uom_insert.puomid=mpr_insert.uom
 				JOIN product_insert ON product_insert.pcode=mpr_insert.mpcode
 				JOIN product_category_insert ON product_category_insert.pccode=product_insert.pccode
@@ -1267,8 +1267,7 @@ class Admin extends CI_Model
 
 		$query = "SELECT mpr_insert_id.mprid,fid,etypename,uname,pcname,pname,item,qty,puom,
 		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,pprice,
-		grn,rqty,rdate,iqty,
-		supplier_insert.supplier,
+		(receive_insert.cdate) AS cdate,grn,rqty,rdate,iqty,supplier_insert.supplier,
 		invoice,DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
@@ -1297,6 +1296,7 @@ class Admin extends CI_Model
 		description,remarks,mdate,msdate,po_insert.po,po_insert.pdate,pqty,pprice,
 		grn,rqty,rdate,iqty,
 		supplier_insert.supplier,
+		(receive_insert.cdate) AS cdate,
 		invoice,DATEDIFF(CURDATE(),msdate) AS cday
 		FROM mpr_insert_id 
 		JOIN mpr_insert ON mpr_insert.smprid=mpr_insert_id.smprid
@@ -1661,7 +1661,7 @@ LEFT JOIN employment_type
     mac,
     product_inventory.userid,
     user.name,
-    departmentname,
+    departmentname,designation,
     pastatus,
     
     -- Count of assigned items
@@ -1687,6 +1687,7 @@ LEFT JOIN item_release_insert ON item_release_insert.pacode = product_inventory.
 LEFT JOIN item_release_type_insert ON item_release_type_insert.irid = item_release_insert.irid
 LEFT JOIN user ON user.userid = product_inventory.userid
 LEFT JOIN department ON department.deptid = user.departmentid
+LEFT JOIN designation ON designation.desigid = user.designationid
 
 WHERE product_ihistory_insert.phstatus = '1'";
 		$result = $this->db->query($query);
@@ -1762,7 +1763,8 @@ WHERE product_ihistory_insert.phstatus = '1'";
 	}
 	public function user_agreement($userid)
 	{
-		$query = "SELECT  COUNT(product_assign_insert.pacode) AS apacode,product_inventory.pacode,product_ihistory_insert.factoryid,
+		$query = "SELECT  COUNT(product_assign_insert.pacode) AS apacode,product_inventory.pacode,
+		product_ihistory_insert.factoryid,
 		supplier_insert.supplier,uname,
 		mpr_insert_id.mprid,sn,idescription,item,
 		iqty,puom,warranty,price,pprice,
@@ -1791,7 +1793,8 @@ WHERE product_ihistory_insert.phstatus = '1'";
 		LEFT JOIN department ON department.deptid=user.departmentid
 		LEFT JOIN designation ON designation.desigid=user.designationid
 		WHERE product_ihistory_insert.phstatus='1' AND user.userid='$userid' 
-		AND product_insert.pcode='LPT'";
+		AND product_insert.pcode='LPT'
+		GROUP BY product_inventory.pacode";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}

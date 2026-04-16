@@ -387,7 +387,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</a>
 							<ul class="treeview-menu">
 
-								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_mpr_form"><i class="fa fa-circle-o"></i>Date Wise MPR</a></li>
+								<!-- <li><a href="<?php echo base_url(); ?>Dashboard/date_wise_mpr_form"><i class="fa fa-circle-o"></i>Date Wise MPR</a></li> -->
 								<li><a href="<?php echo base_url(); ?>Dashboard/date_wise_mpr_list_form"><i class="fa fa-circle-o"></i>Date Wise MPR List</a></li>
 
 							</ul>

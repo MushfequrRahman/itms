@@ -303,7 +303,8 @@
           <td style="vertical-align:middle;"><label class="checkbox-inline"><input type="checkbox" class="row-select" checked><?php echo $i++; ?></label></td>
           <?php /*?><td style="vertical-align:middle;"><input type="checkbox" class="checkbox" name="simprid[]" value="<?php echo $row['simprid']; ?>"></td><?php */ ?>
           <!-- <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/product_inventory_insert_form/<?php echo $row['sipoid']; ?>"><?php echo $row['mprid']; ?></a></td> -->
-          <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/mpr_wise_remaining/<?php echo $row['mprid']; ?>"><?php echo $row['mprid']; ?></a></td>
+          <!-- <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/mpr_wise_remaining/<?php echo $row['mprid']; ?>"><?php echo $row['mprid']; ?></a></td> -->
+           <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
           <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>

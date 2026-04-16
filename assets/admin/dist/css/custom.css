@@ -7,3 +7,20 @@
     margin-right: 10px;
     margin-top: -2px;
 }
+/* Month dropdown */
+.ui-datepicker select.ui-datepicker-month {
+    background-color: #d1ecf1 !important;
+    color: #000 !important;
+}
+
+/* Year dropdown */
+.ui-datepicker select.ui-datepicker-year {
+    background-color: #f8d7da !important;
+    color: #000 !important;
+}
+
+/* Focus state */
+.ui-datepicker select:focus {
+    border: 1px solid #3399ff !important;
+    outline: none !important;
+}

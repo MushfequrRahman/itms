@@ -10,10 +10,20 @@
 <script type="text/javascript">
   $(function() {
     jQuery(".pd").datepicker({
-      dateFormat: 'dd-mm-yy'
+      dateFormat: 'dd-mm-yy',
+      autoclose: true,
+      todayHighlight: true,
+      changeMonth: true, // ✅ Month dropdown
+      changeYear: true, // ✅ Year dropdown
+      yearRange: '1950:2035'
     });
     jQuery(".wd").datepicker({
-      dateFormat: 'dd-mm-yy'
+      dateFormat: 'dd-mm-yy',
+      autoclose: true,
+      todayHighlight: true,
+      changeMonth: true, // ✅ Month dropdown
+      changeYear: true, // ✅ Year dropdown
+      yearRange: '1950:2035'
     });
   })
 </script>

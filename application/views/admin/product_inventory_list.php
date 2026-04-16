@@ -20,7 +20,7 @@
 	}
 
 	.table-container {
-		height: 450px;
+		height: 750px;
 		overflow: auto;
 		position: relative;
 	}
@@ -267,17 +267,18 @@
 													<th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />U.ID</th>
 													<th data-column="23"><input type="checkbox" class="column-select" data-col-index="24" checked><br />U.Name</th>
 													<th data-column="24"><input type="checkbox" class="column-select" data-col-index="25" checked><br />U.Dept</th>
-													<th data-column="25"><input type="checkbox" class="column-select" data-col-index="26" checked><br />G.Date</th>
+													<th data-column="25"><input type="checkbox" class="column-select" data-col-index="26" checked><br />U.Desig</th>
+													<th data-column="26"><input type="checkbox" class="column-select" data-col-index="27" checked><br />G.Date</th>
 													<?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
 													} else {
 													?>
-														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="27" checked><br />Edit</th>
-														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="28" checked><br />Transfer</th>
-														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="29" checked><br />Release</th>
+														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="28" checked><br />Edit</th>
+														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="29" checked><br />Transfer</th>
+														<th class="filter-false"><input type="checkbox" class="column-select" data-col-index="30" checked><br />Release</th>
 													<?php
 													}
 													?>
-													<th data-column="26"><input type="checkbox" class="column-select" data-col-index="30" checked><br />T.Using</th>
+													<th data-column="27"><input type="checkbox" class="column-select" data-col-index="31" checked><br />T.Using</th>
 												</tr>
 											</thead>
 											<tfoot>
@@ -286,6 +287,7 @@
 													<th colspan="13">Totals</th>
 													<th id="rowCount"></th>
 													<th data-math="col-sum">col-sum</th>
+													<th>&nbsp;</th>
 													<th>&nbsp;</th>
 													<th>&nbsp;</th>
 													<th>&nbsp;</th>
@@ -382,7 +384,7 @@
 														<?php
 														} else {
 														?>
-															<td style="vertical-align:middle; background:#FF473D;"><?php echo $remain; ?></td>
+															<td style="vertical-align:middle; background:#FF473D;"><?php echo "End Of Warranty"; ?></td>
 														<?php
 														}
 														?>
@@ -408,9 +410,11 @@
 															<td style="vertical-align:middle; background:#FFD662;"><?php echo  $row['userid']; ?></td>
 															<td style="vertical-align:middle; background:#FFD662;"><?php echo  $row['name']; ?></td>
 															<td style="vertical-align:middle; background:#FFD662;"><?php echo  $row['departmentname']; ?></td>
+															<td style="vertical-align:middle; background:#FFD662;"><?php echo  $row['designation']; ?></td>
 														<?php
 														} else {
 														?>
+															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
 															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
 															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
 															<td style="vertical-align:middle; background:#819830;">&nbsp;</td>
