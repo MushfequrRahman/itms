@@ -453,12 +453,6 @@
 															if ($row['pastatus'] == 2) {
 															?>
 																<td style="vertical-align:middle;"><?php echo $row['releasetype']; ?></td>
-
-															<?php
-															}
-															elseif ($row['pastatus'] == 1) {
-															?>
-																<td style="vertical-align:middle;">Using</td>
 															<?php
 															} else {
 															?>

@@ -227,58 +227,11 @@ class Admin extends CI_Model
 		$result = $query1->result_array();
 		return $result;
 	}
-	// public function ulup($factoryid, $departmentid, $designationid, $name, $email, $mobile, $usertypeid, $userstatusid, $userid, $password, $indate)
-	// {
-	// 	$indate = date("Y-m-d", strtotime($indate));
-	// 	$sql = "UPDATE user SET factoryid='$factoryid',departmentid='$departmentid',designationid='$designationid',name='$name',email='$email',mobile='$mobile',user_type='$usertypeid',password='$password',ustatus='$userstatusid',indate='$indate' WHERE userid='$userid'";
-	// 	return $query = $this->db->query($sql);
-	// }
-
 	public function ulup($factoryid, $departmentid, $designationid, $name, $email, $mobile, $usertypeid, $userstatusid, $userid, $password, $indate)
 	{
 		$indate = date("Y-m-d", strtotime($indate));
-
-		date_default_timezone_set('Asia/Dhaka');
-		$d = date('Y-m-d');
-		$t = date("H:i:s");
-		$d1 = str_replace("-", "", $d);
-		$t1 = str_replace(":", "", $t);
-		$ccid = $d1 . $t1;
-
-
-		$indate = date("Y-m-d", strtotime($indate));
 		$sql = "UPDATE user SET factoryid='$factoryid',departmentid='$departmentid',designationid='$designationid',name='$name',email='$email',mobile='$mobile',user_type='$usertypeid',password='$password',ustatus='$userstatusid',indate='$indate' WHERE userid='$userid'";
-		$query = $this->db->query($sql);
-
-
-		$sql1a = "SELECT pacode FROM product_inventory WHERE userid='$userid' ";
-		$query1a = $this->db->query($sql1a);
-		$result1a = $query1a->result_array();
-
-		if (empty($result1a)) {
-			return true; // no pacode, but user update successful
-		}
-
-		foreach ($result1a as $i => $row) {
-
-			$rand = rand(1, 500000000);
-			$t = date("H:i:s");
-			$t1 = str_replace(":", "", $t);
-
-			$ccid = $ccid + $rand + $t1 + $i;
-			$pacode = $row['pacode'];
-
-			$sql0 = "UPDATE product_inventory SET ifid='$factoryid' WHERE pacode='$pacode'";
-			$this->db->query($sql0);
-
-			$sql = "UPDATE product_ihistory_insert SET phstatus='0' WHERE pacode='$pacode' AND phstatus='1'";
-			$this->db->query($sql);
-
-			$sql1 = "INSERT INTO product_ihistory_insert VALUES ('$ccid','$pacode','$factoryid','1')";
-			$query1 = $this->db->query($sql1);
-			//return $query1;
-		}
-		return $query1;
+		return $query = $this->db->query($sql);
 	}
 	public function user_transfer($factoryid, $etypeid, $departmentid, $designationid, $name, $oemail, $mobile, $usertypeid, $userstatusid, $userid, $password, $ruserid, $pic_file)
 	{
