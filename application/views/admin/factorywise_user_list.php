@@ -232,7 +232,7 @@
 							<td style="vertical-align:middle;"><?php echo $row['userstatus']; ?></td>
 							<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/user_product_using_history/<?php echo $bn = $row['userid']; ?>"><i class="fa fa-history" style="font-size:14px"></i></a></td>
 							<td style="vertical-align:middle;"><a href="<?php echo base_url(); ?>Dashboard/user_list_up/<?php echo $bn = $row['userid']; ?>"><i class="fa fa-edit" style="font-size:24px"></i></a></td>
-							<td style="vertical-align:middle;"></td>
+							<!-- <td style="vertical-align:middle;"></td> -->
 						<?php
 
 						}
