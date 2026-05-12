@@ -119,7 +119,12 @@
 <script type="text/javascript">
 	$(function() {
 		jQuery(".pd").datepicker({
-			dateFormat: 'dd-mm-yy'
+			dateFormat: 'dd-mm-yy',
+			autoclose: true,
+			todayHighlight: true,
+			changeMonth: true, // ✅ Month dropdown
+			changeYear: true, // ✅ Year dropdown
+			yearRange: '1950:2035'
 		});
 	})
 </script>
@@ -157,7 +162,7 @@
 												</div>
 												<div class="col-sm-6 col-md-6 col-lg-6">
 													<label>Assign Date</label>
-													<input type="text" class="form-control pd"  name="adate" value="<?php echo date('d-m-Y'); ?>">
+													<input type="text" class="form-control pd" readonly name="adate" value="<?php echo date('d-m-Y'); ?>">
 
 												</div>
 											</div>

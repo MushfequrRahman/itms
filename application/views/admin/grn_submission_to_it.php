@@ -37,7 +37,8 @@
 
   .top {
     /* width: 700px; */
-    height: 150px;
+    /* height: 150px; */
+    height: 120px;
     font-size: 22px;
 
   }
@@ -175,7 +176,7 @@
       </div>
     </div>
     <div class="middle">
-      <p style="text-align:center;"><strong>GRN Submission To IT</strong></p>
+      <p style="text-align:center;"><strong>GRN Submission Summary</strong></p>
       <table id="tableData">
         <thead>
           <tr>

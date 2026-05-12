@@ -31,11 +31,6 @@
     font-size: 12px;
     text-align: center;
   }
-
-  td {
-    font-weight: 600;
-    font-variant: small-caps;
-  }
 </style> -->
 <style type="text/css">
   .paging-nav {
@@ -80,7 +75,7 @@
 
   .tablesorter-filter-row {
     position: sticky;
-    top: 65px;
+    top: 70px;
     z-index: 2;
   }
 
@@ -101,11 +96,61 @@
     width: 12px;
     height: 12px;
   }
-
-  #ui-datepicker-div {
-    z-index: 3 !important;
-  }
+  #ui-datepicker-div{z-index: 3 !important;}
 </style>
+<!-- <script>
+  $(function() {
+    $("table").tablesorter({
+      theme: 'blue',
+      widgets: ['math', 'zebra', 'filter'],
+      widgetOptions: {
+        math_data: 'math', // data-math attribute
+        math_ignore: [0, 1],
+        math_none: 'N/A', // no matching math elements found (text added to cell)
+        math_complete: function($cell, wo, result, value, arry) {
+          var txt = '<span class="align-decimal">' +
+            (value === wo.math_none ? '' : ' ') +
+            result + '</span>';
+          if ($cell.attr('data-math') === 'all-sum') {
+            // when the "all-sum" is processed, add a count to the end
+            return txt + ' (Sum of ' + arry.length + ' cells)';
+          }
+          return txt;
+        },
+        math_completed: function(c) {
+          // c = table.config
+          // called after all math calculations have completed
+          console.log('math calculations complete', c.$table.find('[data-math="all-sum"]:first').text());
+        },
+        // see "Mask Examples" section
+        math_mask: '#,##0.00',
+        math_prefix: '', // custom string added before the math_mask value (usually HTML)
+        math_suffix: '', // custom string added after the math_mask value
+        // event triggered on the table which makes the math widget update all data-math cells (default shown)
+        math_event: 'recalculate',
+        // math calculation priorities (default shown)... rows are first, then column above/below,
+        // then entire column, and lastly "all" which is not included because it should always be last
+        math_priority: ['row', 'above', 'below', 'col'],
+        // set row filter to limit which table rows are included in the calculation (v2.25.0)
+        // e.g. math_rowFilter : ':visible:not(.filtered)' (default behavior when math_rowFilter isn't set)
+        // or math_rowFilter : ':visible'; default is an empty string
+        math_rowFilter: ''
+      }
+    });
+  }); -->
+</script>
+<!-- <script>
+  $(document).ready(function() {
+    excel = new ExcelGen({
+      "src_id": "tableData",
+      "show_header": true
+    });
+    $("#generate-excel").click(function() {
+      excel.generate();
+    });
+  });
+</script> -->
+</script>
 <!-- <script>
   $(function() {
     $("table").tablesorter({
@@ -147,6 +192,7 @@
     });
   });
 </script> -->
+
 <script>
   $(function() {
     $("table").tablesorter({
@@ -226,144 +272,54 @@
 
 
     // Download selected rows and columns as Excel
-    // $("#downloadExcel").on("click", function() {
-    //   var wb = XLSX.utils.book_new(); // Create a new workbook
-    //   var ws_data = [];
-
-    //   // Prepare header row based on selected columns
-    //   var headers = [];
-    //   $('#tableData thead th').each(function() {
-    //     var $checkbox = $(this).find('.column-select');
-    //     if ($checkbox.length === 0 || $checkbox.is(':checked')) {
-    //       headers.push($(this).text());
-    //     }
-    //   });
-    //   ws_data.push(headers); // Push headers as the first row
-
-    //   // Add the selected rows
-    //   $('#tableData tbody tr:visible').each(function() {
-    //     var $checkbox = $(this).find('.row-select');
-    //     if ($checkbox.is(':checked')) {
-    //       var row = [];
-    //       $(this).find('td').each(function(index) {
-    //         var $colCheckbox = $(this).closest('table').find('thead th').eq(index).find('.column-select');
-    //         if ($colCheckbox.length === 0 || $colCheckbox.is(':checked')) {
-    //           row.push($(this).text());
-    //         }
-    //       });
-    //       ws_data.push(row);
-    //     }
-    //   });
-
-    //   // Create a worksheet from the data
-    //   var ws = XLSX.utils.aoa_to_sheet(ws_data);
-    //   XLSX.utils.book_append_sheet(wb, ws, "Selected Rows");
-
-    //   // Export the Excel file
-    //   XLSX.writeFile(wb, 'date_wise_mpr_list.xlsx');
-    // });
-
     $("#downloadExcel").on("click", function() {
-      var wb = XLSX.utils.book_new();
+      var wb = XLSX.utils.book_new(); // Create a new workbook
       var ws_data = [];
 
-      // Get columns with their data types
-      var columns = [];
-      $('#tableData thead th').each(function(index) {
+      // Prepare header row based on selected columns
+      var headers = [];
+      $('#tableData thead th').each(function() {
         var $checkbox = $(this).find('.column-select');
         if ($checkbox.length === 0 || $checkbox.is(':checked')) {
-          columns.push({
-            index: index,
-            header: $(this).text(),
-            type: $(this).data('type') || 'text'
-          });
+          headers.push($(this).text());
         }
       });
+      ws_data.push(headers); // Push headers as the first row
 
-      // Headers
-      ws_data.push(columns.map(c => c.header));
-
-      // Data rows
+      // Add the selected rows
       $('#tableData tbody tr:visible').each(function() {
-        if (!$(this).find('.row-select').is(':checked')) return;
-
-        var row = [];
-        columns.forEach(function(col) {
-          var cellValue = $(this).find('td').eq(col.index).text().trim();
-
-          switch (col.type) {
-            case 'date':
-              var dateParts = cellValue.split('-');
-              if (dateParts.length === 3) {
-                var dateObj = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-                if (!isNaN(dateObj.getTime())) {
-                  cellValue = (dateObj - new Date(1899, 11, 30)) / (24 * 60 * 60 * 1000);
-                }
-              }
-              break;
-            case 'currency':
-            case 'number':
-              cellValue = parseFloat(cellValue.replace(/,/g, '')) || 0;
-              break;
-          }
-          row.push(cellValue);
-        }.bind(this));
-        ws_data.push(row);
+        var $checkbox = $(this).find('.row-select');
+        if ($checkbox.is(':checked')) {
+          var row = [];
+          $(this).find('td').each(function(index) {
+            var $colCheckbox = $(this).closest('table').find('thead th').eq(index).find('.column-select');
+            if ($colCheckbox.length === 0 || $colCheckbox.is(':checked')) {
+              row.push($(this).text());
+            }
+          });
+          ws_data.push(row);
+        }
       });
 
+      // Create a worksheet from the data
       var ws = XLSX.utils.aoa_to_sheet(ws_data);
-
-      // Apply number formatting
-      var range = XLSX.utils.decode_range(ws['!ref']);
-      for (var rowNum = range.s.r + 1; rowNum <= range.e.r; rowNum++) {
-        for (var colNum = 0; colNum < columns.length; colNum++) {
-          var cellAddress = XLSX.utils.encode_cell({
-            r: rowNum,
-            c: colNum
-          });
-          var cell = ws[cellAddress];
-          if (cell && cell.t === 'n') {
-            switch (columns[colNum].type) {
-              case 'date':
-                cell.z = 'dd-mm-yyyy';
-                break;
-              case 'currency':
-                cell.z = '#,##0.00';
-                break;
-              case 'number':
-                cell.z = '#,##0';
-                break;
-            }
-          }
-        }
-      }
-
       XLSX.utils.book_append_sheet(wb, ws, "Selected Rows");
-      XLSX.writeFile(wb, 'date_wise_mpr_list.xlsx');
+
+      // Export the Excel file
+      XLSX.writeFile(wb, 'date_wise_po_list.xlsx');
     });
   });
 </script>
-<!-- <script>
-  $(document).ready(function() {
-    excel = new ExcelGen({
-      "src_id": "tableData",
-      "show_header": true
-    });
-    $("#generate-excel").click(function() {
-      excel.generate();
-    });
-  });
-</script> -->
 
 <!-- /.box-header -->
 <div class="box-body">
-  <!-- <form action="<?php echo base_url() ?>Dashboard/date_wise_mpr_list_xls" class="excel-upl" id="excel-upl" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+  <?php /*?><form action="<?php echo base_url() ?>Dashboard/date_wise_po_list_xls" class="excel-upl" id="excel-upl" enctype="multipart/form-data" method="post" accept-charset="utf-8">
     <div class="row padall">
       <div class="col-lg-12">
         <div class="float-right">
           <?php
           foreach ($ul as $row1) { ?>
-            <?php /*?><input type="hidden" name="factoryid" value="<?php echo $row1['factoryid']; ?>" /><?php */ ?>
+            
             <input type="hidden" name="pd" value="<?php echo $pd; ?>" />
             <input type="hidden" name="wd" value="<?php echo $wd; ?>" />
           <?php
@@ -376,8 +332,7 @@
         </div>
       </div>
     </div>
-  </form>
-  <br /><br /> -->
+  </form><?php */ ?>
   <div class="row padall">
     <div class="col-lg-12">
       <div class="row">
@@ -394,63 +349,64 @@
       </div>
     </div>
   </div>
-  <!-- <div class="table-responsive"> -->
   <div class="table-responsive no-padding table-container">
     <!-- <table id="tableData" class="table table-hover table-bordered"> -->
     <table id="tableData" class="table table-hover tablesorter">
       <thead>
         <tr>
-          <!-- <th data-column="0"><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
+          <th data-column="0"><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
           <th data-column="1"><input type="checkbox" class="column-select" data-col-index="2" checked><br />MPR NO</th>
           <th data-column="2"><input type="checkbox" class="column-select" data-col-index="3" checked><br />MPR Date</th>
-          <th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />MPR Submission Date</th>
-          <th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Unit</th>
-          <th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Employment Type</th>
-          <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />MPR Prepared By</th>
+          <th data-column="3"><input type="checkbox" class="column-select" data-col-index="4" checked><br />Unit</th>
+          <th data-column="4"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Employment Type</th>
+          <th data-column="5"><input type="checkbox" class="column-select" data-col-index="6" checked><br />MPR Issued By</th>
+          <th data-column="6"><input type="checkbox" class="column-select" data-col-index="7" checked><br />User</th>
           <th data-column="7"><input type="checkbox" class="column-select" data-col-index="8" checked><br />Category</th>
           <th data-column="8"><input type="checkbox" class="column-select" data-col-index="9" checked><br />Group</th>
           <th data-column="9"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Sub Group</th>
-          <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Item</th>
-          <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Model</th>
-          <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />Brand</th>
-          <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />Qty</th>
-          <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Description</th>
-          <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Unit Price</th>
-          <th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />Total Price</th>
-          <th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />Remarks</th>
-          <th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />User</th> -->
-          <th data-column="0" data-type="text"><input type="checkbox" class="column-select" data-col-index="1" checked><br />SL</th>
-          <th data-column="1" data-type="text"><input type="checkbox" class="column-select" data-col-index="2" checked><br />MPR NO</th>
-          <th data-column="2" data-type="date"><input type="checkbox" class="column-select" data-col-index="3" checked><br />MPR Date</th>
-          <th data-column="3" data-type="date"><input type="checkbox" class="column-select" data-col-index="4" checked><br />MPR Submission Date</th>
-          <th data-column="4" data-type="text"><input type="checkbox" class="column-select" data-col-index="5" checked><br />Unit</th>
-          <th data-column="5" data-type="text"><input type="checkbox" class="column-select" data-col-index="6" checked><br />Employment Type</th>
-          <th data-column="6" data-type="text"><input type="checkbox" class="column-select" data-col-index="7" checked><br />MPR Prepared By</th>
-          <th data-column="7" data-type="text"><input type="checkbox" class="column-select" data-col-index="8" checked><br />Category</th>
-          <th data-column="8" data-type="text"><input type="checkbox" class="column-select" data-col-index="9" checked><br />Group</th>
-          <th data-column="9" data-type="text"><input type="checkbox" class="column-select" data-col-index="10" checked><br />Sub Group</th>
-          <th data-column="10" data-type="text"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Item</th>
-          <th data-column="11" data-type="text"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Model</th>
-          <th data-column="12" data-type="text"><input type="checkbox" class="column-select" data-col-index="13" checked><br />Brand</th>
-          <th data-column="13" data-type="number"><input type="checkbox" class="column-select" data-col-index="14" checked><br />Qty</th>
-          <th data-column="14" data-type="text"><input type="checkbox" class="column-select" data-col-index="15" checked><br />Description</th>
-          <th data-column="15" data-type="currency"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Unit Price</th>
-          <th data-column="16" data-type="currency"><input type="checkbox" class="column-select" data-col-index="17" checked><br />Total Price</th>
-          <th data-column="17" data-type="text"><input type="checkbox" class="column-select" data-col-index="18" checked><br />Remarks</th>
-          <th data-column="18" data-type="text"><input type="checkbox" class="column-select" data-col-index="19" checked><br />User</th>
-
+          <th data-column="10"><input type="checkbox" class="column-select" data-col-index="11" checked><br />Product</th>
+          <th data-column="11"><input type="checkbox" class="column-select" data-col-index="12" checked><br />Item/Model</th>
+          <th data-column="12"><input type="checkbox" class="column-select" data-col-index="13" checked><br />MPR Qty</th>
+          <th data-column="13"><input type="checkbox" class="column-select" data-col-index="14" checked><br />MPR Description</th>
+          <th data-column="14"><input type="checkbox" class="column-select" data-col-index="15" checked><br />MPR Unit Price</th>
+          <th data-column="15"><input type="checkbox" class="column-select" data-col-index="16" checked><br />Total Price</th>
+          <th data-column="16"><input type="checkbox" class="column-select" data-col-index="17" checked><br />PO NO</th>
+          <th data-column="17"><input type="checkbox" class="column-select" data-col-index="18" checked><br />PO Date</th>
+          <th data-column="18"><input type="checkbox" class="column-select" data-col-index="19" checked><br />PO Qty</th>
+          <th data-column="19"><input type="checkbox" class="column-select" data-col-index="20" checked><br />PO Unit Price</th>
+          <th data-column="20"><input type="checkbox" class="column-select" data-col-index="21" checked><br />Total PO Price</th>
+          <th data-column="21"><input type="checkbox" class="column-select" data-col-index="22" checked><br />PO Description</th>
+          <th data-column="22"><input type="checkbox" class="column-select" data-col-index="23" checked><br />PO Remarks</th>
+          <th data-column="23"><input type="checkbox" class="column-select" data-col-index="24" checked><br />Supplier</th>
+          <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
+          } else {
+          ?>
+            <th data-column="24"><input type="checkbox" class="column-select" data-col-index="25" checked><br />Edit</th>
+            <th data-column="25"><input type="checkbox" class="column-select" data-col-index="26" checked><br />PO Log</th>
+          <?php
+          }
+          ?>
         </tr>
       </thead>
       <tfoot>
         <tr>
           <th id="rowCount"></th>
-          <th colspan="14">Totals</th>
+          <th colspan="17">Totals</th>
+          <th>&nbsp;</th>
           <th data-math="col-sum">col-sum</th>
           <th data-math="col-sum">col-sum</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
+          } else {
+          ?>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
 
-
+          <?php
+          }
+          ?>
         </tr>
       </tfoot>
       <tbody>
@@ -462,23 +418,49 @@
             <td style="vertical-align:middle;"><?php echo $row['mprid']; ?></td>
             <?php $mdate = date("d-m-Y", strtotime($row['mdate'])); ?>
             <td style="vertical-align:middle;"><?php echo $mdate; ?></td>
-            <?php $msdate = date("d-m-Y", strtotime($row['msdate'])); ?>
-            <td style="vertical-align:middle;"><?php echo $msdate; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['fid']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['etypename']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['name'] . '--' . $row['departmentname'] . '--' . $row['designation']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pcname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pgname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['psgname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['pname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['item']; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['brandname']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['qty'] . " " . $row['puom']; ?></td>
             <td style="vertical-align:middle;"><?php echo $row['description']; ?></td>
-            <td style="vertical-align:middle;"><?php echo number_format($row['price'], 2, '.', ','); ?></td>
-            <td style="vertical-align:middle;"><?php echo number_format($row['qty'] * $row['price'], 2, '.', ','); ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['remarks']; ?></td>
-            <td style="vertical-align:middle;"><?php echo $row['uname']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['price']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['qty'] * $row['price']; ?></td>
+
+            <td style="vertical-align:middle;"><?php echo $row['po']; ?></td>
+            <?php $pdate = date("d-m-Y", strtotime($row['pdate'])); ?>
+            <td style="vertical-align:middle;"><?php echo $pdate; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['pqty'] . " " . $row['puom']; ?></td>
+            <td style="vertical-align:middle;"><?php echo number_format($row['pprice'], 2, '.', ','); ?></td>
+            <td style="vertical-align:middle;"><?php echo number_format($row['pqty'] * $row['pprice'], 2, '.', ','); ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['podescription']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['premarks']; ?></td>
+            <td style="vertical-align:middle;"><?php echo $row['supplier']; ?></td>
+            <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
+            } else {
+            ?>
+              <?php
+              if ($row['pstatus'] == '0') {
+              ?>
+                <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_up_form/<?php echo $bn = $row['sipoid']; ?>"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
+              <?php
+              } else {
+              ?>
+                <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_up_form/<?php echo $bn = $row['sipoid']; ?>">Received</a></td>
+              <?php
+              }
+
+              ?>
+
+              <td style="vertical-align:middle;"><a target="_blank" href="<?php echo base_url(); ?>Dashboard/po_list_log/<?php echo $bn = $row['sipoid']; ?>"><i class="fa fa-history" style="font-size:20px"></i></a></td>
+            <?php
+            }
+            ?>
           </tr>
         <?php } ?>
       </tbody>

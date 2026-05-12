@@ -741,6 +741,22 @@ class Admin extends CI_Model
 		WHERE piv='$piv'";
 		return $query = $this->db->query($sql);
 	}
+	public function productinventorylup_by_pacode($pacode, $sn, $ip, $mac, $description, $iqty, $warranty, $pdate)
+	{
+		$sql = "UPDATE product_inventory SET 
+            sn='$sn',
+            ip='$ip',
+            mac='$mac',
+            idescription='$description',
+            iqty='$iqty',
+            warranty='$warranty',
+            pdate='$pdate' 
+            WHERE pacode='$pacode'";
+
+		error_log("SQL: " . $sql);
+
+		return $this->db->query($sql);
+	}
 	public function product_assign_insert($pacode, $userid, $adate)
 	{
 		date_default_timezone_set('Asia/Dhaka');
@@ -1065,8 +1081,8 @@ class Admin extends CI_Model
 		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,etypename,name,
 		departmentname,designation,uname,
 		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,
-		description,price,po,pdate,pqty,podescription,
-		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,pstatus
+		description,price,po,pdate,pqty,podescription,po_insert.simprid,po_insert.spoid,
+		pprice,pqty,pprice,premarks,supplier_insert.supplier,supplier_insert.supplierid,sipoid,pstatus
 		 FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
@@ -1111,8 +1127,10 @@ class Admin extends CI_Model
 		// $wd = date("Y-m-d", strtotime($wd));
 
 		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
-		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
-		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,po_insert.spoid,po_insert.simprid,supplierid
+		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,
+		po,pdate,pqty,
+		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,po_insert.spoid,
+		po_insert.simprid,supplier_insert.supplierid
 		 FROM po_insert 
 		JOIN po_insert_id ON po_insert.spoid=po_insert_id.spoid
 		JOIN mpr_insert ON mpr_insert.simprid=po_insert.simprid
@@ -1128,9 +1146,30 @@ class Admin extends CI_Model
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
+	// public function po_list_update($spoid, $sipoid, $userid, $mprid, $po, $simprid, $pqty, $premarks, $pprice, $supplier, $podate)
+	// {
+	// 	date_default_timezone_set('Asia/Dhaka');
+	// 	$d = date('Y-m-d');
+	// 	$t = date("H:i:s");
+	// 	$d1 = str_replace("-", "", $d);
+	// 	$t1 = str_replace(":", "", $t);
+	// 	$ccid = $d1 . $t1;
+
+	// 	$podate = date("Y-m-d", strtotime($podate));
+	// 	$sql = "update po_insert SET po='$po',pqty='$pqty',premarks='$premarks',pprice='$pprice',supplier='$supplier',pdate='$podate' WHERE sipoid='$sipoid'";
+
+	// 	$sqlr = "update receive_insert SET po='$po' WHERE sipoid='$sipoid'";
+
+	// 	$sql1 = "INSERT INTO po_insert_edit_log VALUES ('$ccid','$spoid','$sipoid','$userid','$mprid','$po','$simprid','$pqty','$premarks','$pprice','$supplier','$podate',CURDATE(),CURTIME())";
+	// 	$query1 = $this->db->query($sql1);
+	// 	$queryr = $this->db->query($sqlr);
+	// 	return $query = $this->db->query($sql);
+	// }
+
 	public function po_list_update($spoid, $sipoid, $userid, $mprid, $po, $simprid, $pqty, $premarks, $pprice, $supplier, $podate)
 	{
 		date_default_timezone_set('Asia/Dhaka');
+
 		$d = date('Y-m-d');
 		$t = date("H:i:s");
 		$d1 = str_replace("-", "", $d);
@@ -1138,19 +1177,58 @@ class Admin extends CI_Model
 		$ccid = $d1 . $t1;
 
 		$podate = date("Y-m-d", strtotime($podate));
-		$sql = "update po_insert SET po='$po',pqty='$pqty',premarks='$premarks',pprice='$pprice',supplier='$supplier',pdate='$podate' WHERE sipoid='$sipoid'";
 
-		$sqlr = "update receive_insert SET po='$po' WHERE sipoid='$sipoid'";
+		// 1st UPDATE
+		$sql = "
+        UPDATE po_insert 
+        SET po='$po',
+            pqty='$pqty',
+            premarks='$premarks',
+            pprice='$pprice',
+            supplier='$supplier',
+            pdate='$podate'
+        WHERE sipoid='$sipoid'
+    ";
 
-		$sql1 = "INSERT INTO po_insert_edit_log VALUES ('$ccid','$spoid','$sipoid','$userid','$mprid','$po','$simprid','$pqty','$premarks','$pprice','$supplier','$podate',CURDATE(),CURTIME())";
-		$query1 = $this->db->query($sql1);
-		$queryr = $this->db->query($sqlr);
-		return $query = $this->db->query($sql);
+		// 2nd UPDATE
+		$sqlr = "
+        UPDATE receive_insert 
+        SET po='$po' 
+        WHERE sipoid='$sipoid'
+    ";
+
+		// 3rd INSERT (FIXED - column name use করুন)
+		$sql1 = "
+        INSERT INTO po_insert_edit_log
+        (spoid, sipoid, suserid, mprid, po, simprid, pqty, premarks, pprice, supplier, pdate, pedate, petime)
+        VALUES
+        ('$spoid','$sipoid','$userid','$mprid','$po','$simprid','$pqty','$premarks','$pprice','$supplier','$podate',CURDATE(),CURTIME())
+    ";
+
+		// execute one by one
+		$q1 = $this->db->query($sql);
+		if (!$q1) {
+			return false;
+		}
+
+		$q2 = $this->db->query($sqlr);
+		if (!$q2) {
+			return false;
+		}
+
+		$q3 = $this->db->query($sql1);
+		if (!$q3) {
+			return false;
+		}
+
+		return true;
 	}
 	public function po_list_log($sipoid)
 	{
-		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,departmentname,designation,
-		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,description,price,po,pdate,pqty,
+		$query = "SELECT mpr_insert_id.mprid,mdate,mpr_insert_id.fid,name,
+		departmentname,designation,
+		pcname,pgname,psgname,pname,item,mpr_insert.qty,product_uom_insert.puom,
+		description,price,po,pdate,pqty,
 		pprice,pqty,pprice,premarks,supplier_insert.supplier,sipoid,
 		po_insert_edit_log.spoid,po_insert_edit_log.simprid,supplierid,
 		pedate,petime

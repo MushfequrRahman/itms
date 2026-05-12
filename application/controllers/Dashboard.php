@@ -1511,6 +1511,86 @@ class Dashboard extends CI_Controller
 			redirect('Dashboard/product_inventory_list', 'refresh');
 		}
 	}
+
+
+	// Method to get inventory data as JSON for AJAX
+	public function get_inventory_ajax()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+		$sql = "SELECT * FROM product_inventory ORDER BY piv DESC";
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+
+		// Add additional calculated fields
+		foreach ($result as &$row) {
+			// Calculate end date and remaining days
+			if ($row['pdate'] && $row['warranty']) {
+				$enddate = date("Y-m-d", strtotime("+" . $row['warranty'] . " days", strtotime($row['pdate'])));
+				$row['enddate'] = $enddate;
+				$now = time();
+				$enddate_ts = strtotime($enddate);
+				$datediff = $enddate_ts - $now;
+				$row['remain'] = round($datediff / (60 * 60 * 24));
+			} else {
+				$row['enddate'] = '';
+				$row['remain'] = '';
+			}
+		}
+
+		echo json_encode(['status' => 'success', 'data' => $result]);
+	}
+
+	public function productinventorylup_ajax()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+
+		// Change from piv to pacode
+		$pacode = $this->input->post('pacode');
+		$sn = $this->input->post('sn');
+		$ip = $this->input->post('ip');
+		$mac = $this->input->post('mac');
+		$description = $this->input->post('description');
+		$iqty = $this->input->post('iqty');
+		$warranty = $this->input->post('warranty');
+		$pdate = $this->input->post('pdate');
+
+		error_log("=== UPDATE REQUEST RECEIVED ===");
+		error_log("PACODE: " . $pacode);
+		error_log("SN: " . $sn);
+		error_log("IP: " . $ip);
+		error_log("MAC: " . $mac);
+		error_log("Qty: " . $iqty);
+		error_log("Warranty: " . $warranty);
+		error_log("Date (before conversion): " . $pdate);
+
+		// Convert date format from dd-mm-yyyy to yyyy-mm-dd for database
+		if ($pdate && $pdate != '') {
+			$dateParts = explode('-', $pdate);
+			if (count($dateParts) == 3) {
+				$pdate = $dateParts[2] . '-' . $dateParts[1] . '-' . $dateParts[0];
+			}
+		} else {
+			$pdate = null;
+		}
+
+		error_log("Date (after conversion): " . $pdate);
+
+		// Update using pacode instead of piv
+		$result = $this->Admin->productinventorylup_by_pacode($pacode, $sn, $ip, $mac, $description, $iqty, $warranty, $pdate);
+
+		$this->output->set_content_type('application/json');
+
+		if ($result) {
+			$affected_rows = $this->db->affected_rows();
+			error_log("Affected rows: " . $affected_rows);
+			echo json_encode(['status' => 'success', 'message' => 'Product updated successfully']);
+		} else {
+			echo json_encode(['status' => 'error', 'message' => 'Failed to update product']);
+		}
+	}
+
 	public function product_transfer_form()
 	{
 		$this->load->database();
@@ -2385,9 +2465,12 @@ class Dashboard extends CI_Controller
 		//$factoryid = $this->input->post('factoryid');
 		$pd = $this->input->post('pd');
 		$wd = $this->input->post('wd');
+		$data['sl'] = $this->Admin->supplier_list();
 		$data['pd'] = $pd;
 		$data['wd'] = $wd;
+		//$data['sl'] = $suppliers; // Add this line
 		$data['ul'] = $this->Admin->date_wise_po_list($pd, $wd);
+
 		$this->load->view('admin/date_wise_po_list', $data);
 	}
 	//public function date_wise_po_list_xls()
@@ -2565,6 +2648,48 @@ class Dashboard extends CI_Controller
 		// }
 		// redirect('Dashboard/date_wise_mpr_form', 'refresh');
 		//}
+	}
+	public function po_list_update_ajax()
+	{
+		$this->load->database();
+		$this->load->library('form_validation');
+		$this->load->model('Admin');
+
+		$this->form_validation->set_rules('po', 'PO', 'required');
+		$this->form_validation->set_rules('pqty', 'Qty', 'required|numeric');
+		$this->form_validation->set_rules('pprice', 'Price', 'required|numeric');
+		$this->form_validation->set_rules('podate', 'PO Date', 'required');
+		$this->form_validation->set_rules('supplier', 'Supplier', 'required');
+
+		if ($this->form_validation->run() == FALSE) {
+			echo json_encode(['status' => 'error', 'message' => validation_errors()]);
+			return;
+		}
+
+		$userid = $this->input->post('userid');
+		$spoid = $this->input->post('spoid');
+		$sipoid = $this->input->post('sipoid');
+		$mprid = $this->input->post('mprid');
+		$simprid = $this->input->post('simprid');
+		$po = $this->input->post('po');
+		$podate = $this->input->post('podate');
+		$pqty = $this->input->post('pqty');
+		$pprice = $this->input->post('pprice');
+		$premarks = $this->input->post('premarks');
+		$supplier = $this->input->post('supplier');
+
+		// Debug: Log received data
+		error_log("PO Update Request - sipoid: $sipoid, po: $po, pqty: $pqty, pprice: $pprice, supplier: $supplier");
+
+		$update = $this->Admin->po_list_update($spoid, $sipoid, $userid, $mprid, $po, $simprid, $pqty, $premarks, $pprice, $supplier, $podate);
+
+		if ($update) {
+			echo json_encode(['status' => 'success', 'message' => 'PO updated successfully!']);
+		} else {
+			// Get the last database error for debugging
+			$error = $this->db->error();
+			echo json_encode(['status' => 'error', 'message' => 'Failed to update PO: ' . $error['message']]);
+		}
 	}
 	public function po_list_log()
 	{

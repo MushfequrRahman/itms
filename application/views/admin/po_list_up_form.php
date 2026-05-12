@@ -42,14 +42,14 @@
                   <div class="box-header with-border">
                     <h3 class="box-title">PO Edit</h3>
                     <div class="row">
-											<div class="col-sm-12 col-md-12 col-lg-12">
-												<?php if ($responce = $this->session->flashdata('Successfully')) : ?>
-													<div class="text-center">
-														<div class="alert alert-success text-center"><?php echo $responce; ?></div>
-													</div>
-												<?php endif; ?>
-											</div>
-										</div>
+                      <div class="col-sm-12 col-md-12 col-lg-12">
+                        <?php if ($responce = $this->session->flashdata('Successfully')) : ?>
+                          <div class="text-center">
+                            <div class="alert alert-success text-center"><?php echo $responce; ?></div>
+                          </div>
+                        <?php endif; ?>
+                      </div>
+                    </div>
                   </div>
                   <div class="box-body">
                     <?php

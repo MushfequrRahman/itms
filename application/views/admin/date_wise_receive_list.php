@@ -280,7 +280,7 @@ $(function() {
             <?php if ($this->session->userdata('user_type') == '3' || $this->session->userdata('user_type') == '4') {
             } else {
             ?>
-              <a target="_blank" href="<?php echo base_url(); ?>Dashboard/grn_submission_to_it/<?php echo $pd; ?>/<?php echo $wd; ?>/<?php echo $userid; ?>">GRN Submission To IT</a>
+              <a target="_blank" href="<?php echo base_url(); ?>Dashboard/grn_submission_to_it/<?php echo $pd; ?>/<?php echo $wd; ?>/<?php echo $userid; ?>">GRN Submission Summary</a>
             <?php
             }
             ?>
