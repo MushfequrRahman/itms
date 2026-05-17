@@ -1623,6 +1623,30 @@ class Dashboard extends CI_Controller
 			redirect('Dashboard/product_inventory_list', 'refresh');
 		}
 	}
+	public function producthistorylup_ajax()
+	{
+		$this->load->database();
+		$this->load->model('Admin');
+
+		$pacode    = $this->input->post('pacode');
+		$factoryid = $this->input->post('factoryid');
+
+		$ins = $this->Admin->producthistorylup($factoryid, $pacode);
+
+		if ($ins) {
+
+			echo json_encode([
+				'status'  => 'success',
+				'message' => 'Successfully Transfered'
+			]);
+		} else {
+
+			echo json_encode([
+				'status'  => 'error',
+				'message' => 'Failed To Transfer'
+			]);
+		}
+	}
 	public function product_assign_form()
 	{
 		$this->load->database();
@@ -1795,6 +1819,37 @@ class Dashboard extends CI_Controller
 			}
 		}
 	}
+	public function item_release_insert_ajax()
+{
+    $this->load->database();
+    $this->load->model('Admin');
+
+    $pacode  = $this->input->post('pacode');
+    $irid    = $this->input->post('irid');
+    $remarks = $this->input->post('remarks');
+    $ddate   = date("Y-m-d", strtotime($this->input->post('ddate')));
+
+    $result = $this->Admin->item_release_insert($pacode, $irid, $remarks, $ddate);
+
+    if ($result) {
+
+        // শুধু selected release type name আনবে
+        $row = $this->Admin->get_release_type_name($irid);
+
+        $releaseType = ($row) ? $row : '';
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Item released successfully',
+            'releasetype' => $releaseType
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Release failed'
+        ]);
+    }
+}
 	public function item_release_type_insert_form()
 	{
 		$this->load->database();
@@ -1828,6 +1883,7 @@ class Dashboard extends CI_Controller
 			}
 		}
 	}
+	
 	public function item_release_type_list()
 	{
 		$this->load->database();
@@ -3029,6 +3085,8 @@ class Dashboard extends CI_Controller
 		$this->load->view('admin/leftmenu');
 		//$data['al']=$this->Admin->antivirus();
 		//		$data['il']=$this->Admin->internet();
+		$data['fl'] = $this->Admin->factory_list();
+		$data['rl'] = $this->Admin->item_release_type_list();
 		$data['ul'] = $this->Admin->product_inventory_list();
 		$this->load->view('admin/product_inventory_list', $data);
 	}

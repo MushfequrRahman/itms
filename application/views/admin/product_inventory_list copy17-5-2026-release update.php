@@ -671,9 +671,9 @@
 		</div>
 	</div>
 
-	<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 	<script>
 		$(document).ready(function() {
@@ -948,130 +948,151 @@
 		});
 	</script>
 	<script>
-    $(document).ready(function() {
+		$(document).ready(function() {
 
-        let releaseRow = null;
+			let releaseRow = null;
 
-        // ==============================
-        // OPEN MODAL
-        // ==============================
-        $(document).on('click', '.release-product-btn', function() {
+			// ==============================
+			// OPEN MODAL
+			// ==============================
+			$(document).on('click', '.release-product-btn', function() {
 
-            releaseRow = $(this).closest('tr');
+				releaseRow = $(this).closest('tr');
 
-            let pacode = $(this).data('pacode');
+				let pacode = $(this).data('pacode');
 
-            $('#releasePacode').val(pacode);
-            $('#releaseIrid').val('');
-            $('#releaseModal').modal('show');
-        });
+				$('#releasePacode').val(pacode);
+				$('#releaseIrid').val('');
+				$('#releaseModal').modal('show');
+			});
 
-        // ==============================
-        // SUBMIT RELEASE FORM
-        // ==============================
-        $('#releaseForm').on('submit', function(e) {
-            e.preventDefault();
+			// ==============================
+			// SUBMIT RELEASE FORM
+			// ==============================
+			$('#releaseForm').on('submit', function(e) {
+				e.preventDefault();
 
-            let formData = $(this).serialize();
+				let formData = $(this).serialize();
 
-            $('#btnRelease')
-                .prop('disabled', true)
-                .text('Releasing...');
+				$('#btnRelease')
+					.prop('disabled', true)
+					.text('Releasing...');
 
-            $.ajax({
-                url: '<?php echo base_url(); ?>Dashboard/item_release_insert_ajax',
-                type: 'POST',
-                data: formData,
-                dataType: 'json',
+				$.ajax({
+					url: '<?php echo base_url(); ?>Dashboard/item_release_insert_ajax',
+					type: 'POST',
+					data: formData,
+					dataType: 'json',
 
-                success: function(res) {
+					success: function(res) {
 
-                    if (res.status === 'success') {
+						if (res.status === 'success') {
 
-                        if (releaseRow) {
-                            // === NEW CODE: Hide the row completely ===
-                            releaseRow.hide();
-                            
-                            // === UPDATE STATS (row count and total price) ===
-                            updateStatsAfterRelease();
-                        }
+							if (releaseRow) {
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Released Successfully',
-                            text: res.message,
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
+								let type = res.releasetype || '';
 
-                        $('#releaseModal').modal('hide');
+								// ==============================
+								// UPDATE STATUS CELL (21 index)
+								// ==============================
+								releaseRow.find('td').eq(21)
+									.text(type)
+									.css({
+										//"background": "#dd4b39",
+										"color": "#000",
+										//"font-weight": "600"
+									});
 
-                    } else {
+									releaseRow.find('td').eq(27)
+									.text(type)
+									.css({
+										//"background": "#dd4b39",
+										"color": "#000",
+										//"font-weight": "600"
+									});
 
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: res.message
-                        });
-                    }
+									releaseRow.find('td').eq(28)
+									.text(type)
+									.css({
+										//"background": "#dd4b39",
+										"color": "#000",
+										//"font-weight": "600"
+									});
 
-                    $('#btnRelease')
-                        .prop('disabled', false)
-                        .text('Release');
-                },
+									releaseRow.find('td').eq(29)
+									.text(type)
+									.css({
+										//"background": "#dd4b39",
+										"color": "#000",
+										//"font-weight": "600"
+									});
 
-                error: function() {
+								// ==============================
+								// REMOVE ACTION BUTTONS
+								// ==============================
+								//releaseRow.find('.release-product-btn').remove();
+								//releaseRow.find('.transfer-product-btn').remove();
 
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Server Error',
-                        text: 'Please try again'
-                    });
+								// highlight effect
+								releaseRow.addClass('highlight-row');
 
-                    $('#btnRelease')
-                        .prop('disabled', false)
-                        .text('Release');
-                }
+								setTimeout(function() {
+									releaseRow.removeClass('highlight-row');
+								}, 1500);
+							}
 
-            });
-        });
+							Swal.fire({
+								icon: 'success',
+								title: 'Released Successfully',
+								text: res.message,
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-        // === NEW FUNCTION: Update row count and total price after row is hidden ===
-        function updateStatsAfterRelease() {
-            // Update visible rows count
-            var visibleRowsCount = $('#tableData tbody tr:visible').length;
-            $('#rowCount').text("Rows: " + visibleRowsCount);
+							$('#releaseModal').modal('hide');
 
-            // Recalculate total PO price from visible rows only
-            var totalPrice = 0;
-            $('#tableData tbody tr:visible').each(function() {
-                // Price is in column index 15 (0-based)
-                var priceText = $(this).find('td').eq(15).text().replace(/,/g, '');
-                var price = parseFloat(priceText);
-                if (!isNaN(price)) {
-                    totalPrice += price;
-                }
-            });
-            
-            // Update the footer total price display
-            $('#totalPoPriceFooter').text(totalPrice.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }));
-        }
+						} else {
 
-        // ==============================
-        // RESET MODAL AFTER CLOSE
-        // ==============================
-        $('#releaseModal').on('hidden.bs.modal', function() {
+							Swal.fire({
+								icon: 'error',
+								title: 'Failed',
+								text: res.message
+							});
+						}
 
-            $('#releaseForm')[0].reset();
-            $('#btnRelease').prop('disabled', false).text('Release');
-            releaseRow = null;
-        });
+						$('#btnRelease')
+							.prop('disabled', false)
+							.text('Release');
+					},
 
-    });
-</script>
+					error: function() {
+
+						Swal.fire({
+							icon: 'error',
+							title: 'Server Error',
+							text: 'Please try again'
+						});
+
+						$('#btnRelease')
+							.prop('disabled', false)
+							.text('Release');
+					}
+
+				});
+			});
+
+			// ==============================
+			// RESET MODAL AFTER CLOSE
+			// ==============================
+			$('#releaseModal').on('hidden.bs.modal', function() {
+
+				$('#releaseForm')[0].reset();
+				$('#btnRelease').prop('disabled', false).text('Release');
+				releaseRow = null;
+			});
+
+		});
+	</script>
 </body>
 
 </html>

@@ -859,24 +859,6 @@ class Admin extends CI_Model
 		$this->db->query($sql1);
 		return $query = $this->db->query($sql2);
 	}
-	public function get_release_type_name($irid)
-{
-    $row = $this->db->select('releasetype')
-        ->from('item_release_type_insert')
-        ->where('irid', $irid)
-        ->get()
-        ->row();
-
-    return ($row) ? $row->releasetype : '';
-}
-public function get_release_type($irid)
-{
-    return $this->db->select('irid, releasetype')
-        ->from('item_release_type_insert')
-        ->where('irid', $irid)
-        ->get()
-        ->row();
-}
 	public function antivirus()
 	{
 		$query = "SELECT * FROM antivirus";
@@ -1830,7 +1812,7 @@ LEFT JOIN user ON user.userid = product_inventory.userid
 LEFT JOIN department ON department.deptid = user.departmentid
 LEFT JOIN designation ON designation.desigid = user.designationid
 
-WHERE product_inventory.pastatus!= 2 AND product_ihistory_insert.phstatus = 1";
+WHERE product_ihistory_insert.phstatus = '1'";
 		$result = $this->db->query($query);
 		return $result->result_array();
 	}
@@ -1859,7 +1841,6 @@ WHERE product_inventory.pastatus!= 2 AND product_ihistory_insert.phstatus = 1";
 		JOIN  product_group_insert ON product_group_insert.pgid=product_insert.pgid
 		JOIN  product_subgroup_insert ON product_subgroup_insert.psgid=product_insert.psgid
 		JOIN  product_ihistory_insert ON product_ihistory_insert.pacode=product_inventory.pacode
-		
 		LEFT JOIN item_release_insert ON item_release_insert.pacode=product_inventory.pacode
 		LEFT JOIN item_release_type_insert ON item_release_type_insert.irid=item_release_insert.irid
 		LEFT JOIN user ON user.userid=product_inventory.userid
